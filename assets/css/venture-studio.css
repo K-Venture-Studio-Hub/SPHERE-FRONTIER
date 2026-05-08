@@ -187,7 +187,7 @@ body{
   background:#221c14;color:#f0e4d0;border-color:rgba(232,220,200,.2);
 }
 [data-theme="dark"] select option{background:#221c14;color:#f0e4d0}
-[data-theme="dark"] .hero-links a:hover,[data-theme="dark"] .link-pill:hover,[data-theme="dark"] .card-actions button:hover,[data-theme="dark"] .card-actions a:hover,[data-theme="dark"] .mission-actions button:hover,[data-theme="dark"] .pill-button.active,[data-theme="dark"] .theme-toggle:hover{background:#8b4a18;color:#fff;border-color:#8b4a18}
+[data-theme="dark"] .hero-links a:hover,[data-theme="dark"] .link-pill:hover,[data-theme="dark"] .card-actions button:hover,[data-theme="dark"] .card-actions a:hover,[data-theme="dark"] .mission-actions button:hover,[data-theme="dark"] .pill-button.active,[data-theme="dark"] .theme-toggle:hover{background:#2a1000;color:#fff;border-color:#2a1000}
 
 /* Theme toggle */
 .theme-toggle{position:fixed;top:16px;right:16px;z-index:100;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px)}
