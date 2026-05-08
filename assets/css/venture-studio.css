@@ -184,10 +184,9 @@ body{
 
 /* Dark mode form elements */
 [data-theme="dark"] select,[data-theme="dark"] input,[data-theme="dark"] textarea{
-  background:#221c14;color:#f0e4d0;border:1px solid #e0a050;
+  background:#221c14;color:#f0e4d0;border:1px solid var(--line);
 }
 [data-theme="dark"] select option{background:#221c14;color:#f0e4d0}
-[data-theme="dark"] .hero-links a,[data-theme="dark"] .link-pill,[data-theme="dark"] .card-actions button,[data-theme="dark"] .card-actions a,[data-theme="dark"] .mission-actions button,[data-theme="dark"] .pill-button{border:1px solid #e0a050}
 [data-theme="dark"] .hero-links a:hover,[data-theme="dark"] .link-pill:hover,[data-theme="dark"] .card-actions button:hover,[data-theme="dark"] .card-actions a:hover,[data-theme="dark"] .mission-actions button:hover,[data-theme="dark"] .pill-button.active,[data-theme="dark"] .theme-toggle:hover{background:#2a1000;color:#fff;border:1px solid #e0a050}
 
 /* Theme toggle */
