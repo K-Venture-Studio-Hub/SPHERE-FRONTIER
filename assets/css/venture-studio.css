@@ -17,18 +17,18 @@
 /* Dark theme */
 [data-theme="dark"]{
   --bg:#14100a;
-  --panel:rgba(28,22,12,.85);
-  --ink:#e8dcc8;
-  --muted:#a89878;
-  --line:rgba(232,220,200,.1);
+  --panel:rgba(28,22,12,.88);
+  --ink:#f0e4d0;
+  --muted:#b8a888;
+  --line:rgba(232,220,200,.15);
   --accent:#e0a050;
   --accent-2:#3ecf94;
   --science:#3ecf94;
   --entrepreneurship:#e0a050;
   --technology:#6ea8f0;
-  --shadow:0 20px 50px rgba(0,0,0,.3);
-  --card-bg:#1e1810;
-  --input-bg:#1a1408;
+  --shadow:0 20px 50px rgba(0,0,0,.4);
+  --card-bg:#221c14;
+  --input-bg:#1c1608;
 }
 *{box-sizing:border-box}
 body{
