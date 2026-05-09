@@ -23,23 +23,31 @@
     .canvas-grid.bmc{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
     .canvas-grid.lean{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
     .canvas-grid.social{grid-template-columns:1fr 1fr}
-    .canvas-box{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;position:relative}
+    .canvas-box{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;position:relative;transition:border-color .2s}
     .canvas-box h4{margin:0;font-size:13px;color:var(--accent);font-weight:700}
     .canvas-box .hint{font-size:11px;color:var(--muted);line-height:1.4;margin:0}
     .canvas-box textarea{width:100%;min-height:80px;border:1px solid var(--line);border-radius:10px;padding:8px;font-size:13px;font-family:inherit;background:var(--input-bg);color:var(--ink);resize:vertical;transition:border-color .15s}
     .canvas-box textarea:focus{outline:none;border-color:var(--accent)}
     [data-theme="dark"] .canvas-box textarea{background:#1c1608;color:#f0e4d0}
     .canvas-box.filled textarea{border-color:var(--science);border-style:dashed}
-    .canvas-box.empty textarea{border-color:var(--line)}
-    .canvas-box.lens-highlight{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(181,107,45,.12)}
-    .canvas-box.lens-highlight h4::after{content:" ★";color:var(--accent);font-size:11px}
-    .canvas-box .lens-hint{font-size:10px;font-weight:700;padding:2px 6px;border-radius:999px;margin-top:2px;display:inline-block}
-    .lens-hint.science{background:rgba(30,122,94,.1);color:var(--science)}
-    .lens-hint.entrepreneurship{background:rgba(181,107,45,.1);color:var(--entrepreneurship)}
-    .lens-hint.technology{background:rgba(59,130,246,.1);color:#3b82f6}
-    [data-theme="dark"] .lens-hint.science{color:#3ecf94}
-    [data-theme="dark"] .lens-hint.entrepreneurship{color:#e0a050}
-    [data-theme="dark"] .lens-hint.technology{color:#60a5fa}
+    .canvas-box.lens-hl{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(181,107,45,.12)}
+    .canvas-box .lens-tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:999px;margin-top:2px;display:inline-block}
+    .lens-tag.science{background:rgba(30,122,94,.1);color:var(--science)}
+    .lens-tag.entrepreneurship{background:rgba(181,107,45,.1);color:var(--entrepreneurship)}
+    .lens-tag.technology{background:rgba(59,130,246,.1);color:#3b82f6}
+    [data-theme="dark"] .lens-tag.science{color:#3ecf94}
+    [data-theme="dark"] .lens-tag.entrepreneurship{color:#e0a050}
+    [data-theme="dark"] .lens-tag.technology{color:#60a5fa}
+    .sphere-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .sphere-btn{border:2px solid var(--line);border-radius:14px;padding:10px 16px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:all .15s;font-weight:600;display:flex;align-items:flex-start;gap:8px;flex:1;min-width:220px}
+    .sphere-btn:hover{border-color:var(--accent)}
+    .sphere-btn.active{border-color:var(--accent);background:rgba(181,107,45,.06)}
+    .sphere-btn .s-icon{font-size:22px;margin-top:2px}
+    .sphere-btn .s-body{display:flex;flex-direction:column;gap:2px}
+    .sphere-btn .s-title{font-weight:700;font-size:13px}
+    .sphere-btn .s-sub{font-size:11px;color:var(--muted)}
+    .sphere-btn .s-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+    .sphere-btn .s-tags span{font-size:10px;padding:1px 6px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
     .biz-selector{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0;align-items:center}
     .biz-selector strong{font-size:13px;color:var(--muted);margin-right:4px}
     .biz-btn{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
@@ -53,17 +61,6 @@
     .model-info .chip{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--card-bg);border:1px solid var(--line);color:var(--ink)}
     .prefill-badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;background:rgba(30,122,94,.12);color:var(--science);margin-left:6px;vertical-align:middle}
     [data-theme="dark"] .prefill-badge{color:#3ecf94}
-    .sphere-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-    .sphere-btn{border:2px solid var(--line);border-radius:14px;padding:10px 16px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:all .15s;font-weight:600;display:flex;align-items:center;gap:6px;flex:1;min-width:200px}
-    .sphere-btn:hover{border-color:var(--accent)}
-    .sphere-btn.active{border-color:var(--accent);background:rgba(181,107,45,.06)}
-    .sphere-btn .sphere-icon{font-size:20px}
-    .sphere-btn .sphere-text{display:flex;flex-direction:column}
-    .sphere-btn .sphere-title{font-weight:700;font-size:13px}
-    .sphere-btn .sphere-sub{font-size:11px;color:var(--muted)}
-    .progress-bar-wrap{background:var(--line);border-radius:999px;height:8px;margin:10px 0 0;overflow:hidden}
-    .progress-bar-fill{height:100%;border-radius:999px;background:var(--science);transition:width .3s}
-    .progress-label{font-size:11px;color:var(--muted);margin-top:4px}
     .wizard-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
     .wizard-card h3{margin:0 0 10px;font-size:16px;color:var(--accent)}
     .wizard-card p{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.6}
@@ -71,6 +68,9 @@
     .wizard-opt{border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:all .15s;font-weight:600}
     .wizard-opt:hover{border-color:var(--accent);background:rgba(181,107,45,.06)}
     .wizard-opt.chosen{border-color:var(--accent);background:rgba(181,107,45,.1);color:var(--accent)}
+    .progress-bar-wrap{background:var(--line);border-radius:999px;height:8px;margin:10px 0 0;overflow:hidden}
+    .progress-bar-fill{height:100%;border-radius:999px;background:var(--science);transition:width .3s}
+    .progress-label{font-size:11px;color:var(--muted);margin-top:4px}
     .save-row{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap}
     .save-row button{border:1px solid var(--line);background:var(--input-bg);color:var(--ink);padding:8px 18px;border-radius:999px;font-weight:600;font-size:13px;cursor:pointer;transition:all .15s}
     .save-row button:hover{background:var(--ink);color:#fff}
@@ -81,40 +81,52 @@
 </head>
 <body>
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
-  <script>const t=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",t);document.getElementById("themeToggle").textContent=t==="dark"?"☀️":"🌙";</script>
+  <script>var t=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",t);document.getElementById("themeToggle").textContent=t==="dark"?"☀️":"🌙";</script>
   <main class="page">
     <div class="breadcrumb"><a href="./">← K Venture Studio Hub</a></div>
     <section class="hero">
       <p class="eyebrow">Venture Canvases</p>
       <h1>Strategy on One Page</h1>
-      <p class="lede">Pick your Venture Sphere → choose a business model → get a pre-filled canvas. Edit, save, iterate.</p>
+      <p class="lede">Pick your Venture Sphere → choose a business model → get a pre-filled canvas. Edit, save, export.</p>
     </section>
 
-    <!-- Venture Sphere Selector -->
+    <!-- Venture Spheres (I, II, III order) -->
     <div class="sphere-nav" id="sphereNav">
-      <button class="sphere-btn active" data-sphere="entrepreneurship">
-        <span class="sphere-icon">💼</span>
-        <span class="sphere-text"><span class="sphere-title">Sphere II — Entrepreneurship</span><span class="sphere-sub">Applied venture design, market intelligence</span></span>
-      </button>
       <button class="sphere-btn" data-sphere="science">
-        <span class="sphere-icon">🩺</span>
-        <span class="sphere-text"><span class="sphere-title">Sphere I — Science</span><span class="sphere-sub">Research foundations, validation</span></span>
+        <span class="s-icon">🩺</span>
+        <span class="s-body">
+          <span class="s-title">Sphere I — Science</span>
+          <span class="s-sub">Research foundations, validation, hypotheses</span>
+          <span class="s-tags"><span>Bio/Med</span><span>Green</span><span>AgTech</span><span>Human Systems</span></span>
+        </span>
+      </button>
+      <button class="sphere-btn active" data-sphere="entrepreneurship">
+        <span class="s-icon">💼</span>
+        <span class="s-body">
+          <span class="s-title">Sphere II — Entrepreneurship</span>
+          <span class="s-sub">Venture design, market intelligence, growth</span>
+          <span class="s-tags"><span>MVPs</span><span>Founder Logic</span><span>Market Validation</span><span>Ecosystem & Ops</span></span>
+        </span>
       </button>
       <button class="sphere-btn" data-sphere="technology">
-        <span class="sphere-icon">⚙️</span>
-        <span class="sphere-text"><span class="sphere-title">Sphere III — Technology</span><span class="sphere-sub">Reusable tools, dashboards, infra</span></span>
+        <span class="s-icon">⚙️</span>
+        <span class="s-body">
+          <span class="s-title">Sphere III — Technology</span>
+          <span class="s-sub">Reusable tools, dashboards, open infrastructure</span>
+          <span class="s-tags"><span>Analytics</span><span>Engineering</span><span>Dashboards</span><span>Infrastructure</span></span>
+        </span>
       </button>
     </div>
 
-    <!-- Wizard: which canvas? -->
+    <!-- Wizard -->
     <div class="wizard-card" id="wizardCard">
       <h3>🧭 Which canvas do you need?</h3>
-      <p id="wizardQuestion">Not sure? Answer one question and we'll recommend the right canvas.</p>
-      <div class="wizard-options" id="wizardOptions">
-        <button class="wizard-opt" data-recommend="de" data-reason="Full 10-step framework for a new venture from scratch">💡 I'm starting from zero</button>
-        <button class="wizard-opt" data-recommend="bmc" data-reason="Classic 9-block overview of how your business works">🏢 I need a business model overview</button>
-        <button class="wizard-opt" data-recommend="lean" data-reason="Problem-first, fast validation canvas for early-stage">⚡ I need to validate fast</button>
-        <button class="wizard-opt" data-recommend="social" data-reason="Mission-driven canvas balancing impact + sustainability">🌱 I'm building for social impact</button>
+      <p id="wizardQ">Not sure? Pick one and we'll explain why.</p>
+      <div class="wizard-options" id="wizardOpts">
+        <button class="wizard-opt" data-tab="de">💡 Starting from zero → DE Canvas</button>
+        <button class="wizard-opt" data-tab="bmc">🏢 Business model overview → BMC</button>
+        <button class="wizard-opt" data-tab="lean">⚡ Validate fast → Lean Canvas</button>
+        <button class="wizard-opt" data-tab="social">🌱 Social impact → Social Canvas</button>
       </div>
     </div>
 
@@ -133,7 +145,6 @@
 
     <div class="model-info" id="modelInfo"></div>
 
-    <!-- Progress -->
     <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
     <div class="progress-label" id="progressLabel">0% filled</div>
 
@@ -160,7 +171,7 @@
       </div>
     </div>
 
-    <!-- Business Model Canvas -->
+    <!-- BMC -->
     <div class="tab-panel" id="panel-bmc">
       <div class="canvas-grid bmc">
         <div class="canvas-box" style="grid-column:1;grid-row:1/3"><h4>Key Partners <span class="prefill-badge">AUTO</span></h4><p class="hint">Suppliers, partners, allies</p><textarea data-canvas="bmc" data-field="partners"></textarea></div>
@@ -175,7 +186,7 @@
       </div>
     </div>
 
-    <!-- Lean Canvas -->
+    <!-- Lean -->
     <div class="tab-panel" id="panel-lean">
       <div class="canvas-grid lean">
         <div class="canvas-box" style="grid-column:1;grid-row:1/3"><h4>Problem <span class="prefill-badge">AUTO</span></h4><p class="hint">Top 3 problems</p><textarea data-canvas="lean" data-field="problem"></textarea></div>
@@ -190,7 +201,7 @@
       </div>
     </div>
 
-    <!-- Social Enterprise Canvas -->
+    <!-- Social -->
     <div class="tab-panel" id="panel-social">
       <div class="canvas-grid social">
         <div class="canvas-box"><h4>1. Problem & System Context <span class="prefill-badge">AUTO</span></h4><p class="hint">Social/environmental problem & systemic conditions</p><textarea data-canvas="social" data-field="problem"></textarea></div>
@@ -208,197 +219,173 @@
 
     <div class="save-row">
       <button id="saveBtn">💾 Save (browser)</button>
-      <button id="downloadJson">📥 Download JSON</button>
-      <button id="importJson">📂 Import JSON</button>
-      <button id="exportPdf">📄 Download PDF</button>
-      <button id="exportBtn">📋 Copy Markdown</button>
+      <button id="dlJson">📥 Download JSON</button>
+      <button id="impJson">📂 Import JSON</button>
+      <button id="dlPdf">📄 Download PDF</button>
+      <button id="copyMd">📋 Copy Markdown</button>
       <button id="resetBtn">🔄 Reset to Pre-fill</button>
       <button id="clearBtn">🗑️ Clear All</button>
       <span class="saved-msg" id="savedMsg">Saved!</span>
-      <input type="file" id="fileInput" accept=".json" style="display:none">
+      <input type="file" id="fileIn" accept=".json" style="display:none">
     </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">💾 Save = browser localStorage (lost if you clear cache). 📥 Download JSON = backup to disk. 📂 Import = restore from backup. 📄 PDF = print-ready page.</p>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">💾 Save = browser localStorage. 📥 JSON = backup file. 📂 Import = restore. 📄 PDF = print page. 📋 Markdown = clipboard.</p>
   </main>
 
   <script>
   (function(){
+    // Theme
     document.getElementById("themeToggle").addEventListener("click",function(){
-      const c=this.textContent==="🌙"?"dark":"light";
+      var c=this.textContent==="🌙"?"dark":"light";
       document.documentElement.setAttribute("data-theme",c);localStorage.setItem("theme",c);
       this.textContent=c==="dark"?"☀️":"🌙";
     });
 
     // Tabs
-    document.querySelectorAll(".tabbar button").forEach(btn=>{
+    document.querySelectorAll(".tabbar button").forEach(function(btn){
       btn.addEventListener("click",function(){
-        document.querySelectorAll(".tabbar button").forEach(b=>b.classList.remove("active"));
-        document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+        document.querySelectorAll(".tabbar button").forEach(function(b){b.classList.remove("active")});
+        document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active")});
         this.classList.add("active");
         document.getElementById("panel-"+this.dataset.tab).classList.add("active");
         updateProgress();
       });
     });
 
-    // Sphere = lens: highlights relevant fields in ALL canvases
-    let currentSphere = localStorage.getItem("vs-canvas-sphere") || "entrepreneurship";
+    // Sphere lens
+    var currentSphere = localStorage.getItem("vs-canvas-sphere") || "entrepreneurship";
 
-    const SPHERE_LENS = {
+    var LENS = {
       science: {
-        label: "🩺 Research Lens",
-        desc: "Highlights validation, measurement, hypothesis fields",
-        fields: {
-          de: ["market","value","advantage","unit-econ","build"],
-          bmc: ["activities","resources","costs"],
-          lean: ["problem","metrics","advantage"],
-          social: ["problem","solution","impact"]
-        },
+        fields: {de:["market","value","advantage","unit-econ","build"],bmc:["activities","resources","costs"],lean:["problem","metrics","advantage"],social:["problem","solution","impact"]},
         hints: {
-          de: {market:"Research: define TAM with data, not guesses",value:"Research: quantify with experiment, not opinion",advantage:"Research: what evidence proves your moat?","unit-econ":"Research: validate LTV/CAC with cohort data",build:"Research: list falsifiable assumptions + test plan"},
-          bmc: {activities:"Research: what experiments must you run?",resources:"Research: what data/assets do you need?",costs:"Research: cost of validation vs cost of being wrong"},
-          lean: {problem:"Research: is this a real problem? Interview 50+",metrics:"Research: leading indicators before lagging",advantage:"Research: proprietary data or insight from research?"},
-          social: {problem:"Research: root cause analysis, not symptoms",solution:"Research: evidence-based intervention design",impact:"Research: M&E framework, theory of change metrics"}
+          de:{market:"Research: define TAM with data, not guesses",value:"Research: quantify with experiment",advantage:"Research: what evidence proves your moat?","unit-econ":"Research: validate LTV/CAC with cohort data",build:"Research: list falsifiable assumptions + test plan"},
+          bmc:{activities:"Research: what experiments must you run?",resources:"Research: what data/assets do you need?",costs:"Research: cost of validation vs cost of being wrong"},
+          lean:{problem:"Research: is this a real problem? Interview 50+",metrics:"Research: leading indicators before lagging",advantage:"Research: proprietary data or insight?"},
+          social:{problem:"Research: root cause analysis, not symptoms",solution:"Research: evidence-based intervention",impact:"Research: M&E framework, theory of change"}
         }
       },
       entrepreneurship: {
-        label: "💼 Venture Lens",
-        desc: "Highlights market, customers, revenue, scaling fields",
-        fields: {
-          de: ["raison","market","acquisition","revenue","overall-econ","scaling"],
-          bmc: ["proposition","relationships","segments","channels","revenue-streams"],
-          lean: ["uvp","segments","channels","revenue"],
-          social: ["stakeholders","funding","partners"]
-        },
+        fields: {de:["raison","market","acquisition","revenue","overall-econ","scaling"],bmc:["proposition","relationships","segments","channels","revenue-streams"],lean:["uvp","segments","channels","revenue"],social:["stakeholders","funding","partners"]},
         hints: {
-          de: {raison:"Venture: why will customers pay you?",market:"Venture: who has budget + urgency?",acquisition:"Venture: how do you reach buyers affordably?",revenue:"Venture: pricing model = business model","overall-econ":"Venture: is this fundable? Rule of 40",scaling:"Venture: follow-on markets for growth"},
-          bmc: {proposition:"Venture: what makes customers switch?",relationships:"Venture: self-serve or sales-led?",segments:"Venture: beachhead first, then expand",channels:"Venture: CAC-efficient distribution",revenue-streams:"Venture: recurring > one-time"},
-          lean: {uvp:"Venture: 10-word pitch that converts",segments:"Venture: early adopters ≠ mainstream",channels:"Venture: free channels first, paid later",revenue:"Venture: price = signal of value"},
-          social: {stakeholders:"Venture: who pays vs who benefits?",funding:"Venture: earned revenue > grants for sustainability",partners:"Venture: distribution through partners"}
+          de:{raison:"Venture: why will customers pay you?",market:"Venture: who has budget + urgency?",acquisition:"Venture: how do you reach buyers affordably?",revenue:"Venture: pricing model = business model","overall-econ":"Venture: is this fundable? Rule of 40",scaling:"Venture: follow-on markets for growth"},
+          bmc:{proposition:"Venture: what makes customers switch?",relationships:"Venture: self-serve or sales-led?",segments:"Venture: beachhead first, then expand",channels:"Venture: CAC-efficient distribution","revenue-streams":"Venture: recurring > one-time"},
+          lean:{uvp:"Venture: 10-word pitch that converts",segments:"Venture: early adopters ≠ mainstream",channels:"Venture: free channels first, paid later",revenue:"Venture: price = signal of value"},
+          social:{stakeholders:"Venture: who pays vs who benefits?",funding:"Venture: earned revenue > grants",partners:"Venture: distribution through partners"}
         }
       },
       technology: {
-        label: "⚙️ Tech Lens",
-        desc: "Highlights infrastructure, build, resources, scale fields",
-        fields: {
-          de: ["value","advantage","build","scaling"],
-          bmc: ["partners","activities","resources","costs"],
-          lean: ["solution","advantage","metrics"],
-          social: ["structure","costs","activities","channels"]
-        },
+        fields: {de:["value","advantage","build","scaling"],bmc:["partners","activities","resources","costs"],lean:["solution","advantage","metrics"],social:["structure","costs","activities","channels"]},
         hints: {
-          de: {value:"Tech: build vs buy vs partner decision",advantage:"Tech: tech moat = proprietary data/algo/infra",build:"Tech: MVBP = minimal viable beautiful product",scaling:"Tech: architecture for 10x scale"},
-          bmc: {partners:"Tech: APIs, integrations, cloud providers",activities:"Tech: CI/CD, monitoring, security, reliability",resources:"Tech: infra, codebase, dev team, IP",costs:"Tech: hosting scales with users, optimize COGS"},
-          lean: {solution:"Tech: what's the simplest technical solution?",advantage:"Tech: network effects, data flywheel, switching costs",metrics:"Tech: uptime, latency, error rate, deploy frequency"},
-          social: {structure:"Tech: open-source model for social impact?",costs:"Tech: cloud-native = lower fixed costs",activities:"Tech: automate delivery, self-service platform",channels:"Tech: API-first, embeddable widgets, integrations"}
+          de:{value:"Tech: build vs buy vs partner decision",advantage:"Tech: tech moat = proprietary data/algo/infra",build:"Tech: MVBP = minimal viable beautiful product",scaling:"Tech: architecture for 10x scale"},
+          bmc:{partners:"Tech: APIs, integrations, cloud providers",activities:"Tech: CI/CD, monitoring, security",resources:"Tech: infra, codebase, dev team, IP",costs:"Tech: hosting scales with users, optimize COGS"},
+          lean:{solution:"Tech: simplest technical solution?",advantage:"Tech: network effects, data flywheel",metrics:"Tech: uptime, latency, error rate, deploy frequency"},
+          social:{structure:"Tech: open-source model for social impact?",costs:"Tech: cloud-native = lower fixed costs",activities:"Tech: automate delivery, self-service platform",channels:"Tech: API-first, embeddable widgets"}
         }
       }
     };
 
-    function applySphereLens(sphere) {
-      // Remove all highlights first
-      document.querySelectorAll(".canvas-box").forEach(box => {
-        box.classList.remove("lens-highlight");
-        const oldHint = box.querySelector(".lens-hint");
-        if (oldHint) oldHint.remove();
+    function applyLens(sphere) {
+      document.querySelectorAll(".canvas-box").forEach(function(box){
+        box.classList.remove("lens-hl");
+        var old = box.querySelector(".lens-tag");
+        if (old) old.parentNode.removeChild(old);
       });
-      const lens = SPHERE_LENS[sphere];
+      var lens = LENS[sphere];
       if (!lens) return;
-      // Apply highlights across ALL canvases
-      ["de","bmc","lean","social"].forEach(canvas => {
-        const fields = lens.fields[canvas] || [];
-        const hints = lens.hints[canvas] || {};
-        fields.forEach(field => {
-          const ta = document.querySelector('textarea[data-canvas="'+canvas+'"][data-field="'+field+'"]');
+      ["de","bmc","lean","social"].forEach(function(cv){
+        var fields = lens.fields[cv] || [];
+        var hints = lens.hints[cv] || {};
+        fields.forEach(function(field){
+          var ta = document.querySelector('textarea[data-canvas="'+cv+'"][data-field="'+field+'"]');
           if (!ta) return;
-          const box = ta.closest(".canvas-box");
-          if (box) {
-            box.classList.add("lens-highlight");
-            if (hints[field]) {
-              const badge = document.createElement("span");
-              badge.className = "lens-hint "+sphere;
-              badge.textContent = hints[field];
-              box.appendChild(badge);
-            }
+          var box = ta.closest(".canvas-box");
+          if (!box) return;
+          box.classList.add("lens-hl");
+          if (hints[field]) {
+            var tag = document.createElement("span");
+            tag.className = "lens-tag " + sphere;
+            tag.textContent = hints[field];
+            box.appendChild(tag);
           }
         });
       });
     }
 
-    document.querySelectorAll(".sphere-btn").forEach(btn=>{
+    document.querySelectorAll(".sphere-btn").forEach(function(btn){
       btn.addEventListener("click",function(){
-        document.querySelectorAll(".sphere-btn").forEach(b=>b.classList.remove("active"));
+        document.querySelectorAll(".sphere-btn").forEach(function(b){b.classList.remove("active")});
         this.classList.add("active");
         currentSphere = this.dataset.sphere;
         localStorage.setItem("vs-canvas-sphere", currentSphere);
-        applySphereLens(currentSphere);
+        applyLens(currentSphere);
       });
     });
-    document.querySelectorAll(".sphere-btn").forEach(b=>{
+    document.querySelectorAll(".sphere-btn").forEach(function(b){
       b.classList.toggle("active", b.dataset.sphere === currentSphere);
     });
 
     // Wizard
-    document.querySelectorAll(".wizard-opt").forEach(opt=>{
+    document.querySelectorAll(".wizard-opt").forEach(function(opt){
       opt.addEventListener("click",function(){
-        document.querySelectorAll(".wizard-opt").forEach(o=>o.classList.remove("chosen"));
+        document.querySelectorAll(".wizard-opt").forEach(function(o){o.classList.remove("chosen")});
         this.classList.add("chosen");
-        const tab = this.dataset.recommend;
-        const reason = this.dataset.reason;
+        var tab = this.dataset.tab;
         document.querySelector('.tabbar button[data-tab="'+tab+'"]').click();
-        document.getElementById("wizardQuestion").textContent = "✓ Recommended: " + reason;
+        document.getElementById("wizardQ").textContent = "✓ Switched to " + this.textContent.split("→")[1].trim();
       });
     });
 
     // Business model
-    let currentBiz = localStorage.getItem("vs-canvas-biz") || "subscription";
+    var currentBiz = localStorage.getItem("vs-canvas-biz") || "subscription";
 
     function updateModelInfo(key) {
-      const p = CANVAS_PRESETS[key];
+      var p = CANVAS_PRESETS[key];
       if (!p) return;
-      const info = document.getElementById("modelInfo");
-      let html = '<h4>'+p.label+'</h4><p>'+p.desc+'</p>';
+      var info = document.getElementById("modelInfo");
+      var html = '<h4>'+p.label+'</h4><p>'+p.desc+'</p>';
       if (p.examples && p.examples.length) {
         html += '<div class="examples">';
-        p.examples.forEach(e => html += '<span class="chip">'+e+'</span>');
+        p.examples.forEach(function(e){ html += '<span class="chip">'+e+'</span>'; });
         html += '</div>';
       }
       info.innerHTML = html;
     }
 
     function applyPreset(key) {
-      const p = CANVAS_PRESETS[key];
+      var p = CANVAS_PRESETS[key];
       if (!p) return;
-      // Clear ALL textareas first
-      document.querySelectorAll("textarea[data-canvas]").forEach(ta => ta.value = "");
+      // Clear ALL first
+      document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){ ta.value = ""; });
       // Fill from preset
-      ["de","bmc","lean"].forEach(canvas => {
-        if (p[canvas]) {
-          Object.keys(p[canvas]).forEach(field => {
-            const ta = document.querySelector('textarea[data-canvas="'+canvas+'"][data-field="'+field+'"]');
-            if (ta && p[canvas][field]) ta.value = p[canvas][field];
+      ["de","bmc","lean"].forEach(function(cv){
+        if (p[cv]) {
+          Object.keys(p[cv]).forEach(function(field){
+            var ta = document.querySelector('textarea[data-canvas="'+cv+'"][data-field="'+field+'"]');
+            if (ta && p[cv][field]) ta.value = p[cv][field];
           });
         }
       });
-      // Social canvas
+      // Social
       if (p.social) {
-        Object.keys(p.social).forEach(field => {
-          const ta = document.querySelector('textarea[data-canvas="social"][data-field="'+field+'"]');
+        Object.keys(p.social).forEach(function(field){
+          var ta = document.querySelector('textarea[data-canvas="social"][data-field="'+field+'"]');
           if (ta && p.social[field]) ta.value = p.social[field];
         });
       } else if (p.bmc) {
-        const sm = {
-          problem: "Social angle: " + (p.lean?.problem || ""),
-          stakeholders: p.bmc?.segments || "",
-          solution: p.bmc?.proposition || "",
+        var sm = {
+          problem: "Social angle: " + (p.lean && p.lean.problem ? p.lean.problem : ""),
+          stakeholders: p.bmc.segments || "",
+          solution: p.bmc.proposition || "",
           structure: "Hybrid: for-profit with social mission",
-          funding: p.bmc?.["revenue-streams"] || "",
-          costs: p.bmc?.costs || "",
-          activities: p.bmc?.activities || "",
-          channels: p.bmc?.channels || "",
-          partners: p.bmc?.partners || "",
-          impact: "Impact: " + (p.lean?.metrics || "beneficiary outcomes + financial sustainability")
+          funding: p.bmc["revenue-streams"] || "",
+          costs: p.bmc.costs || "",
+          activities: p.bmc.activities || "",
+          channels: p.bmc.channels || "",
+          partners: p.bmc.partners || "",
+          impact: "Impact: " + (p.lean && p.lean.metrics ? p.lean.metrics : "beneficiary outcomes + financial sustainability")
         };
-        Object.keys(sm).forEach(field => {
-          const ta = document.querySelector('textarea[data-canvas="social"][data-field="'+field+'"]');
+        Object.keys(sm).forEach(function(field){
+          var ta = document.querySelector('textarea[data-canvas="social"][data-field="'+field+'"]');
           if (ta && sm[field]) ta.value = sm[field];
         });
       }
@@ -406,197 +393,177 @@
       updateProgress();
     }
 
-    document.querySelectorAll(".biz-btn").forEach(btn=>{
+    document.querySelectorAll(".biz-btn").forEach(function(btn){
       btn.addEventListener("click",function(){
-        document.querySelectorAll(".biz-btn").forEach(b=>b.classList.remove("active"));
+        document.querySelectorAll(".biz-btn").forEach(function(b){b.classList.remove("active")});
         this.classList.add("active");
         currentBiz = this.dataset.biz;
         localStorage.setItem("vs-canvas-biz", currentBiz);
         updateModelInfo(currentBiz);
         applyPreset(currentBiz);
+        applyLens(currentSphere);
       });
     });
-    document.querySelectorAll(".biz-btn").forEach(b=>{
+    document.querySelectorAll(".biz-btn").forEach(function(b){
       b.classList.toggle("active", b.dataset.biz === currentBiz);
     });
 
-    // Progress tracking
+    // Progress
     function updateProgress() {
-      const activeTab = document.querySelector(".tabbar button.active").dataset.tab;
-      const panel = document.getElementById("panel-"+activeTab);
-      const textareas = panel.querySelectorAll("textarea[data-canvas]");
-      const filled = Array.from(textareas).filter(ta => ta.value.trim().length > 0).length;
-      const total = textareas.length;
-      const pct = total > 0 ? Math.round(filled/total*100) : 0;
+      var activeTab = document.querySelector(".tabbar button.active");
+      if (!activeTab) return;
+      var panel = document.getElementById("panel-"+activeTab.dataset.tab);
+      var tas = panel.querySelectorAll("textarea[data-canvas]");
+      var filled = 0;
+      tas.forEach(function(ta){ if (ta.value.trim().length > 0) filled++; });
+      var pct = tas.length > 0 ? Math.round(filled/tas.length*100) : 0;
       document.getElementById("progressFill").style.width = pct+"%";
-      document.getElementById("progressLabel").textContent = pct+"% filled ("+filled+"/"+total+" fields)";
+      document.getElementById("progressLabel").textContent = pct+"% filled ("+filled+"/"+tas.length+" fields)";
     }
 
     function updateFilledState() {
-      document.querySelectorAll(".canvas-box").forEach(box => {
-        const ta = box.querySelector("textarea");
+      document.querySelectorAll(".canvas-box").forEach(function(box){
+        var ta = box.querySelector("textarea");
         if (ta) {
-          box.classList.toggle("filled", ta.value.trim().length > 0);
-          box.classList.toggle("empty", ta.value.trim().length === 0);
+          if (ta.value.trim().length > 0) { box.classList.add("filled"); }
+          else { box.classList.remove("filled"); }
         }
       });
     }
 
-    // Listen for textarea changes
-    document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
-      ta.addEventListener("input", function() {
-        updateFilledState();
-        updateProgress();
-      });
+    document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){
+      ta.addEventListener("input",function(){ updateFilledState(); updateProgress(); });
     });
 
     // Save/Load
-    const SAVE_KEY = "vs-canvas";
+    var SAVE_KEY = "vs-canvas";
     function loadAll() {
-      const data = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}");
-      document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
-        const k = ta.dataset.canvas + "." + ta.dataset.field;
+      var data = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}");
+      document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){
+        var k = ta.dataset.canvas + "." + ta.dataset.field;
         if (data[k]) ta.value = data[k];
       });
     }
     function saveAll() {
-      const data = {};
-      document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
-        const k = ta.dataset.canvas + "." + ta.dataset.field;
+      var data = {};
+      document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){
+        var k = ta.dataset.canvas + "." + ta.dataset.field;
         if (ta.value.trim()) data[k] = ta.value;
       });
       localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-      const msg = document.getElementById("savedMsg"); msg.classList.add("show");
-      setTimeout(() => msg.classList.remove("show"), 1500);
+      var msg = document.getElementById("savedMsg"); msg.classList.add("show");
+      setTimeout(function(){ msg.classList.remove("show"); }, 1500);
     }
 
     document.getElementById("saveBtn").addEventListener("click", saveAll);
 
-    document.getElementById("exportBtn").addEventListener("click", function(){
-      const activeTab = document.querySelector(".tabbar button.active").dataset.tab;
-      const names = {de:"DE Canvas",bmc:"Business Model Canvas",lean:"Lean Canvas",social:"Social Enterprise Canvas"};
-      let md = "# " + names[activeTab] + "\n\n";
-      document.querySelectorAll("#panel-"+activeTab+" .canvas-box").forEach(box => {
-        const h4 = box.querySelector("h4");
-        const ta = box.querySelector("textarea");
+    // Copy Markdown
+    document.getElementById("copyMd").addEventListener("click",function(){
+      var activeTab = document.querySelector(".tabbar button.active");
+      var names = {de:"DE Canvas",bmc:"Business Model Canvas",lean:"Lean Canvas",social:"Social Enterprise Canvas"};
+      var md = "# " + names[activeTab.dataset.tab] + "\n\n";
+      document.querySelectorAll("#panel-"+activeTab.dataset.tab+" .canvas-box").forEach(function(box){
+        var h4 = box.querySelector("h4");
+        var ta = box.querySelector("textarea");
         if (h4 && ta) md += "## " + h4.textContent.replace("AUTO","").trim() + "\n" + ta.value + "\n\n";
       });
-      navigator.clipboard.writeText(md).then(() => {
-        const msg = document.getElementById("savedMsg"); msg.textContent = "Copied!";
-        msg.classList.add("show");
-        setTimeout(() => { msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
+      navigator.clipboard.writeText(md).then(function(){
+        var msg = document.getElementById("savedMsg"); msg.textContent = "Copied!"; msg.classList.add("show");
+        setTimeout(function(){ msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
       });
     });
 
-    document.getElementById("resetBtn").addEventListener("click", function(){
-      if (confirm("Reset all fields to pre-filled values for " + CANVAS_PRESETS[currentBiz].label + "?")) {
+    // Reset
+    document.getElementById("resetBtn").addEventListener("click",function(){
+      if (confirm("Reset to pre-filled values for " + CANVAS_PRESETS[currentBiz].label + "?")) {
         localStorage.removeItem(SAVE_KEY);
         applyPreset(currentBiz);
+        applyLens(currentSphere);
       }
     });
 
-    document.getElementById("clearBtn").addEventListener("click", function(){
-      if (confirm("Clear ALL fields across ALL canvases? This cannot be undone.")) {
-        document.querySelectorAll("textarea[data-canvas]").forEach(ta => ta.value = "");
+    // Clear
+    document.getElementById("clearBtn").addEventListener("click",function(){
+      if (confirm("Clear ALL fields across ALL canvases?")) {
+        document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){ ta.value = ""; });
         localStorage.removeItem(SAVE_KEY);
-        updateFilledState();
-        updateProgress();
+        updateFilledState(); updateProgress();
       }
     });
 
-    // Download JSON backup
-    document.getElementById("downloadJson").addEventListener("click", function(){
-      const data = {biz:currentBiz,sphere:currentSphere,saved:new Date().toISOString()};
-      document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
-        const k = ta.dataset.canvas + "." + ta.dataset.field;
+    // Download JSON
+    document.getElementById("dlJson").addEventListener("click",function(){
+      var data = {biz:currentBiz,sphere:currentSphere,saved:new Date().toISOString()};
+      document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){
+        var k = ta.dataset.canvas + "." + ta.dataset.field;
         if (ta.value.trim()) data[k] = ta.value;
       });
-      const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      var blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
       a.href = url;
       a.download = "canvas-"+currentBiz+"-"+new Date().toISOString().slice(0,10)+".json";
       a.click();
       URL.revokeObjectURL(url);
-      const msg = document.getElementById("savedMsg"); msg.textContent = "Downloaded!"; msg.classList.add("show");
-      setTimeout(() => { msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
+      var msg = document.getElementById("savedMsg"); msg.textContent = "Downloaded!"; msg.classList.add("show");
+      setTimeout(function(){ msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
     });
 
-    // Import JSON backup
-    document.getElementById("importJson").addEventListener("click", function(){
-      document.getElementById("fileInput").click();
+    // Import JSON
+    document.getElementById("impJson").addEventListener("click",function(){
+      document.getElementById("fileIn").click();
     });
-    document.getElementById("fileInput").addEventListener("change", function(e){
-      const file = e.target.files[0];
+    document.getElementById("fileIn").addEventListener("change",function(e){
+      var file = e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
+      var reader = new FileReader();
       reader.onload = function(ev){
         try {
-          const data = JSON.parse(ev.target.result);
+          var data = JSON.parse(ev.target.result);
           if (data.biz) { currentBiz = data.biz; localStorage.setItem("vs-canvas-biz",currentBiz); }
           if (data.sphere) { currentSphere = data.sphere; localStorage.setItem("vs-canvas-sphere",currentSphere); }
-          document.querySelectorAll(".biz-btn").forEach(b=>b.classList.toggle("active",b.dataset.biz===currentBiz));
-          document.querySelectorAll(".sphere-btn").forEach(b=>b.classList.toggle("active",b.dataset.sphere===currentSphere));
-          document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
-            const k = ta.dataset.canvas + "." + ta.dataset.field;
+          document.querySelectorAll(".biz-btn").forEach(function(b){b.classList.toggle("active",b.dataset.biz===currentBiz)});
+          document.querySelectorAll(".sphere-btn").forEach(function(b){b.classList.toggle("active",b.dataset.sphere===currentSphere)});
+          document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){
+            var k = ta.dataset.canvas + "." + ta.dataset.field;
             if (data[k] !== undefined) ta.value = data[k];
           });
           localStorage.setItem(SAVE_KEY, JSON.stringify(data));
           updateModelInfo(currentBiz);
-          updateFilledState();
-          updateProgress();
-          applySphereLens(currentSphere);
-          const msg = document.getElementById("savedMsg"); msg.textContent = "Imported!"; msg.classList.add("show");
-          setTimeout(() => { msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
-        } catch(err) { alert("Invalid JSON file: " + err.message); }
+          updateFilledState(); updateProgress(); applyLens(currentSphere);
+          var msg = document.getElementById("savedMsg"); msg.textContent = "Imported!"; msg.classList.add("show");
+          setTimeout(function(){ msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
+        } catch(err) { alert("Invalid JSON: " + err.message); }
       };
       reader.readAsText(file);
       e.target.value = "";
     });
 
-    // PDF export via print
-    document.getElementById("exportPdf").addEventListener("click", function(){
-      // Show all canvases for printing
-      const panels = document.querySelectorAll(".tab-panel");
-      panels.forEach(p => p.classList.add("active"));
-      // Add print styles
-      const style = document.createElement("style");
+    // PDF via print
+    document.getElementById("dlPdf").addEventListener("click",function(){
+      var panels = document.querySelectorAll(".tab-panel");
+      panels.forEach(function(p){p.classList.add("active")});
+      var style = document.createElement("style");
       style.id = "print-style";
-      style.textContent = `
-        @media print {
-          .theme-toggle,.breadcrumb,.biz-selector,.sphere-nav,.wizard-card,.model-info,.save-row,.progress-bar-wrap,.progress-label,.tabbar,.prefill-badge,.lens-hint { display:none !important; }
-          .tab-panel { display:block !important; page-break-inside:avoid; margin-bottom:30px; }
-          .tab-panel h3 { font-size:18px; margin-bottom:10px; }
-          .canvas-box { border:1px solid #ccc; page-break-inside:avoid; }
-          .canvas-box textarea { border:none; min-height:40px; font-size:11px; }
-          .lens-highlight { border:2px solid #b56b2d; }
-          .page { max-width:100%; padding:10px; }
-          body { font-size:11px; }
-        }
-      `;
+      style.textContent = "@media print{.theme-toggle,.breadcrumb,.biz-selector,.sphere-nav,.wizard-card,.model-info,.save-row,.progress-bar-wrap,.progress-label,.tabbar,.prefill-badge,.lens-tag{display:none!important}.tab-panel{display:block!important;page-break-inside:avoid;margin-bottom:30px}.canvas-box{border:1px solid #ccc;page-break-inside:avoid}.canvas-box textarea{border:none;min-height:40px;font-size:11px}.lens-hl{border:2px solid #b56b2d}.page{max-width:100%;padding:10px}body{font-size:11px}}";
       document.head.appendChild(style);
       window.print();
-      // Cleanup after print
-      setTimeout(() => {
-        document.getElementById("print-style")?.remove();
-        panels.forEach(p => p.classList.remove("active"));
-        const activeTab = document.querySelector(".tabbar button.active");
+      setTimeout(function(){
+        var ps = document.getElementById("print-style");
+        if (ps) ps.parentNode.removeChild(ps);
+        panels.forEach(function(p){p.classList.remove("active")});
+        var activeTab = document.querySelector(".tabbar button.active");
         if (activeTab) document.getElementById("panel-"+activeTab.dataset.tab).classList.add("active");
       }, 1000);
     });
 
     // Init
-    const hasSavedData = localStorage.getItem(SAVE_KEY);
-    if (hasSavedData) {
-      loadAll();
-      updateModelInfo(currentBiz);
-    } else {
-      updateModelInfo(currentBiz);
-      applyPreset(currentBiz);
-    }
+    var hasSavedData = localStorage.getItem(SAVE_KEY);
+    if (hasSavedData) { loadAll(); updateModelInfo(currentBiz); }
+    else { updateModelInfo(currentBiz); applyPreset(currentBiz); }
     updateFilledState();
     updateProgress();
-    applySphereLens(currentSphere);
+    applyLens(currentSphere);
   })();
   </script>
 </body>
