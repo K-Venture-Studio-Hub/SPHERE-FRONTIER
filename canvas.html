@@ -23,13 +23,14 @@
     .canvas-grid.bmc{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
     .canvas-grid.lean{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
     .canvas-grid.social{grid-template-columns:1fr 1fr}
-    .canvas-box{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px}
+    .canvas-box{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;position:relative}
     .canvas-box h4{margin:0;font-size:13px;color:var(--accent);font-weight:700}
     .canvas-box .hint{font-size:11px;color:var(--muted);line-height:1.4;margin:0}
     .canvas-box textarea{width:100%;min-height:80px;border:1px solid var(--line);border-radius:10px;padding:8px;font-size:13px;font-family:inherit;background:var(--input-bg);color:var(--ink);resize:vertical;transition:border-color .15s}
     .canvas-box textarea:focus{outline:none;border-color:var(--accent)}
     [data-theme="dark"] .canvas-box textarea{background:#1c1608;color:#f0e4d0}
-    .canvas-box.full{grid-column:1/-1}
+    .canvas-box.filled textarea{border-color:var(--science);border-style:dashed}
+    .canvas-box.empty textarea{border-color:var(--line)}
     .biz-selector{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0;align-items:center}
     .biz-selector strong{font-size:13px;color:var(--muted);margin-right:4px}
     .biz-btn{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
@@ -43,12 +44,30 @@
     .model-info .chip{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--card-bg);border:1px solid var(--line);color:var(--ink)}
     .prefill-badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;background:rgba(30,122,94,.12);color:var(--science);margin-left:6px;vertical-align:middle}
     [data-theme="dark"] .prefill-badge{color:#3ecf94}
+    .sphere-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .sphere-btn{border:2px solid var(--line);border-radius:14px;padding:10px 16px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:all .15s;font-weight:600;display:flex;align-items:center;gap:6px;flex:1;min-width:200px}
+    .sphere-btn:hover{border-color:var(--accent)}
+    .sphere-btn.active{border-color:var(--accent);background:rgba(181,107,45,.06)}
+    .sphere-btn .sphere-icon{font-size:20px}
+    .sphere-btn .sphere-text{display:flex;flex-direction:column}
+    .sphere-btn .sphere-title{font-weight:700;font-size:13px}
+    .sphere-btn .sphere-sub{font-size:11px;color:var(--muted)}
+    .progress-bar-wrap{background:var(--line);border-radius:999px;height:8px;margin:10px 0 0;overflow:hidden}
+    .progress-bar-fill{height:100%;border-radius:999px;background:var(--science);transition:width .3s}
+    .progress-label{font-size:11px;color:var(--muted);margin-top:4px}
+    .wizard-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
+    .wizard-card h3{margin:0 0 10px;font-size:16px;color:var(--accent)}
+    .wizard-card p{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.6}
+    .wizard-options{display:flex;gap:8px;flex-wrap:wrap}
+    .wizard-opt{border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:all .15s;font-weight:600}
+    .wizard-opt:hover{border-color:var(--accent);background:rgba(181,107,45,.06)}
+    .wizard-opt.chosen{border-color:var(--accent);background:rgba(181,107,45,.1);color:var(--accent)}
     .save-row{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap}
     .save-row button{border:1px solid var(--line);background:var(--input-bg);color:var(--ink);padding:8px 18px;border-radius:999px;font-weight:600;font-size:13px;cursor:pointer;transition:all .15s}
     .save-row button:hover{background:var(--ink);color:#fff}
     .save-row .saved-msg{font-size:12px;color:var(--science);opacity:0;transition:opacity .3s}
     .save-row .saved-msg.show{opacity:1}
-    @media(max-width:768px){.canvas-grid.de,.canvas-grid.social{grid-template-columns:1fr}.canvas-grid.bmc,.canvas-grid.lean{grid-template-columns:1fr 1fr}}
+    @media(max-width:768px){.canvas-grid.de,.canvas-grid.social{grid-template-columns:1fr}.canvas-grid.bmc,.canvas-grid.lean{grid-template-columns:1fr 1fr}.sphere-btn{min-width:140px}}
   </style>
 </head>
 <body>
@@ -59,9 +78,38 @@
     <section class="hero">
       <p class="eyebrow">Venture Canvases</p>
       <h1>Strategy on One Page</h1>
-      <p class="lede">Pick your business model → get a pre-filled canvas with real examples. Edit, save, iterate.</p>
+      <p class="lede">Pick your Venture Sphere → choose a business model → get a pre-filled canvas. Edit, save, iterate.</p>
     </section>
 
+    <!-- Venture Sphere Selector -->
+    <div class="sphere-nav" id="sphereNav">
+      <button class="sphere-btn active" data-sphere="entrepreneurship">
+        <span class="sphere-icon">💼</span>
+        <span class="sphere-text"><span class="sphere-title">Sphere II — Entrepreneurship</span><span class="sphere-sub">Applied venture design, market intelligence</span></span>
+      </button>
+      <button class="sphere-btn" data-sphere="science">
+        <span class="sphere-icon">🩺</span>
+        <span class="sphere-text"><span class="sphere-title">Sphere I — Science</span><span class="sphere-sub">Research foundations, validation</span></span>
+      </button>
+      <button class="sphere-btn" data-sphere="technology">
+        <span class="sphere-icon">⚙️</span>
+        <span class="sphere-text"><span class="sphere-title">Sphere III — Technology</span><span class="sphere-sub">Reusable tools, dashboards, infra</span></span>
+      </button>
+    </div>
+
+    <!-- Wizard: which canvas? -->
+    <div class="wizard-card" id="wizardCard">
+      <h3>🧭 Which canvas do you need?</h3>
+      <p id="wizardQuestion">Not sure? Answer one question and we'll recommend the right canvas.</p>
+      <div class="wizard-options" id="wizardOptions">
+        <button class="wizard-opt" data-recommend="de" data-reason="Full 10-step framework for a new venture from scratch">💡 I'm starting from zero</button>
+        <button class="wizard-opt" data-recommend="bmc" data-reason="Classic 9-block overview of how your business works">🏢 I need a business model overview</button>
+        <button class="wizard-opt" data-recommend="lean" data-reason="Problem-first, fast validation canvas for early-stage">⚡ I need to validate fast</button>
+        <button class="wizard-opt" data-recommend="social" data-reason="Mission-driven canvas balancing impact + sustainability">🌱 I'm building for social impact</button>
+      </div>
+    </div>
+
+    <!-- Business Model Selector -->
     <div class="biz-selector" id="bizSelector">
       <strong>Business model:</strong>
       <button class="biz-btn active" data-biz="subscription">🔄 Subscription/SaaS</button>
@@ -76,6 +124,10 @@
 
     <div class="model-info" id="modelInfo"></div>
 
+    <!-- Progress -->
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">0% filled</div>
+
     <div class="tabbar">
       <button class="active" data-tab="de">DE Canvas</button>
       <button data-tab="bmc">Business Model</button>
@@ -83,6 +135,7 @@
       <button data-tab="social">Social Enterprise</button>
     </div>
 
+    <!-- DE Canvas -->
     <div class="tab-panel active" id="panel-de">
       <div class="canvas-grid de">
         <div class="canvas-box"><h4>① Raison d'Être <span class="prefill-badge">AUTO</span></h4><p class="hint">Why this venture exists beyond profit</p><textarea data-canvas="de" data-field="raison"></textarea></div>
@@ -98,6 +151,7 @@
       </div>
     </div>
 
+    <!-- Business Model Canvas -->
     <div class="tab-panel" id="panel-bmc">
       <div class="canvas-grid bmc">
         <div class="canvas-box" style="grid-column:1;grid-row:1/3"><h4>Key Partners <span class="prefill-badge">AUTO</span></h4><p class="hint">Suppliers, partners, allies</p><textarea data-canvas="bmc" data-field="partners"></textarea></div>
@@ -112,6 +166,7 @@
       </div>
     </div>
 
+    <!-- Lean Canvas -->
     <div class="tab-panel" id="panel-lean">
       <div class="canvas-grid lean">
         <div class="canvas-box" style="grid-column:1;grid-row:1/3"><h4>Problem <span class="prefill-badge">AUTO</span></h4><p class="hint">Top 3 problems</p><textarea data-canvas="lean" data-field="problem"></textarea></div>
@@ -126,6 +181,7 @@
       </div>
     </div>
 
+    <!-- Social Enterprise Canvas -->
     <div class="tab-panel" id="panel-social">
       <div class="canvas-grid social">
         <div class="canvas-box"><h4>1. Problem & System Context <span class="prefill-badge">AUTO</span></h4><p class="hint">Social/environmental problem & systemic conditions</p><textarea data-canvas="social" data-field="problem"></textarea></div>
@@ -145,6 +201,7 @@
       <button id="saveBtn">💾 Save Canvas</button>
       <button id="exportBtn">📋 Copy as Markdown</button>
       <button id="resetBtn">🔄 Reset to Pre-fill</button>
+      <button id="clearBtn">🗑️ Clear All</button>
       <span class="saved-msg" id="savedMsg">Saved!</span>
     </div>
   </main>
@@ -153,20 +210,52 @@
   (function(){
     document.getElementById("themeToggle").addEventListener("click",function(){
       const c=this.textContent==="🌙"?"dark":"light";
-      document.documentElement.setAttribute("data-theme",c);
-      localStorage.setItem("theme",c);
+      document.documentElement.setAttribute("data-theme",c);localStorage.setItem("theme",c);
       this.textContent=c==="dark"?"☀️":"🌙";
     });
 
+    // Tabs
     document.querySelectorAll(".tabbar button").forEach(btn=>{
       btn.addEventListener("click",function(){
         document.querySelectorAll(".tabbar button").forEach(b=>b.classList.remove("active"));
         document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
         this.classList.add("active");
         document.getElementById("panel-"+this.dataset.tab).classList.add("active");
+        updateProgress();
       });
     });
 
+    // Sphere selector
+    let currentSphere = localStorage.getItem("vs-canvas-sphere") || "entrepreneurship";
+    document.querySelectorAll(".sphere-btn").forEach(btn=>{
+      btn.addEventListener("click",function(){
+        document.querySelectorAll(".sphere-btn").forEach(b=>b.classList.remove("active"));
+        this.classList.add("active");
+        currentSphere = this.dataset.sphere;
+        localStorage.setItem("vs-canvas-sphere", currentSphere);
+        // Auto-select best canvas tab for sphere
+        const sphereTab = {science:"lean",entrepreneurship:"de",technology:"bmc"};
+        const targetTab = sphereTab[currentSphere] || "de";
+        document.querySelector('.tabbar button[data-tab="'+targetTab+'"]').click();
+      });
+    });
+    document.querySelectorAll(".sphere-btn").forEach(b=>{
+      b.classList.toggle("active", b.dataset.sphere === currentSphere);
+    });
+
+    // Wizard
+    document.querySelectorAll(".wizard-opt").forEach(opt=>{
+      opt.addEventListener("click",function(){
+        document.querySelectorAll(".wizard-opt").forEach(o=>o.classList.remove("chosen"));
+        this.classList.add("chosen");
+        const tab = this.dataset.recommend;
+        const reason = this.dataset.reason;
+        document.querySelector('.tabbar button[data-tab="'+tab+'"]').click();
+        document.getElementById("wizardQuestion").textContent = "✓ Recommended: " + reason;
+      });
+    });
+
+    // Business model
     let currentBiz = localStorage.getItem("vs-canvas-biz") || "subscription";
 
     function updateModelInfo(key) {
@@ -185,6 +274,9 @@
     function applyPreset(key) {
       const p = CANVAS_PRESETS[key];
       if (!p) return;
+      // Clear ALL textareas first
+      document.querySelectorAll("textarea[data-canvas]").forEach(ta => ta.value = "");
+      // Fill from preset
       ["de","bmc","lean"].forEach(canvas => {
         if (p[canvas]) {
           Object.keys(p[canvas]).forEach(field => {
@@ -193,7 +285,7 @@
           });
         }
       });
-      // Social canvas: use social preset or map from other models
+      // Social canvas
       if (p.social) {
         Object.keys(p.social).forEach(field => {
           const ta = document.querySelector('textarea[data-canvas="social"][data-field="'+field+'"]');
@@ -217,6 +309,8 @@
           if (ta && sm[field]) ta.value = sm[field];
         });
       }
+      updateFilledState();
+      updateProgress();
     }
 
     document.querySelectorAll(".biz-btn").forEach(btn=>{
@@ -229,11 +323,41 @@
         applyPreset(currentBiz);
       });
     });
-
     document.querySelectorAll(".biz-btn").forEach(b=>{
       b.classList.toggle("active", b.dataset.biz === currentBiz);
     });
 
+    // Progress tracking
+    function updateProgress() {
+      const activeTab = document.querySelector(".tabbar button.active").dataset.tab;
+      const panel = document.getElementById("panel-"+activeTab);
+      const textareas = panel.querySelectorAll("textarea[data-canvas]");
+      const filled = Array.from(textareas).filter(ta => ta.value.trim().length > 0).length;
+      const total = textareas.length;
+      const pct = total > 0 ? Math.round(filled/total*100) : 0;
+      document.getElementById("progressFill").style.width = pct+"%";
+      document.getElementById("progressLabel").textContent = pct+"% filled ("+filled+"/"+total+" fields)";
+    }
+
+    function updateFilledState() {
+      document.querySelectorAll(".canvas-box").forEach(box => {
+        const ta = box.querySelector("textarea");
+        if (ta) {
+          box.classList.toggle("filled", ta.value.trim().length > 0);
+          box.classList.toggle("empty", ta.value.trim().length === 0);
+        }
+      });
+    }
+
+    // Listen for textarea changes
+    document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
+      ta.addEventListener("input", function() {
+        updateFilledState();
+        updateProgress();
+      });
+    });
+
+    // Save/Load
     const SAVE_KEY = "vs-canvas";
     function loadAll() {
       const data = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}");
@@ -249,8 +373,7 @@
         if (ta.value.trim()) data[k] = ta.value;
       });
       localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-      const msg = document.getElementById("savedMsg");
-      msg.classList.add("show");
+      const msg = document.getElementById("savedMsg"); msg.classList.add("show");
       setTimeout(() => msg.classList.remove("show"), 1500);
     }
 
@@ -266,8 +389,7 @@
         if (h4 && ta) md += "## " + h4.textContent.replace("AUTO","").trim() + "\n" + ta.value + "\n\n";
       });
       navigator.clipboard.writeText(md).then(() => {
-        const msg = document.getElementById("savedMsg");
-        msg.textContent = "Copied!";
+        const msg = document.getElementById("savedMsg"); msg.textContent = "Copied!";
         msg.classList.add("show");
         setTimeout(() => { msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
       });
@@ -280,6 +402,16 @@
       }
     });
 
+    document.getElementById("clearBtn").addEventListener("click", function(){
+      if (confirm("Clear ALL fields across ALL canvases? This cannot be undone.")) {
+        document.querySelectorAll("textarea[data-canvas]").forEach(ta => ta.value = "");
+        localStorage.removeItem(SAVE_KEY);
+        updateFilledState();
+        updateProgress();
+      }
+    });
+
+    // Init
     const hasSavedData = localStorage.getItem(SAVE_KEY);
     if (hasSavedData) {
       loadAll();
@@ -288,6 +420,8 @@
       updateModelInfo(currentBiz);
       applyPreset(currentBiz);
     }
+    updateFilledState();
+    updateProgress();
   })();
   </script>
 </body>
