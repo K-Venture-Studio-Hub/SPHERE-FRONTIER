@@ -31,6 +31,15 @@
     [data-theme="dark"] .canvas-box textarea{background:#1c1608;color:#f0e4d0}
     .canvas-box.filled textarea{border-color:var(--science);border-style:dashed}
     .canvas-box.empty textarea{border-color:var(--line)}
+    .canvas-box.lens-highlight{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(181,107,45,.12)}
+    .canvas-box.lens-highlight h4::after{content:" ★";color:var(--accent);font-size:11px}
+    .canvas-box .lens-hint{font-size:10px;font-weight:700;padding:2px 6px;border-radius:999px;margin-top:2px;display:inline-block}
+    .lens-hint.science{background:rgba(30,122,94,.1);color:var(--science)}
+    .lens-hint.entrepreneurship{background:rgba(181,107,45,.1);color:var(--entrepreneurship)}
+    .lens-hint.technology{background:rgba(59,130,246,.1);color:#3b82f6}
+    [data-theme="dark"] .lens-hint.science{color:#3ecf94}
+    [data-theme="dark"] .lens-hint.entrepreneurship{color:#e0a050}
+    [data-theme="dark"] .lens-hint.technology{color:#60a5fa}
     .biz-selector{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0;align-items:center}
     .biz-selector strong{font-size:13px;color:var(--muted);margin-right:4px}
     .biz-btn{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
@@ -225,18 +234,97 @@
       });
     });
 
-    // Sphere selector
+    // Sphere = lens: highlights relevant fields in ALL canvases
     let currentSphere = localStorage.getItem("vs-canvas-sphere") || "entrepreneurship";
+
+    const SPHERE_LENS = {
+      science: {
+        label: "🩺 Research Lens",
+        desc: "Highlights validation, measurement, hypothesis fields",
+        fields: {
+          de: ["market","value","advantage","unit-econ","build"],
+          bmc: ["activities","resources","costs"],
+          lean: ["problem","metrics","advantage"],
+          social: ["problem","solution","impact"]
+        },
+        hints: {
+          de: {market:"Research: define TAM with data, not guesses",value:"Research: quantify with experiment, not opinion",advantage:"Research: what evidence proves your moat?","unit-econ":"Research: validate LTV/CAC with cohort data",build:"Research: list falsifiable assumptions + test plan"},
+          bmc: {activities:"Research: what experiments must you run?",resources:"Research: what data/assets do you need?",costs:"Research: cost of validation vs cost of being wrong"},
+          lean: {problem:"Research: is this a real problem? Interview 50+",metrics:"Research: leading indicators before lagging",advantage:"Research: proprietary data or insight from research?"},
+          social: {problem:"Research: root cause analysis, not symptoms",solution:"Research: evidence-based intervention design",impact:"Research: M&E framework, theory of change metrics"}
+        }
+      },
+      entrepreneurship: {
+        label: "💼 Venture Lens",
+        desc: "Highlights market, customers, revenue, scaling fields",
+        fields: {
+          de: ["raison","market","acquisition","revenue","overall-econ","scaling"],
+          bmc: ["proposition","relationships","segments","channels","revenue-streams"],
+          lean: ["uvp","segments","channels","revenue"],
+          social: ["stakeholders","funding","partners"]
+        },
+        hints: {
+          de: {raison:"Venture: why will customers pay you?",market:"Venture: who has budget + urgency?",acquisition:"Venture: how do you reach buyers affordably?",revenue:"Venture: pricing model = business model","overall-econ":"Venture: is this fundable? Rule of 40",scaling:"Venture: follow-on markets for growth"},
+          bmc: {proposition:"Venture: what makes customers switch?",relationships:"Venture: self-serve or sales-led?",segments:"Venture: beachhead first, then expand",channels:"Venture: CAC-efficient distribution",revenue-streams:"Venture: recurring > one-time"},
+          lean: {uvp:"Venture: 10-word pitch that converts",segments:"Venture: early adopters ≠ mainstream",channels:"Venture: free channels first, paid later",revenue:"Venture: price = signal of value"},
+          social: {stakeholders:"Venture: who pays vs who benefits?",funding:"Venture: earned revenue > grants for sustainability",partners:"Venture: distribution through partners"}
+        }
+      },
+      technology: {
+        label: "⚙️ Tech Lens",
+        desc: "Highlights infrastructure, build, resources, scale fields",
+        fields: {
+          de: ["value","advantage","build","scaling"],
+          bmc: ["partners","activities","resources","costs"],
+          lean: ["solution","advantage","metrics"],
+          social: ["structure","costs","activities","channels"]
+        },
+        hints: {
+          de: {value:"Tech: build vs buy vs partner decision",advantage:"Tech: tech moat = proprietary data/algo/infra",build:"Tech: MVBP = minimal viable beautiful product",scaling:"Tech: architecture for 10x scale"},
+          bmc: {partners:"Tech: APIs, integrations, cloud providers",activities:"Tech: CI/CD, monitoring, security, reliability",resources:"Tech: infra, codebase, dev team, IP",costs:"Tech: hosting scales with users, optimize COGS"},
+          lean: {solution:"Tech: what's the simplest technical solution?",advantage:"Tech: network effects, data flywheel, switching costs",metrics:"Tech: uptime, latency, error rate, deploy frequency"},
+          social: {structure:"Tech: open-source model for social impact?",costs:"Tech: cloud-native = lower fixed costs",activities:"Tech: automate delivery, self-service platform",channels:"Tech: API-first, embeddable widgets, integrations"}
+        }
+      }
+    };
+
+    function applySphereLens(sphere) {
+      // Remove all highlights first
+      document.querySelectorAll(".canvas-box").forEach(box => {
+        box.classList.remove("lens-highlight");
+        const oldHint = box.querySelector(".lens-hint");
+        if (oldHint) oldHint.remove();
+      });
+      const lens = SPHERE_LENS[sphere];
+      if (!lens) return;
+      // Apply highlights across ALL canvases
+      ["de","bmc","lean","social"].forEach(canvas => {
+        const fields = lens.fields[canvas] || [];
+        const hints = lens.hints[canvas] || {};
+        fields.forEach(field => {
+          const ta = document.querySelector('textarea[data-canvas="'+canvas+'"][data-field="'+field+'"]');
+          if (!ta) return;
+          const box = ta.closest(".canvas-box");
+          if (box) {
+            box.classList.add("lens-highlight");
+            if (hints[field]) {
+              const badge = document.createElement("span");
+              badge.className = "lens-hint "+sphere;
+              badge.textContent = hints[field];
+              box.appendChild(badge);
+            }
+          }
+        });
+      });
+    }
+
     document.querySelectorAll(".sphere-btn").forEach(btn=>{
       btn.addEventListener("click",function(){
         document.querySelectorAll(".sphere-btn").forEach(b=>b.classList.remove("active"));
         this.classList.add("active");
         currentSphere = this.dataset.sphere;
         localStorage.setItem("vs-canvas-sphere", currentSphere);
-        // Auto-select best canvas tab for sphere
-        const sphereTab = {science:"lean",entrepreneurship:"de",technology:"bmc"};
-        const targetTab = sphereTab[currentSphere] || "de";
-        document.querySelector('.tabbar button[data-tab="'+targetTab+'"]').click();
+        applySphereLens(currentSphere);
       });
     });
     document.querySelectorAll(".sphere-btn").forEach(b=>{
@@ -422,6 +510,7 @@
     }
     updateFilledState();
     updateProgress();
+    applySphereLens(currentSphere);
   })();
   </script>
 </body>
