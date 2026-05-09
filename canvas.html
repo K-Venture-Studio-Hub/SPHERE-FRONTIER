@@ -207,12 +207,17 @@
     </div>
 
     <div class="save-row">
-      <button id="saveBtn">💾 Save Canvas</button>
-      <button id="exportBtn">📋 Copy as Markdown</button>
+      <button id="saveBtn">💾 Save (browser)</button>
+      <button id="downloadJson">📥 Download JSON</button>
+      <button id="importJson">📂 Import JSON</button>
+      <button id="exportPdf">📄 Download PDF</button>
+      <button id="exportBtn">📋 Copy Markdown</button>
       <button id="resetBtn">🔄 Reset to Pre-fill</button>
       <button id="clearBtn">🗑️ Clear All</button>
       <span class="saved-msg" id="savedMsg">Saved!</span>
+      <input type="file" id="fileInput" accept=".json" style="display:none">
     </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">💾 Save = browser localStorage (lost if you clear cache). 📥 Download JSON = backup to disk. 📂 Import = restore from backup. 📄 PDF = print-ready page.</p>
   </main>
 
   <script>
@@ -497,6 +502,87 @@
         updateFilledState();
         updateProgress();
       }
+    });
+
+    // Download JSON backup
+    document.getElementById("downloadJson").addEventListener("click", function(){
+      const data = {biz:currentBiz,sphere:currentSphere,saved:new Date().toISOString()};
+      document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
+        const k = ta.dataset.canvas + "." + ta.dataset.field;
+        if (ta.value.trim()) data[k] = ta.value;
+      });
+      const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "canvas-"+currentBiz+"-"+new Date().toISOString().slice(0,10)+".json";
+      a.click();
+      URL.revokeObjectURL(url);
+      const msg = document.getElementById("savedMsg"); msg.textContent = "Downloaded!"; msg.classList.add("show");
+      setTimeout(() => { msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
+    });
+
+    // Import JSON backup
+    document.getElementById("importJson").addEventListener("click", function(){
+      document.getElementById("fileInput").click();
+    });
+    document.getElementById("fileInput").addEventListener("change", function(e){
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev){
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (data.biz) { currentBiz = data.biz; localStorage.setItem("vs-canvas-biz",currentBiz); }
+          if (data.sphere) { currentSphere = data.sphere; localStorage.setItem("vs-canvas-sphere",currentSphere); }
+          document.querySelectorAll(".biz-btn").forEach(b=>b.classList.toggle("active",b.dataset.biz===currentBiz));
+          document.querySelectorAll(".sphere-btn").forEach(b=>b.classList.toggle("active",b.dataset.sphere===currentSphere));
+          document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
+            const k = ta.dataset.canvas + "." + ta.dataset.field;
+            if (data[k] !== undefined) ta.value = data[k];
+          });
+          localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+          updateModelInfo(currentBiz);
+          updateFilledState();
+          updateProgress();
+          applySphereLens(currentSphere);
+          const msg = document.getElementById("savedMsg"); msg.textContent = "Imported!"; msg.classList.add("show");
+          setTimeout(() => { msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
+        } catch(err) { alert("Invalid JSON file: " + err.message); }
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    });
+
+    // PDF export via print
+    document.getElementById("exportPdf").addEventListener("click", function(){
+      // Show all canvases for printing
+      const panels = document.querySelectorAll(".tab-panel");
+      panels.forEach(p => p.classList.add("active"));
+      // Add print styles
+      const style = document.createElement("style");
+      style.id = "print-style";
+      style.textContent = `
+        @media print {
+          .theme-toggle,.breadcrumb,.biz-selector,.sphere-nav,.wizard-card,.model-info,.save-row,.progress-bar-wrap,.progress-label,.tabbar,.prefill-badge,.lens-hint { display:none !important; }
+          .tab-panel { display:block !important; page-break-inside:avoid; margin-bottom:30px; }
+          .tab-panel h3 { font-size:18px; margin-bottom:10px; }
+          .canvas-box { border:1px solid #ccc; page-break-inside:avoid; }
+          .canvas-box textarea { border:none; min-height:40px; font-size:11px; }
+          .lens-highlight { border:2px solid #b56b2d; }
+          .page { max-width:100%; padding:10px; }
+          body { font-size:11px; }
+        }
+      `;
+      document.head.appendChild(style);
+      window.print();
+      // Cleanup after print
+      setTimeout(() => {
+        document.getElementById("print-style")?.remove();
+        panels.forEach(p => p.classList.remove("active"));
+        const activeTab = document.querySelector(".tabbar button.active");
+        if (activeTab) document.getElementById("panel-"+activeTab.dataset.tab).classList.add("active");
+      }, 1000);
     });
 
     // Init
