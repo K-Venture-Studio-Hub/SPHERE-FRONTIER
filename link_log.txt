@@ -1,0 +1,8 @@
+﻿node.exe : Searching for existing projectsтАж
+At line:1 char:1
++ & "C:\Users\kolisnyk.o\tools\node-v24.14.1-win-x64/node.exe" "C:\User ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Searching for existing projectsтАж:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Linked to tezvs-projects/sphere-venture-studio (created .vercel)
