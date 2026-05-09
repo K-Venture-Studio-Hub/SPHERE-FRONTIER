@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Canvases — K Venture Studio Hub</title>
+  <link rel="stylesheet" href="./assets/css/venture-studio.css">
+  <script src="./assets/js/canvas-presets.js"></script>
+  <style>
+    .breadcrumb{margin:0 0 16px;font-size:13px;color:var(--muted)}
+    .breadcrumb a{color:var(--accent);text-decoration:none}
+    .breadcrumb a:hover{text-decoration:underline}
+    .tabbar{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 0;padding:0;list-style:none}
+    .tabbar button{border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:14px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
+    .tabbar button:hover{background:var(--ink);color:#fff}
+    .tabbar button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+    [data-theme="dark"] .tabbar button:hover{background:#2a1000;color:#fff;border-color:rgba(224,160,80,.5)}
+    [data-theme="dark"] .tabbar button.active{background:#2a1000;color:#fff;border-color:rgba(224,160,80,.5)}
+    .tab-panel{display:none;margin-top:18px}
+    .tab-panel.active{display:block}
+    .canvas-grid{display:grid;gap:14px}
+    .canvas-grid.de{grid-template-columns:1fr 1fr}
+    .canvas-grid.bmc{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
+    .canvas-grid.lean{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
+    .canvas-grid.social{grid-template-columns:1fr 1fr}
+    .canvas-box{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px}
+    .canvas-box h4{margin:0;font-size:13px;color:var(--accent);font-weight:700}
+    .canvas-box .hint{font-size:11px;color:var(--muted);line-height:1.4;margin:0}
+    .canvas-box textarea{width:100%;min-height:80px;border:1px solid var(--line);border-radius:10px;padding:8px;font-size:13px;font-family:inherit;background:var(--input-bg);color:var(--ink);resize:vertical;transition:border-color .15s}
+    .canvas-box textarea:focus{outline:none;border-color:var(--accent)}
+    [data-theme="dark"] .canvas-box textarea{background:#1c1608;color:#f0e4d0}
+    .canvas-box.full{grid-column:1/-1}
+    .biz-selector{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0;align-items:center}
+    .biz-selector strong{font-size:13px;color:var(--muted);margin-right:4px}
+    .biz-btn{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
+    .biz-btn:hover{background:var(--ink);color:#fff}
+    .biz-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    [data-theme="dark"] .biz-btn.active{background:#b56b2d;color:#fff;border-color:#b56b2d}
+    .model-info{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;font-size:13px;line-height:1.6}
+    .model-info h4{margin:0 0 6px;font-size:14px;color:var(--accent)}
+    .model-info p{margin:0;color:var(--muted)}
+    .model-info .examples{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
+    .model-info .chip{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--card-bg);border:1px solid var(--line);color:var(--ink)}
+    .prefill-badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;background:rgba(30,122,94,.12);color:var(--science);margin-left:6px;vertical-align:middle}
+    [data-theme="dark"] .prefill-badge{color:#3ecf94}
+    .save-row{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap}
+    .save-row button{border:1px solid var(--line);background:var(--input-bg);color:var(--ink);padding:8px 18px;border-radius:999px;font-weight:600;font-size:13px;cursor:pointer;transition:all .15s}
+    .save-row button:hover{background:var(--ink);color:#fff}
+    .save-row .saved-msg{font-size:12px;color:var(--science);opacity:0;transition:opacity .3s}
+    .save-row .saved-msg.show{opacity:1}
+    @media(max-width:768px){.canvas-grid.de,.canvas-grid.social{grid-template-columns:1fr}.canvas-grid.bmc,.canvas-grid.lean{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  <script>const t=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",t);document.getElementById("themeToggle").textContent=t==="dark"?"☀️":"🌙";</script>
+  <main class="page">
+    <div class="breadcrumb"><a href="./">← K Venture Studio Hub</a></div>
+    <section class="hero">
+      <p class="eyebrow">Venture Canvases</p>
+      <h1>Strategy on One Page</h1>
+      <p class="lede">Pick your business model → get a pre-filled canvas with real examples. Edit, save, iterate.</p>
+    </section>
+
+    <div class="biz-selector" id="bizSelector">
+      <strong>Business model:</strong>
+      <button class="biz-btn active" data-biz="subscription">🔄 Subscription/SaaS</button>
+      <button class="biz-btn" data-biz="marketplace">🏪 Marketplace</button>
+      <button class="biz-btn" data-biz="saas-freemium">🆓 SaaS Freemium</button>
+      <button class="biz-btn" data-biz="manufacturing">🏭 Manufacturing</button>
+      <button class="biz-btn" data-biz="services">💼 Services/IT</button>
+      <button class="biz-btn" data-biz="b2g">🏛️ B2G/Public</button>
+      <button class="biz-btn" data-biz="social">🌱 Social Enterprise</button>
+      <button class="biz-btn" data-biz="generic">📝 Blank</button>
+    </div>
+
+    <div class="model-info" id="modelInfo"></div>
+
+    <div class="tabbar">
+      <button class="active" data-tab="de">DE Canvas</button>
+      <button data-tab="bmc">Business Model</button>
+      <button data-tab="lean">Lean Canvas</button>
+      <button data-tab="social">Social Enterprise</button>
+    </div>
+
+    <div class="tab-panel active" id="panel-de">
+      <div class="canvas-grid de">
+        <div class="canvas-box"><h4>① Raison d'Être <span class="prefill-badge">AUTO</span></h4><p class="hint">Why this venture exists beyond profit</p><textarea data-canvas="de" data-field="raison"></textarea></div>
+        <div class="canvas-box"><h4>② Initial Market <span class="prefill-badge">AUTO</span></h4><p class="hint">Beachhead market, end user profile, TAM</p><textarea data-canvas="de" data-field="market"></textarea></div>
+        <div class="canvas-box"><h4>③ Value Creation <span class="prefill-badge">AUTO</span></h4><p class="hint">Use case, product spec, quantified value proposition</p><textarea data-canvas="de" data-field="value"></textarea></div>
+        <div class="canvas-box"><h4>④ Competitive Advantage <span class="prefill-badge">AUTO</span></h4><p class="hint">Core capabilities, moats, network effects</p><textarea data-canvas="de" data-field="advantage"></textarea></div>
+        <div class="canvas-box"><h4>⑤ Customer Acquisition <span class="prefill-badge">AUTO</span></h4><p class="hint">Decision-Making Unit, acquisition process, triggers</p><textarea data-canvas="de" data-field="acquisition"></textarea></div>
+        <div class="canvas-box"><h4>⑥ Product Unit Economics <span class="prefill-badge">AUTO</span></h4><p class="hint">LTV, CAC, LTV/CAC ratio, payback period</p><textarea data-canvas="de" data-field="unit-econ"></textarea></div>
+        <div class="canvas-box"><h4>⑦ Revenue <span class="prefill-badge">AUTO</span></h4><p class="hint">Business model, pricing framework, sales channels</p><textarea data-canvas="de" data-field="revenue"></textarea></div>
+        <div class="canvas-box"><h4>⑧ Overall Economics <span class="prefill-badge">AUTO</span></h4><p class="hint">P&L, cash flow, burn rate, runway</p><textarea data-canvas="de" data-field="overall-econ"></textarea></div>
+        <div class="canvas-box"><h4>⑨ Design & Build <span class="prefill-badge">AUTO</span></h4><p class="hint">Key assumptions, MVBP, tracking metrics</p><textarea data-canvas="de" data-field="build"></textarea></div>
+        <div class="canvas-box"><h4>⑩ Scaling <span class="prefill-badge">AUTO</span></h4><p class="hint">Follow-on markets, product plan, growth strategy</p><textarea data-canvas="de" data-field="scaling"></textarea></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-bmc">
+      <div class="canvas-grid bmc">
+        <div class="canvas-box" style="grid-column:1;grid-row:1/3"><h4>Key Partners <span class="prefill-badge">AUTO</span></h4><p class="hint">Suppliers, partners, allies</p><textarea data-canvas="bmc" data-field="partners"></textarea></div>
+        <div class="canvas-box"><h4>Key Activities <span class="prefill-badge">AUTO</span></h4><p class="hint">What you must do</p><textarea data-canvas="bmc" data-field="activities"></textarea></div>
+        <div class="canvas-box" style="grid-column:3;grid-row:1/3"><h4>Value Proposition <span class="prefill-badge">AUTO</span></h4><p class="hint">What you offer uniquely</p><textarea data-canvas="bmc" data-field="proposition"></textarea></div>
+        <div class="canvas-box"><h4>Customer Relationships <span class="prefill-badge">AUTO</span></h4><p class="hint">How you interact</p><textarea data-canvas="bmc" data-field="relationships"></textarea></div>
+        <div class="canvas-box" style="grid-column:5;grid-row:1/3"><h4>Customer Segments <span class="prefill-badge">AUTO</span></h4><p class="hint">Who you serve</p><textarea data-canvas="bmc" data-field="segments"></textarea></div>
+        <div class="canvas-box"><h4>Key Resources <span class="prefill-badge">AUTO</span></h4><p class="hint">Assets you need</p><textarea data-canvas="bmc" data-field="resources"></textarea></div>
+        <div class="canvas-box"><h4>Channels <span class="prefill-badge">AUTO</span></h4><p class="hint">How you reach customers</p><textarea data-canvas="bmc" data-field="channels"></textarea></div>
+        <div class="canvas-box"><h4>Cost Structure <span class="prefill-badge">AUTO</span></h4><p class="hint">Major costs</p><textarea data-canvas="bmc" data-field="costs"></textarea></div>
+        <div class="canvas-box"><h4>Revenue Streams <span class="prefill-badge">AUTO</span></h4><p class="hint">How you earn</p><textarea data-canvas="bmc" data-field="revenue-streams"></textarea></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-lean">
+      <div class="canvas-grid lean">
+        <div class="canvas-box" style="grid-column:1;grid-row:1/3"><h4>Problem <span class="prefill-badge">AUTO</span></h4><p class="hint">Top 3 problems</p><textarea data-canvas="lean" data-field="problem"></textarea></div>
+        <div class="canvas-box"><h4>Solution <span class="prefill-badge">AUTO</span></h4><p class="hint">Top 3 features</p><textarea data-canvas="lean" data-field="solution"></textarea></div>
+        <div class="canvas-box" style="grid-column:3;grid-row:1/3"><h4>Unique Value Proposition <span class="prefill-badge">AUTO</span></h4><p class="hint">Why different & worth trying</p><textarea data-canvas="lean" data-field="uvp"></textarea></div>
+        <div class="canvas-box"><h4>Unfair Advantage <span class="prefill-badge">AUTO</span></h4><p class="hint">Cannot be copied or bought</p><textarea data-canvas="lean" data-field="advantage"></textarea></div>
+        <div class="canvas-box" style="grid-column:5;grid-row:1/3"><h4>Customer Segments <span class="prefill-badge">AUTO</span></h4><p class="hint">Target + early adopters</p><textarea data-canvas="lean" data-field="segments"></textarea></div>
+        <div class="canvas-box"><h4>Key Metrics <span class="prefill-badge">AUTO</span></h4><p class="hint">AARRR metrics</p><textarea data-canvas="lean" data-field="metrics"></textarea></div>
+        <div class="canvas-box"><h4>Channels <span class="prefill-badge">AUTO</span></h4><p class="hint">Paths to customers</p><textarea data-canvas="lean" data-field="channels"></textarea></div>
+        <div class="canvas-box"><h4>Cost Structure <span class="prefill-badge">AUTO</span></h4><p class="hint">Fixed & variable costs</p><textarea data-canvas="lean" data-field="costs"></textarea></div>
+        <div class="canvas-box"><h4>Revenue Streams <span class="prefill-badge">AUTO</span></h4><p class="hint">Revenue model, LTV, pricing</p><textarea data-canvas="lean" data-field="revenue"></textarea></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-social">
+      <div class="canvas-grid social">
+        <div class="canvas-box"><h4>1. Problem & System Context <span class="prefill-badge">AUTO</span></h4><p class="hint">Social/environmental problem & systemic conditions</p><textarea data-canvas="social" data-field="problem"></textarea></div>
+        <div class="canvas-box"><h4>2. Beneficiaries & Stakeholders <span class="prefill-badge">AUTO</span></h4><p class="hint">Who is affected, partners, allies</p><textarea data-canvas="social" data-field="stakeholders"></textarea></div>
+        <div class="canvas-box"><h4>3. Solution & Theory of Change <span class="prefill-badge">AUTO</span></h4><p class="hint">Actions → outputs → outcomes</p><textarea data-canvas="social" data-field="solution"></textarea></div>
+        <div class="canvas-box"><h4>4. Organizational Structure <span class="prefill-badge">AUTO</span></h4><p class="hint">Nonprofit, for-profit, or hybrid</p><textarea data-canvas="social" data-field="structure"></textarea></div>
+        <div class="canvas-box"><h4>5. Revenue & Funding Model <span class="prefill-badge">AUTO</span></h4><p class="hint">Sales, grants, impact investment</p><textarea data-canvas="social" data-field="funding"></textarea></div>
+        <div class="canvas-box"><h4>6. Cost Structure & Key Resources <span class="prefill-badge">AUTO</span></h4><p class="hint">Critical costs and resources</p><textarea data-canvas="social" data-field="costs"></textarea></div>
+        <div class="canvas-box"><h4>7. Key Activities & Delivery <span class="prefill-badge">AUTO</span></h4><p class="hint">Product, service, training, platform</p><textarea data-canvas="social" data-field="activities"></textarea></div>
+        <div class="canvas-box"><h4>8. Channels & Relationships <span class="prefill-badge">AUTO</span></h4><p class="hint">Digital, community, agencies</p><textarea data-canvas="social" data-field="channels"></textarea></div>
+        <div class="canvas-box"><h4>9. Partners & Ecosystem Fit <span class="prefill-badge">AUTO</span></h4><p class="hint">NGOs, government, accelerators</p><textarea data-canvas="social" data-field="partners"></textarea></div>
+        <div class="canvas-box"><h4>10. Impact & Financial Sustainability <span class="prefill-badge">AUTO</span></h4><p class="hint">Mission advancement + financial health</p><textarea data-canvas="social" data-field="impact"></textarea></div>
+      </div>
+    </div>
+
+    <div class="save-row">
+      <button id="saveBtn">💾 Save Canvas</button>
+      <button id="exportBtn">📋 Copy as Markdown</button>
+      <button id="resetBtn">🔄 Reset to Pre-fill</button>
+      <span class="saved-msg" id="savedMsg">Saved!</span>
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    document.getElementById("themeToggle").addEventListener("click",function(){
+      const c=this.textContent==="🌙"?"dark":"light";
+      document.documentElement.setAttribute("data-theme",c);
+      localStorage.setItem("theme",c);
+      this.textContent=c==="dark"?"☀️":"🌙";
+    });
+
+    document.querySelectorAll(".tabbar button").forEach(btn=>{
+      btn.addEventListener("click",function(){
+        document.querySelectorAll(".tabbar button").forEach(b=>b.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+        this.classList.add("active");
+        document.getElementById("panel-"+this.dataset.tab).classList.add("active");
+      });
+    });
+
+    let currentBiz = localStorage.getItem("vs-canvas-biz") || "subscription";
+
+    function updateModelInfo(key) {
+      const p = CANVAS_PRESETS[key];
+      if (!p) return;
+      const info = document.getElementById("modelInfo");
+      let html = '<h4>'+p.label+'</h4><p>'+p.desc+'</p>';
+      if (p.examples && p.examples.length) {
+        html += '<div class="examples">';
+        p.examples.forEach(e => html += '<span class="chip">'+e+'</span>');
+        html += '</div>';
+      }
+      info.innerHTML = html;
+    }
+
+    function applyPreset(key) {
+      const p = CANVAS_PRESETS[key];
+      if (!p) return;
+      ["de","bmc","lean"].forEach(canvas => {
+        if (p[canvas]) {
+          Object.keys(p[canvas]).forEach(field => {
+            const ta = document.querySelector('textarea[data-canvas="'+canvas+'"][data-field="'+field+'"]');
+            if (ta && p[canvas][field]) ta.value = p[canvas][field];
+          });
+        }
+      });
+      // Social canvas: use social preset or map from other models
+      if (p.social) {
+        Object.keys(p.social).forEach(field => {
+          const ta = document.querySelector('textarea[data-canvas="social"][data-field="'+field+'"]');
+          if (ta && p.social[field]) ta.value = p.social[field];
+        });
+      } else if (p.bmc) {
+        const sm = {
+          problem: "Social angle: " + (p.lean?.problem || ""),
+          stakeholders: p.bmc?.segments || "",
+          solution: p.bmc?.proposition || "",
+          structure: "Hybrid: for-profit with social mission",
+          funding: p.bmc?.["revenue-streams"] || "",
+          costs: p.bmc?.costs || "",
+          activities: p.bmc?.activities || "",
+          channels: p.bmc?.channels || "",
+          partners: p.bmc?.partners || "",
+          impact: "Impact: " + (p.lean?.metrics || "beneficiary outcomes + financial sustainability")
+        };
+        Object.keys(sm).forEach(field => {
+          const ta = document.querySelector('textarea[data-canvas="social"][data-field="'+field+'"]');
+          if (ta && sm[field]) ta.value = sm[field];
+        });
+      }
+    }
+
+    document.querySelectorAll(".biz-btn").forEach(btn=>{
+      btn.addEventListener("click",function(){
+        document.querySelectorAll(".biz-btn").forEach(b=>b.classList.remove("active"));
+        this.classList.add("active");
+        currentBiz = this.dataset.biz;
+        localStorage.setItem("vs-canvas-biz", currentBiz);
+        updateModelInfo(currentBiz);
+        applyPreset(currentBiz);
+      });
+    });
+
+    document.querySelectorAll(".biz-btn").forEach(b=>{
+      b.classList.toggle("active", b.dataset.biz === currentBiz);
+    });
+
+    const SAVE_KEY = "vs-canvas";
+    function loadAll() {
+      const data = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}");
+      document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
+        const k = ta.dataset.canvas + "." + ta.dataset.field;
+        if (data[k]) ta.value = data[k];
+      });
+    }
+    function saveAll() {
+      const data = {};
+      document.querySelectorAll("textarea[data-canvas]").forEach(ta => {
+        const k = ta.dataset.canvas + "." + ta.dataset.field;
+        if (ta.value.trim()) data[k] = ta.value;
+      });
+      localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+      const msg = document.getElementById("savedMsg");
+      msg.classList.add("show");
+      setTimeout(() => msg.classList.remove("show"), 1500);
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", saveAll);
+
+    document.getElementById("exportBtn").addEventListener("click", function(){
+      const activeTab = document.querySelector(".tabbar button.active").dataset.tab;
+      const names = {de:"DE Canvas",bmc:"Business Model Canvas",lean:"Lean Canvas",social:"Social Enterprise Canvas"};
+      let md = "# " + names[activeTab] + "\n\n";
+      document.querySelectorAll("#panel-"+activeTab+" .canvas-box").forEach(box => {
+        const h4 = box.querySelector("h4");
+        const ta = box.querySelector("textarea");
+        if (h4 && ta) md += "## " + h4.textContent.replace("AUTO","").trim() + "\n" + ta.value + "\n\n";
+      });
+      navigator.clipboard.writeText(md).then(() => {
+        const msg = document.getElementById("savedMsg");
+        msg.textContent = "Copied!";
+        msg.classList.add("show");
+        setTimeout(() => { msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
+      });
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", function(){
+      if (confirm("Reset all fields to pre-filled values for " + CANVAS_PRESETS[currentBiz].label + "?")) {
+        localStorage.removeItem(SAVE_KEY);
+        applyPreset(currentBiz);
+      }
+    });
+
+    const hasSavedData = localStorage.getItem(SAVE_KEY);
+    if (hasSavedData) {
+      loadAll();
+      updateModelInfo(currentBiz);
+    } else {
+      updateModelInfo(currentBiz);
+      applyPreset(currentBiz);
+    }
+  })();
+  </script>
+</body>
+</html>

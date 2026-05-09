@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finance Tools — K Venture Studio Hub</title>
+  <link rel="stylesheet" href="./assets/css/venture-studio.css">
+  <script src="./assets/js/canvas-presets.js"></script>
+  <style>
+    .breadcrumb{margin:0 0 16px;font-size:13px;color:var(--muted)}
+    .breadcrumb a{color:var(--accent);text-decoration:none}
+    .breadcrumb a:hover{text-decoration:underline}
+    .tabbar{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 0;padding:0;list-style:none}
+    .tabbar button{border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:14px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
+    .tabbar button:hover{background:var(--ink);color:#fff}
+    .tabbar button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+    [data-theme="dark"] .tabbar button:hover{background:#2a1000;color:#fff;border-color:rgba(224,160,80,.5)}
+    [data-theme="dark"] .tabbar button.active{background:#2a1000;color:#fff;border-color:rgba(224,160,80,.5)}
+    .tab-panel{display:none;margin-top:18px}
+    .tab-panel.active{display:block}
+    .calc-card{background:var(--card-bg);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
+    .calc-card h3{margin:0 0 12px;font-size:17px}
+    .calc-row{display:flex;gap:12px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+    .calc-row label{min-width:160px;font-size:14px;font-weight:600}
+    .calc-row input,.calc-row select{flex:1;min-width:120px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:var(--input-bg);color:var(--ink);font-family:inherit}
+    .calc-row input:focus,.calc-row select:focus{outline:none;border-color:var(--accent)}
+    [data-theme="dark"] .calc-row input,[data-theme="dark"] .calc-row select{background:#1c1608;color:#f0e4d0}
+    .calc-result{font-size:22px;font-weight:700;color:var(--accent);margin-top:8px}
+    .calc-result small{font-size:13px;color:var(--muted);font-weight:400}
+    .ratio-good{color:var(--science)}.ratio-warn{color:#d97706}.ratio-bad{color:#ef4444}
+    .fin-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+    .fin-table th,.fin-table td{border:1px solid var(--line);padding:8px 10px;text-align:right}
+    .fin-table th{background:var(--panel);font-weight:700;text-align:center}
+    .fin-table td input{width:100%;border:none;background:transparent;color:var(--ink);font-size:13px;text-align:right;padding:0}
+    .fin-table td input:focus{outline:1px solid var(--accent);border-radius:4px}
+    .fin-table .row-label{text-align:left;font-weight:600}
+    .fin-table .total{font-weight:700;border-top:2px solid var(--ink)}
+    .biz-selector{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0;align-items:center}
+    .biz-selector strong{font-size:13px;color:var(--muted);margin-right:4px}
+    .biz-btn{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
+    .biz-btn:hover{background:var(--ink);color:#fff}
+    .biz-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    [data-theme="dark"] .biz-btn.active{background:#b56b2d;color:#fff;border-color:#b56b2d}
+    .preset-hint{background:rgba(30,122,94,.06);border:1px solid rgba(30,122,94,.15);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:13px;line-height:1.6;color:var(--muted)}
+    .preset-hint strong{color:var(--science)}
+    .save-row{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap}
+    .save-row button{border:1px solid var(--line);background:var(--input-bg);color:var(--ink);padding:8px 18px;border-radius:999px;font-weight:600;font-size:13px;cursor:pointer;transition:all .15s}
+    .save-row button:hover{background:var(--ink);color:#fff}
+    .save-row .saved-msg{font-size:12px;color:var(--science);opacity:0;transition:opacity .3s}
+    .save-row .saved-msg.show{opacity:1}
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:14px 0}
+    .kpi-card{background:var(--card-bg);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+    .kpi-card .kpi-value{font-size:24px;font-weight:700;color:var(--accent)}
+    .kpi-card .kpi-label{font-size:12px;color:var(--muted);margin-top:4px}
+    .kpi-card .kpi-status{font-size:11px;margin-top:4px;font-weight:700}
+    @media(max-width:768px){.calc-row label{min-width:120px}.kpi-grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  <script>const t=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",t);document.getElementById("themeToggle").textContent=t==="dark"?"☀️":"🌙";</script>
+  <main class="page">
+    <div class="breadcrumb"><a href="./">← K Venture Studio Hub</a></div>
+    <section class="hero">
+      <p class="eyebrow">Finance Tools</p>
+      <h1>Startup Economics</h1>
+      <p class="lede">Unit economics, P&L, cash flow, 5-year forecast — all interactive. Pick your model for pre-filled benchmarks.</p>
+    </section>
+
+    <div class="biz-selector" id="bizSelector">
+      <strong>Business model:</strong>
+      <button class="biz-btn active" data-biz="subscription">🔄 SaaS/Subscription</button>
+      <button class="biz-btn" data-biz="marketplace">🏪 Marketplace</button>
+      <button class="biz-btn" data-biz="saas-freemium">🆓 Freemium</button>
+      <button class="biz-btn" data-biz="manufacturing">🏭 Manufacturing</button>
+      <button class="biz-btn" data-biz="services">💼 Services</button>
+    </div>
+
+    <div class="preset-hint" id="presetHint"></div>
+
+    <div class="kpi-grid" id="kpiGrid"></div>
+
+    <div class="tabbar">
+      <button class="active" data-tab="unit">Unit Economics</button>
+      <button data-tab="pnl">P&L</button>
+      <button data-tab="cashflow">Cash Flow</button>
+      <button data-tab="forecast">5-Year Forecast</button>
+    </div>
+
+    <!-- Unit Economics -->
+    <div class="tab-panel active" id="panel-unit">
+      <div class="calc-card">
+        <h3>📊 Unit Economics Calculator</h3>
+        <div class="calc-row"><label>Revenue per user/mo ($)</label><input type="number" id="arpu" value="15"></div>
+        <div class="calc-row"><label>Monthly churn (%)</label><input type="number" id="churn" value="5" step="0.5"></div>
+        <div class="calc-row"><label>CAC — Customer Acquisition Cost ($)</label><input type="number" id="cac" value="50"></div>
+        <div class="calc-row"><label>Gross margin (%)</label><input type="number" id="margin" value="70"></div>
+        <div class="calc-row"><label>Expansion revenue/mo (%)</label><input type="number" id="expansion" value="1" step="0.5"></div>
+        <div class="calc-result" id="unitResult"></div>
+      </div>
+      <div class="calc-card">
+        <h3>🔥 Burn Rate & Runway</h3>
+        <div class="calc-row"><label>Monthly expenses ($)</label><input type="number" id="burn" value="3000"></div>
+        <div class="calc-row"><label>Monthly revenue ($)</label><input type="number" id="revmo" value="500"></div>
+        <div class="calc-row"><label>Cash in bank ($)</label><input type="number" id="cashbank" value="12000"></div>
+        <div class="calc-result" id="burnResult"></div>
+      </div>
+      <div class="calc-card">
+        <h3>🛠️ Build vs Buy vs Partner</h3>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 10px">Should you build in-house, buy/licence, or partner? Compare total cost of ownership.</p>
+        <div class="calc-row"><label>Feature name</label><input type="text" id="featname" value="Payment system" style="flex:2"></div>
+        <div class="calc-row"><label>Build: months to develop</label><input type="number" id="buildmo" value="3"></div>
+        <div class="calc-row"><label>Build: dev cost/mo ($)</label><input type="number" id="buildcost" value="3000"></div>
+        <div class="calc-row"><label>Buy: one-time licence ($)</label><input type="number" id="buycost" value="2000"></div>
+        <div class="calc-row"><label>Buy: monthly fee ($)</label><input type="number" id="buymo" value="100"></div>
+        <div class="calc-row"><label>Partner: revenue share (%)</label><input type="number" id="partnershare" value="15"></div>
+        <div class="calc-row"><label>Expected monthly revenue from feature ($)</label><input type="number" id="featrev" value="1000"></div>
+        <div class="calc-result" id="bbpResult"></div>
+      </div>
+    </div>
+
+    <!-- P&L -->
+    <div class="tab-panel" id="panel-pnl">
+      <div class="calc-card">
+        <h3>📈 Monthly P&L Statement</h3>
+        <table class="fin-table" id="pnlTable">
+          <tr><th>Item</th><th>Month 1</th><th>Month 2</th><th>Month 3</th><th>Month 4</th><th>Month 5</th><th>Month 6</th></tr>
+          <tr><td class="row-label">Revenue</td><td><input data-pnl="rev1"></td><td><input data-pnl="rev2"></td><td><input data-pnl="rev3"></td><td><input data-pnl="rev4"></td><td><input data-pnl="rev5"></td><td><input data-pnl="rev6"></td></tr>
+          <tr><td class="row-label">COGS</td><td><input data-pnl="cogs1"></td><td><input data-pnl="cogs2"></td><td><input data-pnl="cogs3"></td><td><input data-pnl="cogs4"></td><td><input data-pnl="cogs5"></td><td><input data-pnl="cogs6"></td></tr>
+          <tr class="total"><td class="row-label">Gross Profit</td><td id="gp1"></td><td id="gp2"></td><td id="gp3"></td><td id="gp4"></td><td id="gp5"></td><td id="gp6"></td></tr>
+          <tr><td class="row-label">OpEx: R&D</td><td><input data-pnl="rd1"></td><td><input data-pnl="rd2"></td><td><input data-pnl="rd3"></td><td><input data-pnl="rd4"></td><td><input data-pnl="rd5"></td><td><input data-pnl="rd6"></td></tr>
+          <tr><td class="row-label">OpEx: Marketing</td><td><input data-pnl="mkt1"></td><td><input data-pnl="mkt2"></td><td><input data-pnl="mkt3"></td><td><input data-pnl="mkt4"></td><td><input data-pnl="mkt5"></td><td><input data-pnl="mkt6"></td></tr>
+          <tr><td class="row-label">OpEx: G&A</td><td><input data-pnl="ga1"></td><td><input data-pnl="ga2"></td><td><input data-pnl="ga3"></td><td><input data-pnl="ga4"></td><td><input data-pnl="ga5"></td><td><input data-pnl="ga6"></td></tr>
+          <tr class="total"><td class="row-label">Net Income</td><td id="ni1"></td><td id="ni2"></td><td id="ni3"></td><td id="ni4"></td><td id="ni5"></td><td id="ni6"></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Cash Flow -->
+    <div class="tab-panel" id="panel-cashflow">
+      <div class="calc-card">
+        <h3>💸 Cash Flow Tracker</h3>
+        <table class="fin-table" id="cfTable">
+          <tr><th>Item</th><th>Month 1</th><th>Month 2</th><th>Month 3</th><th>Month 4</th><th>Month 5</th><th>Month 6</th></tr>
+          <tr><td class="row-label">Opening Cash</td><td id="oc1"></td><td id="oc2"></td><td id="oc3"></td><td id="oc4"></td><td id="oc5"></td><td id="oc6"></td></tr>
+          <tr><td class="row-label">Cash In (Revenue + Funding)</td><td><input data-cf="in1"></td><td><input data-cf="in2"></td><td><input data-cf="in3"></td><td><input data-cf="in4"></td><td><input data-cf="in5"></td><td><input data-cf="in6"></td></tr>
+          <tr><td class="row-label">Cash Out (All Expenses)</td><td><input data-cf="out1"></td><td><input data-cf="out2"></td><td><input data-cf="out3"></td><td><input data-cf="out4"></td><td><input data-cf="out5"></td><td><input data-cf="out6"></td></tr>
+          <tr class="total"><td class="row-label">Net Cash Flow</td><td id="ncf1"></td><td id="ncf2"></td><td id="ncf3"></td><td id="ncf4"></td><td id="ncf5"></td><td id="ncf6"></td></tr>
+          <tr class="total"><td class="row-label">Closing Cash</td><td id="cc1"></td><td id="cc2"></td><td id="cc3"></td><td id="cc4"></td><td id="cc5"></td><td id="cc6"></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5-Year Forecast -->
+    <div class="tab-panel" id="panel-forecast">
+      <div class="calc-card">
+        <h3>🔮 5-Year Revenue Forecast</h3>
+        <div class="calc-row"><label>Starting MRR ($)</label><input type="number" id="startMrr" value="500"></div>
+        <div class="calc-row"><label>Monthly growth rate (%)</label><input type="number" id="mrrGrowth" value="10" step="1"></div>
+        <div class="calc-row"><label>Churn rate monthly (%)</label><input type="number" id="fChurn" value="5" step="0.5"></div>
+        <div class="calc-row"><label>Gross margin (%)</label><input type="number" id="fMargin" value="70"></div>
+        <table class="fin-table" id="forecastTable" style="margin-top:14px">
+          <tr><th>Metric</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th><th>Year 5</th></tr>
+          <tr><td class="row-label">MRR (end of year)</td><td id="fmrr1"></td><td id="fmrr2"></td><td id="fmrr3"></td><td id="fmrr4"></td><td id="fmrr5"></td></tr>
+          <tr><td class="row-label">ARR</td><td id="farr1"></td><td id="farr2"></td><td id="farr3"></td><td id="farr4"></td><td id="farr5"></td></tr>
+          <tr><td class="row-label">Annual Revenue</td><td id="frev1"></td><td id="frev2"></td><td id="frev3"></td><td id="frev4"></td><td id="frev5"></td></tr>
+          <tr><td class="row-label">Gross Profit</td><td id="fgp1"></td><td id="fgp2"></td><td id="fgp3"></td><td id="fgp4"></td><td id="fgp5"></td></tr>
+          <tr><td class="row-label">Active Subscribers</td><td id="fsub1"></td><td id="fsub2"></td><td id="fsub3"></td><td id="fsub4"></td><td id="fsub5"></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="save-row">
+      <button id="saveBtn">💾 Save All</button>
+      <button id="resetBtn">🔄 Reset to Pre-fill</button>
+      <button id="exportBtn">📋 Export CSV</button>
+      <span class="saved-msg" id="savedMsg">Saved!</span>
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    document.getElementById("themeToggle").addEventListener("click",function(){
+      const c=this.textContent==="🌙"?"dark":"light";
+      document.documentElement.setAttribute("data-theme",c);localStorage.setItem("theme",c);
+      this.textContent=c==="dark"?"☀️":"🌙";
+    });
+
+    document.querySelectorAll(".tabbar button").forEach(btn=>{
+      btn.addEventListener("click",function(){
+        document.querySelectorAll(".tabbar button").forEach(b=>b.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+        this.classList.add("active");
+        document.getElementById("panel-"+this.dataset.tab).classList.add("active");
+      });
+    });
+
+    // Finance presets per business model (from KSE Zubchenok PDF)
+    const FIN_PRESETS = {
+      subscription: {arpu:15,churn:5,cac:50,margin:70,expansion:1,burn:3000,revmo:500,cashbank:12000,
+        pnl:{rev:[500,700,1000,1400,1800,2200],cogs:[150,210,300,420,540,660],rd:[1200,1200,1500,1500,1800,1800],mkt:[800,900,1000,1100,1200,1300],ga:[300,300,400,400,500,500]},
+        cf:{in:[500,700,1000,1400,1800,2200],out:[2450,2610,3200,3420,4040,4260],opening:12000},
+        forecast:{startMrr:500,mrrGrowth:10,fChurn:5,fMargin:70}},
+      marketplace: {arpu:25,churn:4,cac:80,margin:30,expansion:2,burn:5000,revmo:800,cashbank:20000,
+        pnl:{rev:[800,1200,1800,2500,3500,5000],cogs:[560,840,1260,1750,2450,3500],rd:[1500,1500,1800,1800,2000,2000],mkt:[1200,1400,1600,1800,2000,2200],ga:[400,400,500,500,600,600]},
+        cf:{in:[800,1200,1800,2500,3500,5000],out:[3660,4140,5160,5850,7050,8300],opening:20000},
+        forecast:{startMrr:800,mrrGrowth:12,fChurn:4,fMargin:30}},
+      "saas-freemium": {arpu:20,churn:4,cac:30,margin:75,expansion:2,burn:4000,revmo:300,cashbank:15000,
+        pnl:{rev:[300,500,800,1200,1800,2600],cogs:[75,125,200,300,450,650],rd:[2000,2000,2200,2200,2500,2500],mkt:[600,700,800,900,1000,1100],ga:[300,300,400,400,500,500]},
+        cf:{in:[300,500,800,1200,1800,2600],out:[2975,3125,3600,3800,4450,4750],opening:15000},
+        forecast:{startMrr:300,mrrGrowth:15,fChurn:4,fMargin:75}},
+      manufacturing: {arpu:50,churn:0,cac:100,margin:45,expansion:0,burn:8000,revmo:2000,cashbank:30000,
+        pnl:{rev:[2000,2500,3000,4000,5000,6000],cogs:[1100,1375,1650,2200,2750,3300],rd:[1500,1500,1800,1800,2000,2000],mkt:[600,700,800,900,1000,1100],ga:[500,500,600,600,700,700]},
+        cf:{in:[2000,2500,3000,4000,5000,6000],out:[3700,4075,4850,5500,6450,7100],opening:30000},
+        forecast:{startMrr:2000,mrrGrowth:8,fChurn:0,fMargin:45}},
+      services: {arpu:80,churn:0,cac:200,margin:40,expansion:0,burn:6000,revmo:3000,cashbank:18000,
+        pnl:{rev:[3000,3500,4000,5000,6000,7000],cogs:[1800,2100,2400,3000,3600,4200],rd:[500,500,600,600,700,700],mkt:[400,500,600,700,800,900],ga:[400,400,500,500,600,600]},
+        cf:{in:[3000,3500,4000,5000,6000,7000],out:[3100,3500,4100,4800,5700,6400],opening:18000},
+        forecast:{startMrr:3000,mrrGrowth:6,fChurn:0,fMargin:40}}
+    };
+
+    let currentBiz = localStorage.getItem("vs-fin-biz") || "subscription";
+
+    function applyFinPreset(key) {
+      const p = FIN_PRESETS[key];
+      if (!p) return;
+      document.getElementById("arpu").value = p.arpu;
+      document.getElementById("churn").value = p.churn;
+      document.getElementById("cac").value = p.cac;
+      document.getElementById("margin").value = p.margin;
+      document.getElementById("expansion").value = p.expansion;
+      document.getElementById("burn").value = p.burn;
+      document.getElementById("revmo").value = p.revmo;
+      document.getElementById("cashbank").value = p.cashbank;
+      // P&L
+      for (let i=0;i<6;i++){
+        document.querySelector('[data-pnl="rev'+(i+1)+'"]').value=p.pnl.rev[i];
+        document.querySelector('[data-pnl="cogs'+(i+1)+'"]').value=p.pnl.cogs[i];
+        document.querySelector('[data-pnl="rd'+(i+1)+'"]').value=p.pnl.rd[i];
+        document.querySelector('[data-pnl="mkt'+(i+1)+'"]').value=p.pnl.mkt[i];
+        document.querySelector('[data-pnl="ga'+(i+1)+'"]').value=p.pnl.ga[i];
+      }
+      // Cash flow
+      document.getElementById("oc1").textContent = p.cf.opening;
+      for (let i=0;i<6;i++){
+        document.querySelector('[data-cf="in'+(i+1)+'"]').value=p.cf.in[i];
+        document.querySelector('[data-cf="out'+(i+1)+'"]').value=p.cf.out[i];
+      }
+      // Forecast
+      document.getElementById("startMrr").value = p.forecast.startMrr;
+      document.getElementById("mrrGrowth").value = p.forecast.mrrGrowth;
+      document.getElementById("fChurn").value = p.forecast.fChurn;
+      document.getElementById("fMargin").value = p.forecast.fMargin;
+    }
+
+    function updatePresetHint(key) {
+      const p = CANVAS_PRESETS[key];
+      const f = FIN_PRESETS[key];
+      const hint = document.getElementById("presetHint");
+      if (p && f) {
+        hint.innerHTML = '<strong>'+p.label+'</strong> — '+p.desc+'<br>Pre-filled benchmarks: ARPU $'+f.arpu+'/mo, CAC $'+f.cac+', churn '+f.churn+'%, gross margin '+f.margin+'%, burn $'+f.burn+'/mo, runway ~'+Math.round(f.cashbank/f.burn)+' months.';
+      }
+    }
+
+    document.querySelectorAll(".biz-btn").forEach(btn=>{
+      btn.addEventListener("click",function(){
+        document.querySelectorAll(".biz-btn").forEach(b=>b.classList.remove("active"));
+        this.classList.add("active");
+        currentBiz = this.dataset.biz;
+        localStorage.setItem("vs-fin-biz", currentBiz);
+        updatePresetHint(currentBiz);
+        applyFinPreset(currentBiz);
+        calcAll();
+      });
+    });
+
+    document.querySelectorAll(".biz-btn").forEach(b=>{
+      b.classList.toggle("active", b.dataset.biz === currentBiz);
+    });
+
+    // Calculations
+    function calcUnitEcon() {
+      const arpu = +document.getElementById("arpu").value || 0;
+      const churn = +document.getElementById("churn").value || 1;
+      const cac = +document.getElementById("cac").value || 0;
+      const margin = +document.getElementById("margin").value || 0;
+      const expansion = +document.getElementById("expansion").value || 0;
+      const ltv = arpu * (margin/100) * (1 / (churn/100 - expansion/100));
+      const ratio = cac > 0 ? ltv / cac : 0;
+      const payback = arpu > 0 ? cac / (arpu * margin/100) : 0;
+      const cls = ratio >= 3 ? "ratio-good" : ratio >= 1.5 ? "ratio-warn" : "ratio-bad";
+      document.getElementById("unitResult").innerHTML =
+        'LTV: <strong>$'+ltv.toFixed(0)+'</strong> <small>(ARPU × margin% ÷ net churn)</small> &nbsp;|&nbsp; '+
+        'LTV/CAC: <strong class="'+cls+'">'+ratio.toFixed(1)+'x</strong> <small>(target ≥ 3:1)</small> &nbsp;|&nbsp; '+
+        'Payback: <strong>'+payback.toFixed(1)+' months</strong> <small>(target < 12)</small>';
+    }
+
+    function calcBurn() {
+      const burn = +document.getElementById("burn").value || 0;
+      const rev = +document.getElementById("revmo").value || 0;
+      const cash = +document.getElementById("cashbank").value || 0;
+      const netBurn = burn - rev;
+      const runway = netBurn > 0 ? Math.floor(cash / netBurn) : 999;
+      const cls = runway >= 18 ? "ratio-good" : runway >= 6 ? "ratio-warn" : "ratio-bad";
+      document.getElementById("burnResult").innerHTML =
+        'Net burn: <strong>$'+netBurn+'/mo</strong> &nbsp;|&nbsp; '+
+        'Runway: <strong class="'+cls+'">'+(runway>=999?'∞':runway+' months')+'</strong> <small>(target ≥ 18mo)</small>';
+    }
+
+    function calcBBP() {
+      const buildMo = +document.getElementById("buildmo").value || 0;
+      const buildCost = +document.getElementById("buildcost").value || 0;
+      const buyCost = +document.getElementById("buycost").value || 0;
+      const buyMo = +document.getElementById("buymo").value || 0;
+      const partnerShare = +document.getElementById("partnershare").value || 0;
+      const featRev = +document.getElementById("featrev").value || 0;
+      const buildTotal = buildMo * buildCost;
+      const buyTotal12 = buyCost + buyMo * 12;
+      const partnerCost12 = featRev * 12 * partnerShare / 100;
+      let rec = partnerCost12 <= buyTotal12 && partnerCost12 <= buildTotal ? "Partner" :
+                buyTotal12 <= buildTotal ? "Buy/License" : "Build";
+      document.getElementById("bbpResult").innerHTML =
+        'Build (12mo): <strong>$'+buildTotal+'</strong> <small>('+buildMo+'mo × $'+buildCost+')</small> &nbsp;|&nbsp; '+
+        'Buy (12mo): <strong>$'+buyTotal12+'</strong> <small>(licence + 12×fee)</small> &nbsp;|&nbsp; '+
+        'Partner (12mo): <strong>$'+partnerCost12+'</strong> <small>('+partnerShare+'% of $'+featRev+'/mo)</small><br>'+
+        '<strong>Recommendation: '+rec+'</strong>';
+    }
+
+    function calcPnL() {
+      for (let i=1;i<=6;i++){
+        const rev = +document.querySelector('[data-pnl="rev'+i+'"]').value || 0;
+        const cogs = +document.querySelector('[data-pnl="cogs'+i+'"]').value || 0;
+        const rd = +document.querySelector('[data-pnl="rd'+i+'"]').value || 0;
+        const mkt = +document.querySelector('[data-pnl="mkt'+i+'"]').value || 0;
+        const ga = +document.querySelector('[data-pnl="ga'+i+'"]').value || 0;
+        const gp = rev - cogs;
+        const ni = gp - rd - mkt - ga;
+        document.getElementById("gp"+i).textContent = gp >= 0 ? "$"+gp : "-$"+Math.abs(gp);
+        document.getElementById("gp"+i).style.color = gp >= 0 ? "var(--science)" : "#ef4444";
+        document.getElementById("ni"+i).textContent = ni >= 0 ? "$"+ni : "-$"+Math.abs(ni);
+        document.getElementById("ni"+i).style.color = ni >= 0 ? "var(--science)" : "#ef4444";
+      }
+    }
+
+    function calcCF() {
+      let prevCash = +document.getElementById("oc1").textContent || 0;
+      for (let i=1;i<=6;i++){
+        if (i > 1) { document.getElementById("oc"+i).textContent = "$"+prevCash; }
+        const cin = +document.querySelector('[data-cf="in'+i+'"]').value || 0;
+        const cout = +document.querySelector('[data-cf="out'+i+'"]').value || 0;
+        const ncf = cin - cout;
+        const closeCash = prevCash + ncf;
+        document.getElementById("ncf"+i).textContent = ncf >= 0 ? "+$"+ncf : "-$"+Math.abs(ncf);
+        document.getElementById("ncf"+i).style.color = ncf >= 0 ? "var(--science)" : "#ef4444";
+        document.getElementById("cc"+i).textContent = "$"+closeCash;
+        document.getElementById("cc"+i).style.color = closeCash >= 0 ? "var(--ink)" : "#ef4444";
+        prevCash = closeCash;
+      }
+    }
+
+    function calcForecast() {
+      const startMrr = +document.getElementById("startMrr").value || 0;
+      const growth = +document.getElementById("mrrGrowth").value || 0;
+      const churn = +document.getElementById("fChurn").value || 0;
+      const margin = +document.getElementById("fMargin").value || 0;
+      const netGrowth = (growth - churn) / 100;
+      let mrr = startMrr;
+      for (let y=1;y<=5;y++){
+        for (let m=0;m<12;m++) mrr = mrr * (1 + netGrowth);
+        const arr = mrr * 12;
+        const avgMrr = startMrr * (Math.pow(1+netGrowth, (y-1)*12) + mrr) / 2;
+        const annRev = avgMrr * 12;
+        const gp = annRev * margin / 100;
+        const subs = mrr > 0 && document.getElementById("arpu").value > 0 ? Math.round(mrr / +document.getElementById("arpu").value) : 0;
+        document.getElementById("fmrr"+y).textContent = "$"+Math.round(mrr).toLocaleString();
+        document.getElementById("farr"+y).textContent = "$"+Math.round(arr).toLocaleString();
+        document.getElementById("frev"+y).textContent = "$"+Math.round(annRev).toLocaleString();
+        document.getElementById("fgp"+y).textContent = "$"+Math.round(gp).toLocaleString();
+        document.getElementById("fsub"+y).textContent = subs.toLocaleString();
+      }
+    }
+
+    function updateKPIs() {
+      const arpu = +document.getElementById("arpu").value || 0;
+      const churn = +document.getElementById("churn").value || 1;
+      const cac = +document.getElementById("cac").value || 1;
+      const margin = +document.getElementById("margin").value || 0;
+      const ltv = arpu * (margin/100) * (1 / (churn/100));
+      const ratio = ltv / cac;
+      const burn = +document.getElementById("burn").value || 0;
+      const rev = +document.getElementById("revmo").value || 0;
+      const cash = +document.getElementById("cashbank").value || 0;
+      const netBurn = burn - rev;
+      const runway = netBurn > 0 ? Math.floor(cash / netBurn) : 999;
+      const grid = document.getElementById("kpiGrid");
+      grid.innerHTML =
+        '<div class="kpi-card"><div class="kpi-value">$'+ltv.toFixed(0)+'</div><div class="kpi-label">LTV</div><div class="kpi-status '+(ratio>=3?"ratio-good":ratio>=1.5?"ratio-warn":"ratio-bad")+'">LTV/CAC '+ratio.toFixed(1)+'x</div></div>'+
+        '<div class="kpi-card"><div class="kpi-value">$'+cac+'</div><div class="kpi-label">CAC</div></div>'+
+        '<div class="kpi-card"><div class="kpi-value">'+churn+'%</div><div class="kpi-label">Monthly Churn</div><div class="kpi-status '+(churn<=3?"ratio-good":churn<=7?"ratio-warn":"ratio-bad")+'">'+(churn<=3?"Excellent":churn<=7?"OK":"Danger")+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-value">'+margin+'%</div><div class="kpi-label">Gross Margin</div><div class="kpi-status '+(margin>=70?"ratio-good":margin>=40?"ratio-warn":"ratio-bad")+'">'+(margin>=70?"SaaS-grade":margin>=40?"OK":"Low")+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-value">$'+netBurn+'</div><div class="kpi-label">Net Burn/mo</div></div>'+
+        '<div class="kpi-card"><div class="kpi-value">'+(runway>=999?"∞":runway+"mo")+'</div><div class="kpi-label">Runway</div><div class="kpi-status '+(runway>=18?"ratio-good":runway>=6?"ratio-warn":"ratio-bad")+'">'+(runway>=18?"Safe":runway>=6?"Tight":"Critical")+'</div></div>';
+    }
+
+    function calcAll() { calcUnitEcon(); calcBurn(); calcBBP(); calcPnL(); calcCF(); calcForecast(); updateKPIs(); }
+
+    // Auto-calculate on input change
+    document.querySelectorAll("input[type=number]").forEach(inp => inp.addEventListener("input", calcAll));
+    document.querySelectorAll("[data-pnl]").forEach(inp => inp.addEventListener("input", calcPnL));
+    document.querySelectorAll("[data-cf]").forEach(inp => inp.addEventListener("input", calcCF));
+
+    // Save/Load
+    const SAVE_KEY = "vs-finance";
+    function saveAll() {
+      const data = {};
+      document.querySelectorAll("input[type=number][id]").forEach(inp => data[inp.id] = inp.value);
+      document.querySelectorAll("[data-pnl]").forEach(inp => data["pnl_"+inp.dataset.pnl] = inp.value);
+      document.querySelectorAll("[data-cf]").forEach(inp => data["cf_"+inp.dataset.cf] = inp.value);
+      localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+      const msg = document.getElementById("savedMsg"); msg.classList.add("show");
+      setTimeout(() => msg.classList.remove("show"), 1500);
+    }
+    function loadAll() {
+      const data = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}");
+      document.querySelectorAll("input[type=number][id]").forEach(inp => { if(data[inp.id]) inp.value = data[inp.id]; });
+      document.querySelectorAll("[data-pnl]").forEach(inp => { if(data["pnl_"+inp.dataset.pnl]) inp.value = data["pnl_"+inp.dataset.pnl]; });
+      document.querySelectorAll("[data-cf]").forEach(inp => { if(data["cf_"+inp.dataset.cf]) inp.value = data["cf_"+inp.dataset.cf]; });
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", saveAll);
+    document.getElementById("resetBtn").addEventListener("click", function(){
+      if (confirm("Reset to pre-filled values?")) { localStorage.removeItem(SAVE_KEY); applyFinPreset(currentBiz); calcAll(); }
+    });
+    document.getElementById("exportBtn").addEventListener("click", function(){
+      let csv = "Metric," + [1,2,3,4,5,6].map(i=>"Month "+i).join(",") + "\n";
+      ["rev","cogs","rd","mkt","ga"].forEach(key => {
+        csv += key + "," + [1,2,3,4,5,6].map(i => document.querySelector('[data-pnl="'+key+i+'"]').value || 0).join(",") + "\n";
+      });
+      navigator.clipboard.writeText(csv).then(() => {
+        const msg = document.getElementById("savedMsg"); msg.textContent = "Copied!"; msg.classList.add("show");
+        setTimeout(() => { msg.textContent = "Saved!"; msg.classList.remove("show"); }, 1500);
+      });
+    });
+
+    // Init
+    const hasSaved = localStorage.getItem(SAVE_KEY);
+    if (hasSaved) { loadAll(); } else { applyFinPreset(currentBiz); }
+    updatePresetHint(currentBiz);
+    calcAll();
+  })();
+  </script>
+</body>
+</html>

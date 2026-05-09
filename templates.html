@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document Templates — K Venture Studio Hub</title>
+  <link rel="stylesheet" href="./assets/css/venture-studio.css">
+  <style>
+    .breadcrumb{margin:0 0 16px;font-size:13px;color:var(--muted)}
+    .breadcrumb a{color:var(--accent);text-decoration:none}
+    .breadcrumb a:hover{text-decoration:underline}
+    .phase-section{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:var(--shadow)}
+    .phase-section h3{margin:0 0 10px;font-size:18px;display:flex;align-items:center;gap:8px}
+    .phase-section .phase-desc{color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 14px}
+    .doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+    .doc-card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px}
+    .doc-card h4{margin:0;font-size:14px}
+    .doc-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+    .doc-card .doc-type{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;display:inline-block;width:fit-content}
+    .type-template{background:rgba(36,79,143,.12);color:var(--technology)}
+    .type-guide{background:rgba(30,122,94,.12);color:var(--science)}
+    .type-checklist{background:rgba(181,107,45,.12);color:var(--entrepreneurship)}
+    [data-theme="dark"] .type-template{color:#6ea8f0}
+    [data-theme="dark"] .type-guide{color:#3ecf94}
+    [data-theme="dark"] .type-checklist{color:#e0a050}
+    .doc-card a{font-size:12px;color:var(--technology);text-decoration:none}
+    .doc-card a:hover{text-decoration:underline}
+    .monetize-box{background:var(--card-bg);border:2px solid var(--accent);border-radius:22px;padding:24px;margin-top:18px}
+    .monetize-box h3{margin:0 0 10px;font-size:18px}
+    .monetize-box p{color:var(--muted);font-size:14px;line-height:1.6;margin:6px 0}
+    .monetize-box .price-tag{display:inline-block;font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;background:rgba(30,122,94,.12);color:var(--science);margin:4px 4px 4px 0}
+    [data-theme="dark"] .monetize-box .price-tag{color:#3ecf94}
+    .monetize-box a{color:var(--technology);text-decoration:none;font-weight:600}
+    .monetize-box a:hover{text-decoration:underline}
+    .expert-box{background:rgba(181,107,45,.06);border:1px solid rgba(181,107,45,.2);border-radius:18px;padding:20px;margin-top:14px}
+    [data-theme="dark"] .expert-box{background:rgba(224,160,80,.08);border-color:rgba(224,160,80,.2)}
+    .expert-box h4{margin:0 0 8px;font-size:15px}
+    .expert-box p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+    @media(max-width:768px){.doc-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  <script>const t=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",t);document.getElementById("themeToggle").textContent=t==="dark"?"☀️":"🌙";</script>
+  <main class="page">
+    <div class="breadcrumb"><a href="./">← K Venture Studio Hub</a></div>
+    <section class="hero">
+      <p class="eyebrow">Document Templates</p>
+      <h1>Startup Document Pack</h1>
+      <p class="lede">Every document you need, organized by phase. Free templates + premium extended versions.</p>
+    </section>
+
+    <!-- Phase 1 -->
+    <div class="phase-section">
+      <h3>💡 Phase 1 — Capture</h3>
+      <p class="phase-desc">Documents to articulate your idea and understand your market.</p>
+      <div class="doc-grid">
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>Idea One-Pager</h4>
+          <p>1 sentence idea + 3 motivations + initial assets list. Forces clarity before complexity.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-guide">Guide</span>
+          <h4>Market Segmentation Worksheet</h4>
+          <p>Brainstorm all possible segments, then narrow to one beachhead. Includes TAM estimation method.</p>
+          <a href="./canvas.html">Fill in DE Canvas →</a>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>End User Profile</h4>
+          <p>Demographics, behaviors, pain points, and a named persona for your beachhead market.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-checklist">Checklist</span>
+          <h4>Idea Viability Checklist</h4>
+          <p>10 yes/no questions to quickly assess if your idea has fundamental potential.</p>
+          <a href="./quiz.html">Take Readiness Quiz →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-section">
+      <h3>🧪 Phase 2 — Validate</h3>
+      <p class="phase-desc">Documents to test assumptions and learn from real customers.</p>
+      <div class="doc-grid">
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>Customer Interview Script</h4>
+          <p>5 open-ended questions that reveal pain, not just opinions. "Tell me about the last time you..."</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>Crash Test Protocol</h4>
+          <p>Smallest possible experiment to validate demand: hypothesis, test, success criteria, timeline.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-guide">Guide</span>
+          <h4>Quantified Value Proposition</h4>
+          <p>How to calculate time/money/effort saved. Turn "we make it better" into numbers.</p>
+          <a href="./canvas.html">DE Canvas Box 3 →</a>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-checklist">Checklist</span>
+          <h4>Validation Sprint Checklist</h4>
+          <p>10 interviews done? Crash test completed? First 10 customers identified? Track your progress.</p>
+          <a href="./roadmap.html">Roadmap →</a>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>Competitive Analysis Matrix</h4>
+          <p>Map 5 competitors: features, pricing, moats, weaknesses. Find your unique position.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-section">
+      <h3>🏗️ Phase 3 — Build</h3>
+      <p class="phase-desc">Documents to build your MVBP and make the business work end-to-end.</p>
+      <div class="doc-grid">
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>MVBP Specification</h4>
+          <p>Minimum Viable Business Product: product features + sales channel + payment method. All three required.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>Pricing Framework</h4>
+          <p>Cost-based, value-based, and competitive pricing analysis. Pick your model and justify it.</p>
+          <a href="./finance.html">Unit Economics →</a>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>Decision-Making Unit Map</h4>
+          <p>Champion, end user, primary influencer, veto person, buyer. Know who says yes and who can say no.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>Sales Process Design</h4>
+          <p>Awareness → Interest → Evaluation → Purchase. Map each step with channels and actions.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-guide">Guide</span>
+          <h4>Business Model Selector</h4>
+          <p>B2B, B2C, SaaS, marketplace, subscription, hardware — which model fits your venture?</p>
+          <a href="./canvas.html">Canvases →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-section">
+      <h3>🚀 Phase 4 — Scale</h3>
+      <p class="phase-desc">Documents to grow sustainably and present to investors.</p>
+      <div class="doc-grid">
+        <div class="doc-card">
+          <span class="doc-type type-guide">Guide</span>
+          <h4>Pitch Deck Recommendations</h4>
+          <p>General structure and best practices — not a rigid template, but a proven narrative flow.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>5-Year Financial Model</h4>
+          <p>P&L, cash flow, and key ratios by year. Investors want to see the path to sustainability.</p>
+          <a href="./finance.html">Finance Tools →</a>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>Follow-on Market Plan</h4>
+          <p>After the beachhead: which markets next, in what order, with what resources?</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-template">Template</span>
+          <h4>Fundraising Strategy</h4>
+          <p>How much, from whom, on what terms. Includes equity considerations and timeline.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-type type-checklist">Checklist</span>
+          <h4>Scaling Readiness Checklist</h4>
+          <p>Beachhead conquered? Unit economics proven? Team ready? Don't scale prematurely.</p>
+          <a href="./quiz.html">Readiness Quiz →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monetization -->
+    <div class="monetize-box">
+      <h3>💎 Extended Version</h3>
+      <p>The free version above gives you everything essential. The extended version adds:</p>
+      <p>
+        <span class="price-tag">Fillable PDF templates</span>
+        <span class="price-tag">Financial model spreadsheet</span>
+        <span class="price-tag">Pitch deck template (Google Slides)</span>
+        <span class="price-tag">Co-founder profile template</span>
+        <span class="price-tag">Investor update template</span>
+        <span class="price-tag">Priority support</span>
+      </p>
+      <p style="margin-top:12px"><a href="https://praxeonedu.gumroad.com" target="_blank" rel="noreferrer">Get extended version on Gumroad →</a></p>
+    </div>
+
+    <div class="expert-box">
+      <h4>🤝 Independent Expert</h4>
+      <p>Need hands-on guidance? Oksana Kolisnyk is available as an independent expert for venture strategy, market validation, and startup mentoring. <a href="mailto:kolisnyk.o@kse.org.ua" style="color:var(--accent)">Get in touch →</a></p>
+    </div>
+  </main>
+
+  <script>
+  document.getElementById("themeToggle").addEventListener("click",function(){
+    const c=this.textContent==="🌙"?"dark":"light";
+    document.documentElement.setAttribute("data-theme",c);
+    localStorage.setItem("theme",c);
+    this.textContent=c==="dark"?"☀️":"🌙";
+  });
+  </script>
+</body>
+</html>

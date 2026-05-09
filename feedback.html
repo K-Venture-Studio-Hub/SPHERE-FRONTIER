@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback — K Venture Studio Hub</title>
+  <link rel="stylesheet" href="./assets/css/venture-studio.css">
+  <style>
+    .breadcrumb{margin:0 0 16px;font-size:13px;color:var(--muted)}
+    .breadcrumb a{color:var(--accent);text-decoration:none}
+    .breadcrumb a:hover{text-decoration:underline}
+    .fb-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:var(--shadow)}
+    .fb-card h3{margin:0 0 14px;font-size:17px}
+    .fb-question{margin-bottom:18px}
+    .fb-question .q-label{font-size:14px;font-weight:600;margin-bottom:8px;display:block}
+    .fb-question .q-sub{font-size:12px;color:var(--muted);margin-bottom:6px}
+    .likert{display:flex;gap:8px;flex-wrap:wrap}
+    .likert label{display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;padding:6px 12px;border:1px solid var(--line);border-radius:999px;transition:all .15s;background:var(--card-bg)}
+    .likert label:hover{border-color:var(--accent)}
+    .likert input:checked+span{color:var(--accent);font-weight:700}
+    .likert input{accent-color:var(--accent)}
+    .fb-textarea{width:100%;min-height:80px;border:1px solid var(--line);border-radius:12px;padding:10px;font-size:14px;font-family:inherit;background:var(--input-bg);color:var(--ink);resize:vertical}
+    .fb-textarea:focus{outline:none;border-color:var(--accent)}
+    [data-theme="dark"] .fb-textarea{background:#1c1608;color:#f0e4d0}
+    .fb-input{width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:var(--input-bg);color:var(--ink);font-family:inherit}
+    .fb-input:focus{outline:none;border-color:var(--accent)}
+    [data-theme="dark"] .fb-input{background:#1c1608;color:#f0e4d0}
+    .submit-btn{border:1px solid var(--line);background:var(--input-bg);color:var(--ink);padding:12px 28px;border-radius:999px;font-weight:600;font-size:15px;cursor:pointer;transition:all .15s}
+    .submit-btn:hover{background:var(--ink);color:#fff}
+    .thank-you{display:none;text-align:center;padding:40px 20px}
+    .thank-you.show{display:block}
+    .thank-you h2{margin:0 0 10px;font-size:24px}
+    .thank-you p{color:var(--muted);font-size:15px}
+    .thank-you .big-emoji{font-size:48px;margin-bottom:14px}
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  <script>const t=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",t);document.getElementById("themeToggle").textContent=t==="dark"?"☀️":"🌙";</script>
+  <main class="page">
+    <div class="breadcrumb"><a href="./">← K Venture Studio Hub</a></div>
+    <section class="hero">
+      <p class="eyebrow">Feedback</p>
+      <h1>Did This Help?</h1>
+      <p class="lede">Help us improve. Your feedback shapes what gets built next.</p>
+    </section>
+
+    <div id="fbForm">
+      <div class="fb-card">
+        <h3>Your Experience</h3>
+
+        <div class="fb-question">
+          <span class="q-label">How well did this environment help you orient yourself in the startup journey?</span>
+          <span class="q-sub">1 = Not at all, 5 = Completely</span>
+          <div class="likert">
+            <label><input type="radio" name="q1" value="1"><span>1</span></label>
+            <label><input type="radio" name="q1" value="2"><span>2</span></label>
+            <label><input type="radio" name="q1" value="3"><span>3</span></label>
+            <label><input type="radio" name="q1" value="4"><span>4</span></label>
+            <label><input type="radio" name="q1" value="5"><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="fb-question">
+          <span class="q-label">Which tool was most useful?</span>
+          <div class="likert">
+            <label><input type="checkbox" name="tools" value="roadmap"><span>Roadmap</span></label>
+            <label><input type="checkbox" name="tools" value="canvas"><span>Canvases</span></label>
+            <label><input type="checkbox" name="tools" value="quiz"><span>Quiz</span></label>
+            <label><input type="checkbox" name="tools" value="finance"><span>Finance</span></label>
+            <label><input type="checkbox" name="tools" value="templates"><span>Templates</span></label>
+          </div>
+        </div>
+
+        <div class="fb-question">
+          <span class="q-label">How clear was the "from zero to startup" path?</span>
+          <span class="q-sub">1 = Very confusing, 5 = Crystal clear</span>
+          <div class="likert">
+            <label><input type="radio" name="q3" value="1"><span>1</span></label>
+            <label><input type="radio" name="q3" value="2"><span>2</span></label>
+            <label><input type="radio" name="q3" value="3"><span>3</span></label>
+            <label><input type="radio" name="q3" value="4"><span>4</span></label>
+            <label><input type="radio" name="q3" value="5"><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="fb-question">
+          <span class="q-label">Would you recommend this to someone starting their first venture?</span>
+          <div class="likert">
+            <label><input type="radio" name="q4" value="yes"><span>Yes</span></label>
+            <label><input type="radio" name="q4" value="maybe"><span>Maybe</span></label>
+            <label><input type="radio" name="q4" value="no"><span>No</span></label>
+          </div>
+        </div>
+
+        <div class="fb-question">
+          <span class="q-label">What's missing? What would make this more useful?</span>
+          <textarea class="fb-textarea" id="q5" placeholder="Your honest thoughts..."></textarea>
+        </div>
+
+        <div class="fb-question">
+          <span class="q-label">Your name or email (optional — only if you want a follow-up)</span>
+          <input class="fb-input" id="q6" type="text" placeholder="Optional">
+        </div>
+
+        <button class="submit-btn" id="submitBtn">Submit Feedback</button>
+      </div>
+    </div>
+
+    <div class="thank-you" id="thankYou">
+      <div class="big-emoji">🙏</div>
+      <h2>Thank You!</h2>
+      <p>Your feedback helps build a better environment for future entrepreneurs.</p>
+      <a href="./" style="color:var(--accent);text-decoration:none;font-weight:600">← Back to Venture Studio</a>
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    document.getElementById("themeToggle").addEventListener("click",function(){
+      const c=this.textContent==="🌙"?"dark":"light";
+      document.documentElement.setAttribute("data-theme",c);
+      localStorage.setItem("theme",c);
+      this.textContent=c==="dark"?"☀️":"🌙";
+    });
+
+    document.getElementById("submitBtn").addEventListener("click",function(){
+      const data={
+        orient:document.querySelector("input[name=q1]:checked")?.value||"",
+        tools:[...document.querySelectorAll("input[name=tools]:checked")].map(i=>i.value),
+        clarity:document.querySelector("input[name=q3]:checked")?.value||"",
+        recommend:document.querySelector("input[name=q4]:checked")?.value||"",
+        missing:document.getElementById("q5").value,
+        contact:document.getElementById("q6").value,
+        timestamp:new Date().toISOString()
+      };
+      // Save to localStorage
+      const all=JSON.parse(localStorage.getItem("vs-feedback")||"[]");
+      all.push(data);
+      localStorage.setItem("vs-feedback",JSON.stringify(all));
+      // Show thank you
+      document.getElementById("fbForm").style.display="none";
+      document.getElementById("thankYou").classList.add("show");
+    });
+  })();
+  </script>
+</body>
+</html>

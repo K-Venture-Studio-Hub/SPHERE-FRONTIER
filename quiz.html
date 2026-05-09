@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Readiness Quiz — K Venture Studio Hub</title>
+  <link rel="stylesheet" href="./assets/css/venture-studio.css">
+  <style>
+    .breadcrumb{margin:0 0 16px;font-size:13px;color:var(--muted)}
+    .breadcrumb a{color:var(--accent);text-decoration:none}
+    .breadcrumb a:hover{text-decoration:underline}
+    .quiz-intro{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;margin-bottom:18px}
+    .quiz-intro p{color:var(--muted);font-size:14px;line-height:1.6;margin:8px 0}
+    .quiz-progress{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .quiz-progress .bar{flex:1;height:10px;background:rgba(19,33,28,.08);border-radius:999px;overflow:hidden}
+    [data-theme="dark"] .quiz-progress .bar{background:rgba(255,255,255,.08)}
+    .quiz-progress .bar .fill{height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
+    .quiz-progress .count{font-size:13px;color:var(--muted);white-space:nowrap}
+    .q-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;margin-bottom:14px}
+    .q-card .q-cat{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px}
+    .q-card .q-text{font-size:15px;line-height:1.6;margin:0 0 14px;font-style:italic}
+    .q-options{display:flex;flex-direction:column;gap:8px}
+    .q-opt{padding:10px 14px;border:1px solid var(--line);border-radius:12px;cursor:pointer;font-size:14px;transition:all .12s;background:var(--card-bg)}
+    .q-opt:hover{border-color:var(--accent)}
+    .q-opt.selected{border-color:var(--accent);background:rgba(181,107,45,.08)}
+    [data-theme="dark"] .q-opt.selected{background:rgba(224,160,80,.12)}
+    .results{display:none;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:28px;margin-top:18px}
+    .results.show{display:block}
+    .results h2{margin:0 0 14px}
+    .score-ring{width:120px;height:120px;border-radius:50%;border:6px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;margin:0 auto 18px;position:relative}
+    .score-ring .pct{color:var(--accent)}
+    .score-ring::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:6px solid transparent;border-top-color:var(--accent);animation:spin 1s linear}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .score-details{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px}
+    .score-col{text-align:center;padding:14px;background:var(--card-bg);border:1px solid var(--line);border-radius:16px}
+    .score-col .cat-name{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+    .score-col .cat-score{font-size:24px;font-weight:700;color:var(--accent)}
+    .recs{margin-top:18px}
+    .recs h3{font-size:16px;margin:0 0 10px}
+    .recs ul{list-style:none;padding:0;margin:0}
+    .recs li{padding:6px 0;font-size:14px;color:var(--ink);border-bottom:1px solid var(--line)}
+    .recs li:last-child{border-bottom:none}
+    .recs li::before{content="→ ";color:var(--accent)}
+    .retry-btn{border:1px solid var(--line);background:var(--input-bg);color:var(--ink);padding:10px 22px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;margin-top:18px;transition:all .15s}
+    .retry-btn:hover{background:var(--ink);color:#fff}
+    @media(max-width:768px){.score-details{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  <script>const t=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",t);document.getElementById("themeToggle").textContent=t==="dark"?"☀️":"🌙";</script>
+  <main class="page">
+    <div class="breadcrumb"><a href="./">← K Venture Studio Hub</a></div>
+    <section class="hero">
+      <p class="eyebrow">Readiness Quiz</p>
+      <h1>Are You Startup-Ready?</h1>
+      <p class="lede">33 questions that AI can't answer for you. Metaphors, paradoxes, and real tests of entrepreneurial thinking.</p>
+    </section>
+
+    <div class="quiz-intro">
+      <p><strong>3 categories:</strong> Mindset (1-11) · Knowledge (12-22) · Readiness (23-33)</p>
+      <p>There are no obviously right answers. Pick what resonates with how you actually think and act. Your honesty = your score's value.</p>
+    </div>
+
+    <div class="quiz-progress">
+      <div class="bar"><div class="fill" id="qFill" style="width:0%"></div></div>
+      <span class="count" id="qCount">0 / 33</span>
+    </div>
+
+    <div id="quizArea"></div>
+
+    <div class="results" id="results">
+      <h2>Your Readiness Score</h2>
+      <div class="score-ring"><span class="pct" id="scorePct">0%</span></div>
+      <div class="score-details">
+        <div class="score-col"><div class="cat-name">Mindset</div><div class="cat-score" id="mindScore">0</div></div>
+        <div class="score-col"><div class="cat-name">Knowledge</div><div class="cat-score" id="knowScore">0</div></div>
+        <div class="score-col"><div class="cat-name">Readiness</div><div class="cat-score" id="readScore">0</div></div>
+      </div>
+      <div class="recs" id="recs"></div>
+      <button class="retry-btn" id="retryBtn">🔄 Retake Quiz</button>
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    // Theme
+    document.getElementById("themeToggle").addEventListener("click",function(){
+      const c=this.textContent==="🌙"?"dark":"light";
+      document.documentElement.setAttribute("data-theme",c);
+      localStorage.setItem("theme",c);
+      this.textContent=c==="dark"?"☀️":"🌙";
+    });
+
+    // Questions data — JS-rendered for protection
+    const Q=[
+      // MINDSET 1-11
+      {cat:"mindset",q:"You discover your metaphorical apple contains aphorisms — wisdom baked into the fruit. What do you do first?",o:["Eat it all immediately — knowledge is meant to be consumed","Plant the seeds — wisdom grows when shared and cultivated","Analyze the patterns — what system produced these aphorisms?","Sell the apple — someone will pay for embedded wisdom"],s:[1,3,2,0]},
+      {cat:"mindset",q:"A ship in a bottle cannot be built from the outside. How does this describe your approach to a startup?",o:["I study the bottle first, then plan every move","I find the entry point and build from inside out","I break the bottle — constraints are meant to be questioned","I build many ships in many bottles simultaneously"],s:[2,3,1,0]},
+      {cat:"mindset",q:'Marcus Aurelius wrote: "The impediment to action advances action. What stands in the way becomes the way." How does this apply to your venture?',o:["Obstacles are signals to pivot — the market is telling you something","Obstacles are fuel — each one teaches you what to build next","Obstacles mean you're on the wrong path — find an easier route","Obstacles are temporary — persistence alone solves everything"],s:[2,3,0,1]},
+      {cat:"mindset",q:"You're given a cube where each face shows a different business model. You can only see three faces. What do you do?",o:["Rotate it slowly, study each face before deciding","Pick the face that looks most promising and go deep","Ask someone who has seen all six faces","Build a mirror system to see all faces at once"],s:[2,3,0,1]},
+      {cat:"mindset",q:'"Get Ship Done!" is written on your shirt. A friend asks: "But what if the ship sinks?" Your answer:',o:["Then I'll learn to swim while building the next one","I test the ship in shallow water before the open sea","I build a lifeboat first, then the ship","Ships don't sink if you build them right — I study naval engineering"],s:[1,3,2,0]},
+      {cat:"mindset",q:"You find a door that opens only when you don't want to enter. What does this teach about customer discovery?",o:["The best insights come when you stop selling and start listening","Customers reveal needs when you stop assuming what they want","Desperation repels — curiosity attracts","All of the above, depending on the context"],s:[2,2,1,3]},
+      {cat:"mindset",q:"A clock that runs backwards still measures time accurately. What startup lesson is hidden here?",o:["Convention is not the only way — unconventional approaches can work","The direction matters less than the consistency of measurement","Time is running out — urgency is always appropriate","There is no lesson — it's just a broken clock"],s:[2,3,0,0]},
+      {cat:"mindset",q:'Nietzsche wrote: "He who has a why can bear almost any how." Your startup has a "why" that is:',o:["Personal — I need to prove something to myself","Market-driven — customers are waiting for this","Mission-driven — the world needs this to exist","Still forming — I'm discovering it as I go"],s:[1,2,3,2]},
+      {cat:"mindset",q:"You're offered three keys. One opens any door but only once. One opens one door forever. One opens all doors but only on Tuesdays. Which do you choose for your venture?",o:["Any door once — I need that one breakthrough opportunity","One door forever — I'll dominate a single market completely","Tuesdays only — consistency beats intensity","I'd ask what's behind each door first"],s:[1,3,2,0]},
+      {cat:"mindset",q:"Your venture is a garden. Someone asks: 'When will it bloom?' Your honest answer:",o:["When the conditions are right — I control the soil, not the weather","Next quarter — I have a timeline and I'm sticking to it","It already is — growth is happening even if invisible","When I stop asking that question and start weeding"],s:[2,0,1,3]},
+      {cat:"mindset",q:"A labyrinth has no center but has many exits. How do you navigate your startup journey?",o:["Pick an exit and move toward it — direction matters more than destination","Explore systematically — map what you find","Follow someone who seems to know the way","Stop walking — maybe the labyrinth is the point"],s:[2,3,0,1]},
+
+      // KNOWLEDGE 12-22
+      {cat:"knowledge",q:"Your product has a LTV of $200 and COCA of $10. An investor says 'great unit economics.' What's your honest reaction?",o:["I agree — LTV/COCA of 20x is excellent","I'm skeptical — a $10 COCA for a $200 LTV product seems too low","I ask what timeframe this LTV covers — short-term or long-term?","I celebrate and move on to the next topic"],s:[0,3,2,0]},
+      {cat:"knowledge",q:"A beachhead market is NOT:",o:["The largest market you could possibly serve","A single, specific segment you can dominate first","The market where you have the strongest initial advantage","A market with a clear persona and use case"],s:[3,0,0,0]},
+      {cat:"knowledge",q:"You're building a two-sided marketplace. Your first 10 customers are:",o:["5 buyers and 5 sellers, launched simultaneously","All on one side first — you create value for the other side manually","Whoever shows up first — let the market decide","Only buyers — sellers will come when there's demand"],s:[0,3,0,1]},
+      {cat:"knowledge",q:"A 'Core' in competitive advantage terms is:",o:["A feature customers love most","An internal capability you have uniquely or much stronger than others","Your company's mission statement","The center of your organizational chart"],s:[0,3,0,0]},
+      {cat:"knowledge",q:"Your MVBP (Minimum Viable Business Product) must include:",o:["Just the product — we'll figure out sales later","Product + sales channel + payment — the whole tiny business works end-to-end","A beautiful landing page and waitlist","The full feature set, but for one customer only"],s:[0,3,0,0]},
+      {cat:"knowledge",q:'"Dogs will eat the dog food" means:',o:["Your product works technically","Real users are actually using and paying for your product — not just signing up","You've achieved product-market fit","Your team believes in the product"],s:[0,3,0,0]},
+      {cat:"knowledge",q:"Your Decision-Making Unit (DMU) includes all EXCEPT:",o:["Champion — the person who wants to buy","End User — the person who uses the product","Primary Influencer — who sways the decision","Investor — who funds your company"],s:[0,0,0,3]},
+      {cat:"knowledge",q:"Network effects as a moat are:",o:["Always the strongest competitive advantage","Rarely achieved — most companies that list them don't actually have them","Easy to create — just get more users","Only relevant for social media companies"],s:[0,3,0,0]},
+      {cat:"knowledge",q:"Your startup's TAM for the beachhead market should be calculated as:",o:["Total global demand for this type of product","The specific revenue opportunity in your single beachhead segment","Whatever number makes investors excited","The sum of all possible markets you could ever enter"],s:[0,3,0,0]},
+      {cat:"knowledge",q:"A pivot is best described as:",o:["Giving up on your original idea","A fundamental change in strategy based on what you've learned","A minor adjustment to your marketing plan","What you do when you run out of money"],s:[0,3,0,0]},
+      {cat:"knowledge",q:"The most important number in your financial model is:",o:["Total revenue in year 5","LTV/COCA ratio — it tells you if unit economics work","Your valuation","Monthly burn rate"],s:[0,3,0,1]},
+
+      // READINESS 23-33
+      {cat:"readiness",q:"You have an idea but no co-founder yet. Your next move:",o:["Start building alone — speed matters more than team","Talk to 20 potential co-founders before writing a line of code","Post on co-founder matching platforms and wait","Work on the idea until it's compelling enough to attract someone"],s:[0,2,0,3]},
+      {cat:"readiness",q:"A potential customer says 'that's interesting' after your pitch. What do you do?",o:["Celebrate — they're interested!","Ask 'what would make this a must-have, not just nice-to-have?'","Send them a follow-up email with pricing","Move on — 'interesting' means 'no'"],s:[0,3,1,0]},
+      {cat:"readiness",q:"You've been working on your startup for 3 months with no revenue. Your next step:",o:["Keep going — persistence is key","Stop and reassess: have you talked to 50+ potential customers?","Pivot to a completely different idea","Raise money to extend your runway"],s:[0,3,0,0]},
+      {cat:"readiness",q:"Your co-founder wants to build the full product before showing it to anyone. You:",o:["Agree — first impressions matter","Suggest building the smallest testable version and showing it this week","Compromise — build half the features, then show it","Let them lead — they know the product best"],s:[0,3,0,0]},
+      {cat:"readiness",q:"You can only do ONE thing this week for your startup. You choose:",o:["Write code","Talk to 5 potential customers","Create a financial model","Design the brand identity"],s:[0,3,1,0]},
+      {cat:"readiness",q:"An investor offers $50K but wants 40% of your company. You:",o:["Take it — money is money and 60% is still majority","Decline — that's way too much equity for too little money at this stage","Negotiate — maybe 15% for $50K or $50K as a convertible note","Ask your mentor for advice before deciding"],s:[0,2,3,1]},
+      {cat:"readiness",q:"Your burn rate is $5K/month. You have $30K in the bank. Your priority:",o:["Cut costs to extend runway as long as possible","Focus on revenue — 6 months of runway means revenue must start within 2 months","Raise more money immediately","Build faster — ship before the money runs out"],s:[0,3,0,1]},
+      {cat:"readiness",q:"You've identified 3 possible beachhead markets. How do you choose?",o:["Pick the largest one — bigger market = bigger opportunity","Pick the one where you have the most personal connection and access to 10 first customers","Pick the one that sounds most impressive to investors","Try all three simultaneously — why choose?"],s:[0,3,0,0]},
+      {cat:"readiness",q:"A competitor launches a product similar to yours. Your reaction:",o:["Panic — we're too late","Validate the market — if they built it, the need is real. Now differentiate","Copy their features and launch faster","Abandon this idea — the market is taken"],s:[0,3,0,0]},
+      {cat:"readiness",q:"Your mom loves your product. Your next validation step:",o:["Great! One satisfied customer down","Find 10 people who don't know you and test with them","Ask mom to recommend 5 friends","Build more features based on mom's feedback"],s:[0,3,1,0]},
+      {cat:"readiness",q:"It's Sunday evening. You're planning your startup week. You schedule:",o:["80% building, 20% talking to users","50% customer conversations, 30% building, 20% analyzing what you learned","100% building — you'll talk to users when the product is ready","Whatever feels most urgent on Monday morning"],s:[0,3,0,1]}
+    ];
+
+    let answers={};
+    const area=document.getElementById("quizArea");
+
+    // Render questions
+    Q.forEach((item,i)=>{
+      const catLabel={mindset:"🧠 Mindset",knowledge:"📚 Knowledge",readiness:"🎯 Readiness"}[item.cat];
+      let html='<div class="q-card"><div class="q-cat">'+catLabel+'</div><div class="q-text">'+(i+1)+'. '+item.q+'</div><div class="q-options">';
+      item.o.forEach((opt,oi)=>{
+        html+='<div class="q-opt" data-qi="'+i+'" data-oi="'+oi+'">'+opt+'</div>';
+      });
+      html+='</div></div>';
+      area.innerHTML+=html;
+    });
+
+    // Click handler
+    area.addEventListener("click",function(e){
+      const opt=e.target.closest(".q-opt");
+      if(!opt)return;
+      const qi=parseInt(opt.dataset.qi);
+      const oi=parseInt(opt.dataset.oi);
+      answers[qi]=oi;
+      // Visual
+      opt.closest(".q-options").querySelectorAll(".q-opt").forEach(o=>o.classList.remove("selected"));
+      opt.classList.add("selected");
+      updateProgress();
+    });
+
+    function updateProgress(){
+      const done=Object.keys(answers).length;
+      const pct=Math.round(done/Q.length*100);
+      document.getElementById("qFill").style.width=pct+"%";
+      document.getElementById("qCount").textContent=done+" / "+Q.length;
+      if(done===Q.length)showResults();
+    }
+
+    function showResults(){
+      let mind=0,know=0,read=0,mindMax=0,knowMax=0,readMax=0;
+      Q.forEach((item,i)=>{
+        const score=item.s[answers[i]]||0;
+        const max=Math.max(...item.s);
+        if(item.cat==="mindset"){mind+=score;mindMax+=max}
+        else if(item.cat==="knowledge"){know+=score;knowMax+=max}
+        else{read+=score;readMax+=max}
+      });
+      const total=mind+know+read;
+      const totalMax=mindMax+knowMax+readMax;
+      const pct=Math.round(total/totalMax*100);
+      const mPct=mindMax?Math.round(mind/mindMax*100):0;
+      const kPct=knowMax?Math.round(know/knowMax*100):0;
+      const rPct=readMax?Math.round(read/readMax*100):0;
+
+      document.getElementById("scorePct").textContent=pct+"%";
+      document.getElementById("mindScore").textContent=mPct+"%";
+      document.getElementById("knowScore").textContent=kPct+"%";
+      document.getElementById("readScore").textContent=rPct+"%";
+
+      // Recommendations
+      let recs=[];
+      if(mPct<60)recs.push("Strengthen your entrepreneurial mindset — read Disciplined Entrepreneurship, practice reframing obstacles");
+      if(mPct>=60)recs.push("Your mindset is solid — focus on turning thinking into action");
+      if(kPct<60)recs.push("Fill knowledge gaps — study unit economics, DMU, MVBP concepts on the Roadmap");
+      if(kPct>=60)recs.push("Good knowledge foundation — now apply it to your specific venture");
+      if(rPct<60)recs.push("Increase readiness — start customer conversations this week, build your MVBP");
+      if(rPct>=60)recs.push("You're ready to execute — open the Canvas and start filling it with real data");
+      if(pct>=80)recs.push("🌟 Outstanding readiness — your next step is the Roadmap, Phase 2: Validate");
+
+      const recsHtml=recs.map(r=>"<li>"+r+"</li>").join("");
+      document.getElementById("recs").innerHTML='<h3>Recommendations</h3><ul>'+recsHtml+'</ul>';
+
+      area.style.display="none";
+      document.querySelector(".quiz-intro").style.display="none";
+      document.querySelector(".quiz-progress").style.display="none";
+      document.getElementById("results").classList.add("show");
+    }
+
+    document.getElementById("retryBtn").addEventListener("click",function(){
+      answers={};
+      area.style.display="";
+      document.querySelector(".quiz-intro").style.display="";
+      document.querySelector(".quiz-progress").style.display="";
+      document.getElementById("results").classList.remove("show");
+      area.querySelectorAll(".q-opt").forEach(o=>o.classList.remove("selected"));
+      updateProgress();
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+  })();
+  </script>
+</body>
+</html>

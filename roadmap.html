@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roadmap — K Venture Studio Hub</title>
+  <link rel="stylesheet" href="./assets/css/venture-studio.css">
+  <style>
+    .breadcrumb{margin:0 0 16px;font-size:13px;color:var(--muted)}
+    .breadcrumb a{color:var(--accent);text-decoration:none}
+    .breadcrumb a:hover{text-decoration:underline}
+    .phase-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:18px}
+    .phase{background:var(--panel);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--shadow)}
+    .phase-header{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+    .phase-icon{font-size:36px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:16px;background:var(--card-bg);border:1px solid var(--line)}
+    .phase-header h3{margin:0;font-size:20px}
+    .phase-header .phase-tag{margin-left:auto;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px}
+    .tag-capture{background:rgba(245,158,11,.12);color:#d97706}
+    .tag-validate{background:rgba(30,122,94,.12);color:var(--science)}
+    .tag-build{background:rgba(36,79,143,.12);color:var(--technology)}
+    .tag-scale{background:rgba(181,107,45,.12);color:var(--entrepreneurship)}
+    [data-theme="dark"] .tag-capture{color:#fbbf24}
+    [data-theme="dark"] .tag-validate{color:#3ecf94}
+    [data-theme="dark"] .tag-build{color:#6ea8f0}
+    [data-theme="dark"] .tag-scale{color:#e0a050}
+    .phase-desc{color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 14px}
+    .step-list{list-style:none;padding:0;margin:0}
+    .step-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+    .step-item:last-child{border-bottom:none}
+    .step-item input[type="checkbox"]{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex-shrink:0}
+    .step-item.done .step-text{text-decoration:line-through;color:var(--muted)}
+    .step-text{flex:1;line-height:1.5}
+    .step-link{font-size:12px;color:var(--technology);text-decoration:none;white-space:nowrap}
+    .step-link:hover{text-decoration:underline}
+    .docs-box{margin-top:12px;background:var(--card-bg);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .docs-box h4{margin:0 0 8px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .docs-box ul{list-style:none;padding:0;margin:0}
+    .docs-box li{padding:4px 0;font-size:13px;color:var(--ink)}
+    .docs-box li::before{content:"📄 ";color:var(--muted)}
+    .docs-box li a{color:var(--technology);text-decoration:none}
+    .docs-box li a:hover{text-decoration:underline}
+    .progress-summary{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;margin-top:18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+    .progress-summary h3{margin:0;font-size:18px}
+    .progress-bar-big{flex:1;min-width:200px;height:14px;background:rgba(19,33,28,.08);border-radius:999px;overflow:hidden}
+    .progress-bar-big .fill{height:100%;background:var(--accent);border-radius:999px;transition:width .4s}
+    [data-theme="dark"] .progress-bar-big{background:rgba(255,255,255,.08)}
+    .progress-pct{font-size:22px;font-weight:700;color:var(--accent)}
+    .reset-btn{border:1px solid var(--line);background:var(--input-bg);color:var(--muted);padding:6px 14px;border-radius:999px;font-size:12px;cursor:pointer;transition:all .15s}
+    .reset-btn:hover{background:var(--ink);color:#fff}
+    @media(max-width:768px){.phase-grid{gap:14px}.phase{padding:18px}.progress-summary{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  <script>const t=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",t);document.getElementById("themeToggle").textContent=t==="dark"?"☀️":"🌙";</script>
+  <main class="page">
+    <div class="breadcrumb"><a href="./">← K Venture Studio Hub</a></div>
+    <section class="hero">
+      <p class="eyebrow">Roadmap</p>
+      <h1>Від Чайника до Стартапу</h1>
+      <p class="lede">Everything you need to know and test before and during a startup launch. Raise your % success in the overall statistics.</p>
+    </section>
+
+    <div class="progress-summary">
+      <h3>Your Progress</h3>
+      <div class="progress-bar-big"><div class="fill" id="progressFill" style="width:0%"></div></div>
+      <span class="progress-pct" id="progressPct">0%</span>
+      <button class="reset-btn" id="resetBtn">Reset</button>
+    </div>
+
+    <div class="phase-grid">
+
+      <!-- PHASE 1: CAPTURE -->
+      <div class="phase" id="phase-capture">
+        <div class="phase-header">
+          <div class="phase-icon">💡</div>
+          <h3>Capture</h3>
+          <span class="phase-tag tag-capture">Phase 1</span>
+        </div>
+        <p class="phase-desc">Find and articulate your idea. This is about curiosity, observation, and turning vague excitement into something you can test.</p>
+        <ul class="step-list" data-phase="capture">
+          <li class="step-item"><input type="checkbox" data-step="c1"><span class="step-text">Write down your idea in one sentence — what it is, who it's for, why it matters</span><a href="./canvas.html" class="step-link">DE Canvas →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="c2"><span class="step-text">List your motivations — passion, impact, mission, or obsession</span><a href="./canvas.html" class="step-link">Raison d'Être →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="c3"><span class="step-text">Identify what you already have — skills, assets, network, knowledge</span></li>
+          <li class="step-item"><input type="checkbox" data-step="c4"><span class="step-text">Segment the market — who could possibly use this?</span><a href="./canvas.html" class="step-link">Market Segmentation →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="c5"><span class="step-text">Pick one beachhead market — the smallest segment you can dominate first</span></li>
+          <li class="step-item"><input type="checkbox" data-step="c6"><span class="step-text">Create an end user profile — demographics, behaviors, pain points</span></li>
+          <li class="step-item"><input type="checkbox" data-step="c7"><span class="step-text">Estimate your beachhead TAM — how big is this specific market?</span></li>
+          <li class="step-item"><input type="checkbox" data-step="c8"><span class="step-text">Name your beachhead persona — a specific fictional user</span></li>
+        </ul>
+        <div class="docs-box">
+          <h4>Documents for this phase</h4>
+          <ul>
+            <li>Idea One-Pager (1 sentence + 3 motivations)</li>
+            <li><a href="./canvas.html">DE Canvas — Boxes 1-2</a></li>
+            <li><a href="./templates.html">Market Segmentation Worksheet</a></li>
+            <li><a href="./quiz.html">Readiness Quiz — Mindset section</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PHASE 2: VALIDATE -->
+      <div class="phase" id="phase-validate">
+        <div class="phase-header">
+          <div class="phase-icon">🧪</div>
+          <h3>Validate</h3>
+          <span class="phase-tag tag-validate">Phase 2</span>
+        </div>
+        <p class="phase-desc">Test your assumptions with real people. This is where most startups fail — by skipping. Talk to customers before you build.</p>
+        <ul class="step-list" data-phase="validate">
+          <li class="step-item"><input type="checkbox" data-step="v1"><span class="step-text">Define the life cycle use case — how does the user discover, adopt, use, pay?</span></li>
+          <li class="step-item"><input type="checkbox" data-step="v2"><span class="step-text">Write a high-level product spec — what it does, not how it's built</span></li>
+          <li class="step-item"><input type="checkbox" data-step="v3"><span class="step-text">Quantify your value proposition — how much time/money/effort do you save?</span><a href="./canvas.html" class="step-link">QVP →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="v4"><span class="step-text">Identify your first 10 target customers by name</span></li>
+          <li class="step-item"><input type="checkbox" data-step="v5"><span class="step-text">Conduct 10+ customer interviews — listen, don't pitch</span></li>
+          <li class="step-item"><input type="checkbox" data-step="v6"><span class="step-text">Define your Core — what can you do uniquely better than anyone?</span></li>
+          <li class="step-item"><input type="checkbox" data-step="v7"><span class="step-text">Map your competitive moats — network effects, switching costs, brand</span></li>
+          <li class="step-item"><input type="checkbox" data-step="v8"><span class="step-text">Run a crash test — smallest possible experiment to validate demand</span></li>
+        </ul>
+        <div class="docs-box">
+          <h4>Documents for this phase</h4>
+          <ul>
+            <li><a href="./canvas.html">DE Canvas — Boxes 3-5</a></li>
+            <li>Customer Interview Script (5 questions)</li>
+            <li><a href="./finance.html">Unit Economics Calculator</a></li>
+            <li>Crash Test Protocol</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PHASE 3: BUILD -->
+      <div class="phase" id="phase-build">
+        <div class="phase-header">
+          <div class="phase-icon">🏗️</div>
+          <h3>Build</h3>
+          <span class="phase-tag tag-build">Phase 3</span>
+        </div>
+        <p class="phase-desc">Create your Minimum Viable Business Product. Not just a product — a business that works end to end, even if tiny.</p>
+        <ul class="step-list" data-phase="build">
+          <li class="step-item"><input type="checkbox" data-step="b1"><span class="step-text">Define the Decision-Making Unit — who says yes, who influences, who vetoes?</span></li>
+          <li class="step-item"><input type="checkbox" data-step="b2"><span class="step-text">Map the customer acquisition process — how do they find you?</span></li>
+          <li class="step-item"><input type="checkbox" data-step="b3"><span class="step-text">Choose your business model — subscription, marketplace, SaaS, licensing...</span><a href="./canvas.html" class="step-link">Business Model →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="b4"><span class="step-text">Set your pricing framework — what you charge and why</span><a href="./finance.html" class="step-link">Pricing →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="b5"><span class="step-text">Calculate Customer Lifetime Value (LTV)</span><a href="./finance.html" class="step-link">LTV Calc →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="b6"><span class="step-text">Design your scalable revenue engine</span></li>
+          <li class="step-item"><input type="checkbox" data-step="b7"><span class="step-text">Estimate Cost of Customer Acquisition (COCA)</span><a href="./finance.html" class="step-link">COCA →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="b8"><span class="step-text">Build your Minimum Viable Business Product (MVBP)</span></li>
+          <li class="step-item"><input type="checkbox" data-step="b9"><span class="step-text">Prove that dogs will eat the dog food — get real usage, not just signups</span></li>
+        </ul>
+        <div class="docs-box">
+          <h4>Documents for this phase</h4>
+          <ul>
+            <li><a href="./canvas.html">DE Canvas — Boxes 6-9</a></li>
+            <li><a href="./finance.html">P&L Template</a></li>
+            <li><a href="./finance.html">5-Year Forecast</a></li>
+            <li>MVBP Specification</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PHASE 4: SCALE -->
+      <div class="phase" id="phase-scale">
+        <div class="phase-header">
+          <div class="phase-icon">🚀</div>
+          <h3>Scale</h3>
+          <span class="phase-tag tag-scale">Phase 4</span>
+        </div>
+        <p class="phase-desc">Expand beyond the beachhead. This is about sustainable growth, follow-on markets, and building something that outlasts you.</p>
+        <ul class="step-list" data-phase="scale">
+          <li class="step-item"><input type="checkbox" data-step="s1"><span class="step-text">Identify follow-on markets — where do you go after the beachhead?</span></li>
+          <li class="step-item"><input type="checkbox" data-step="s2"><span class="step-text">Create your product plan — what's next after MVBP?</span></li>
+          <li class="step-item"><input type="checkbox" data-step="s3"><span class="step-text">Build a financial model — P&L, cash flow, 5-year forecast</span><a href="./finance.html" class="step-link">Finance →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="s4"><span class="step-text">Prepare your pitch — narrative, data, vision</span><a href="./templates.html" class="step-link">Pitch Guide →</a></li>
+          <li class="step-item"><input type="checkbox" data-step="s5"><span class="step-text">Define your scaling strategy — partnerships, channels, geography</span></li>
+          <li class="step-item"><input type="checkbox" data-step="s6"><span class="step-text">Set up tracking metrics — what numbers tell you if you're winning?</span></li>
+          <li class="step-item"><input type="checkbox" data-step="s7"><span class="step-text">Establish governance — board, advisors, decision frameworks</span></li>
+          <li class="step-item"><input type="checkbox" data-step="s8"><span class="step-text">Plan fundraising — how much, from whom, on what terms</span></li>
+        </ul>
+        <div class="docs-box">
+          <h4>Documents for this phase</h4>
+          <ul>
+            <li><a href="./canvas.html">DE Canvas — Box 10</a></li>
+            <li><a href="./finance.html">Full Financial Model</a></li>
+            <li><a href="./templates.html">Pitch Deck Recommendations</a></li>
+            <li>Fundraising Strategy Template</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <section class="panel-section" style="margin-top:18px">
+      <blockquote style="border-left:3px solid var(--accent);margin:0;padding:12px 20px;background:rgba(181,107,45,.06);border-radius:0 12px 12px 0;font-style:italic;color:var(--muted)">
+        "You do not need a perfect plan to start. You need one crash test, one next step, and one weekly loop."
+      </blockquote>
+    </section>
+  </main>
+
+  <script>
+  (function(){
+    // Theme toggle
+    document.getElementById("themeToggle").addEventListener("click",function(){
+      const c=this.textContent==="🌙"?"dark":"light";
+      document.documentElement.setAttribute("data-theme",c);
+      localStorage.setItem("theme",c);
+      this.textContent=c==="dark"?"☀️":"🌙";
+    });
+
+    // Roadmap progress
+    const KEY="vs-roadmap";
+    let saved=JSON.parse(localStorage.getItem(KEY)||"{}");
+
+    function save(){localStorage.setItem(KEY,JSON.stringify(saved))}
+    function updateUI(){
+      document.querySelectorAll(".step-item input[type=checkbox]").forEach(cb=>{
+        const k=cb.dataset.step;
+        cb.checked=!!saved[k];
+        cb.closest(".step-item").classList.toggle("done",!!saved[k]);
+      });
+      const total=document.querySelectorAll(".step-item input[type=checkbox]").length;
+      const done=Object.keys(saved).filter(k=>saved[k]).length;
+      const pct=total?Math.round(done/total*100):0;
+      document.getElementById("progressFill").style.width=pct+"%";
+      document.getElementById("progressPct").textContent=pct+"%";
+    }
+
+    document.querySelectorAll(".step-item input[type=checkbox]").forEach(cb=>{
+      cb.addEventListener("change",function(){
+        saved[this.dataset.step]=this.checked;
+        save();updateUI();
+      });
+    });
+
+    document.getElementById("resetBtn").addEventListener("click",function(){
+      if(confirm("Reset all roadmap progress?")){
+        saved={};save();updateUI();
+      }
+    });
+
+    updateUI();
+  })();
+  </script>
+</body>
+</html>

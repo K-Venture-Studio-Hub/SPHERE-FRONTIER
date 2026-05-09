@@ -5,6 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>K Venture Studio Hub — SPHERE FRONTIER</title>
   <link rel="stylesheet" href="./assets/css/venture-studio.css">
+  <style>
+    .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:14px}
+    .tool-card{background:var(--card-bg);border:1px solid var(--line);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:8px;transition:all .15s;cursor:pointer;text-decoration:none;color:var(--ink)}
+    .tool-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+    .tool-icon{font-size:28px;margin-bottom:4px}
+    .tool-card h3{margin:0;font-size:16px}
+    .tool-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+    .tool-tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-right:4px}
+    .tag-core{background:rgba(181,107,45,.12);color:var(--entrepreneurship)}
+    .tag-new{background:rgba(30,122,94,.12);color:var(--science)}
+    [data-theme="dark"] .tag-core{color:#e0a050}
+    [data-theme="dark"] .tag-new{color:#3ecf94}
+    .roadmap-preview{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+    .roadmap-step{text-align:center;padding:14px 8px;background:var(--card-bg);border:1px solid var(--line);border-radius:16px;transition:all .15s;text-decoration:none;color:var(--ink)}
+    .roadmap-step:hover{border-color:var(--accent)}
+    .roadmap-step .step-icon{font-size:24px}
+    .roadmap-step .step-title{font-weight:700;font-size:14px;margin-top:6px}
+    .roadmap-step .step-sub{color:var(--muted);font-size:12px;margin-top:2px}
+    @media(max-width:768px){.roadmap-preview{grid-template-columns:1fr 1fr}.tool-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
@@ -15,9 +35,10 @@
       <h1>SPHERE FRONTIER</h1>
       <p class="lede">Pre-structured venture architecture. From learning to validated startup — faster.</p>
       <div class="hero-links">
+        <a href="./roadmap.html">🗺️ Roadmap</a>
+        <a href="./canvas.html">📋 Canvases</a>
+        <a href="./quiz.html">🧩 Readiness Quiz</a>
         <a href="https://github.com/K-Venture-Studio-Hub" target="_blank" rel="noreferrer">GitHub</a>
-        <a href="https://sphere-mentorship-hub.vercel.app" target="_blank" rel="noreferrer">Mentorship Hub</a>
-        <a href="https://sphere-rnd-lab.vercel.app" target="_blank" rel="noreferrer">R&D Lab</a>
       </div>
     </section>
 
@@ -37,6 +58,76 @@
       <div class="stat-card">
         <div class="stat-value">OSS</div>
         <div class="stat-label">All Open</div>
+      </div>
+    </section>
+
+    <section class="panel-section">
+      <h2>Від Чайника до Стартапу</h2>
+      <p style="color:var(--muted);font-size:14px;line-height:1.6">Your step-by-step path from zero to validated venture. Check off each step, track your progress, and know exactly what comes next.</p>
+      <div class="roadmap-preview">
+        <a href="./roadmap.html#phase-capture" class="roadmap-step">
+          <div class="step-icon">💡</div>
+          <div class="step-title">Capture</div>
+          <div class="step-sub">Find your idea</div>
+        </a>
+        <a href="./roadmap.html#phase-validate" class="roadmap-step">
+          <div class="step-icon">🧪</div>
+          <div class="step-title">Validate</div>
+          <div class="step-sub">Test assumptions</div>
+        </a>
+        <a href="./roadmap.html#phase-build" class="roadmap-step">
+          <div class="step-icon">🏗️</div>
+          <div class="step-title">Build</div>
+          <div class="step-sub">Create MVBP</div>
+        </a>
+        <a href="./roadmap.html#phase-scale" class="roadmap-step">
+          <div class="step-icon">🚀</div>
+          <div class="step-title">Scale</div>
+          <div class="step-sub">Expand & grow</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="panel-section">
+      <h2>Venture Tools</h2>
+      <p style="color:var(--muted);font-size:14px;line-height:1.6">Everything you need to plan, validate, and build — no AI required, all free and open.</p>
+      <div class="tool-grid">
+        <a href="./roadmap.html" class="tool-card">
+          <div class="tool-icon">🗺️</div>
+          <h3>Roadmap</h3>
+          <p>4-phase step-by-step guide with progress tracking. From idea to scale.</p>
+          <span class="tool-tag tag-core">CORE</span>
+        </a>
+        <a href="./canvas.html" class="tool-card">
+          <div class="tool-icon">📋</div>
+          <h3>Canvases</h3>
+          <p>DE Canvas, Business Model, Lean Canvas, Social Enterprise — fill and save.</p>
+          <span class="tool-tag tag-core">CORE</span>
+        </a>
+        <a href="./quiz.html" class="tool-card">
+          <div class="tool-icon">🧩</div>
+          <h3>Readiness Quiz</h3>
+          <p>33 questions to test your startup readiness. Metaphorical, surreal, no AI can cheat.</p>
+          <span class="tool-tag tag-new">NEW</span>
+        </a>
+        <a href="./finance.html" class="tool-card">
+          <div class="tool-icon">📊</div>
+          <h3>Finance Tools</h3>
+          <p>Unit economics, P&L, cash flow, 5-year forecast — interactive calculators.</p>
+          <span class="tool-tag tag-new">NEW</span>
+        </a>
+        <a href="./templates.html" class="tool-card">
+          <div class="tool-icon">📄</div>
+          <h3>Document Templates</h3>
+          <p>Pitch deck guide, marketing plan, interview scripts, co-founder profile.</p>
+          <span class="tool-tag tag-new">NEW</span>
+        </a>
+        <a href="./feedback.html" class="tool-card">
+          <div class="tool-icon">💬</div>
+          <h3>Feedback</h3>
+          <p>Did this environment help you orient better? Let us know.</p>
+          <span class="tool-tag tag-new">NEW</span>
+        </a>
       </div>
     </section>
 
