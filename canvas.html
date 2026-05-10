@@ -38,21 +38,27 @@
     [data-theme="dark"] .lens-tag.science{color:#3ecf94}
     [data-theme="dark"] .lens-tag.entrepreneurship{color:#e0a050}
     [data-theme="dark"] .lens-tag.technology{color:#60a5fa}
-    .sphere-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-    .sphere-btn{border:2px solid var(--line);border-radius:14px;padding:10px 16px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:all .15s;font-weight:600;display:flex;align-items:flex-start;gap:8px;flex:1;min-width:220px}
-    .sphere-btn:hover{border-color:var(--accent)}
-    .sphere-btn.active{border-color:var(--accent);background:rgba(181,107,45,.06)}
-    .sphere-btn .s-icon{font-size:22px;margin-top:2px}
-    .sphere-btn .s-body{display:flex;flex-direction:column;gap:2px}
-    .sphere-btn .s-title{font-weight:700;font-size:13px}
-    .sphere-btn .s-sub{font-size:11px;color:var(--muted)}
-    .sphere-btn .s-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
-    .sphere-btn .s-tags span{font-size:10px;padding:1px 6px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
+    /* Sphere cards with subcategory dropdowns */
+    .sphere-nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .sphere-card-wrap{border:2px solid var(--line);border-radius:16px;padding:14px;flex:1;min-width:240px;cursor:pointer;transition:all .15s;background:var(--card-bg)}
+    .sphere-card-wrap:hover{border-color:var(--accent)}
+    .sphere-card-wrap.active{border-color:var(--accent);background:rgba(181,107,45,.06)}
+    .sphere-card-wrap .sc-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+    .sphere-card-wrap .sc-icon{font-size:22px}
+    .sphere-card-wrap .sc-title{font-weight:700;font-size:14px}
+    .sphere-card-wrap .sc-sub{font-size:11px;color:var(--muted);margin:0 0 8px}
+    .subcat-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+    .subcat-row label{font-size:12px;font-weight:600;min-width:24px}
+    .subcat-row select{flex:1;padding:5px 8px;border:1px solid var(--line);border-radius:8px;font-size:12px;background:var(--input-bg);color:var(--ink);font-family:inherit}
+    .subcat-row select:focus{outline:none;border-color:var(--accent)}
+    [data-theme="dark"] .subcat-row select{background:#1c1608;color:#f0e4d0}
+    /* Business model pills */
     .biz-selector{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0;align-items:center}
     .biz-selector strong{font-size:13px;color:var(--muted);margin-right:4px}
     .biz-btn{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
     .biz-btn:hover{background:var(--ink);color:#fff}
     .biz-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .biz-btn.disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
     [data-theme="dark"] .biz-btn.active{background:#b56b2d;color:#fff;border-color:#b56b2d}
     .model-info{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;font-size:13px;line-height:1.6}
     .model-info h4{margin:0 0 6px;font-size:14px;color:var(--accent)}
@@ -76,7 +82,7 @@
     .save-row button:hover{background:var(--ink);color:#fff}
     .save-row .saved-msg{font-size:12px;color:var(--science);opacity:0;transition:opacity .3s}
     .save-row .saved-msg.show{opacity:1}
-    @media(max-width:768px){.canvas-grid.de,.canvas-grid.social{grid-template-columns:1fr}.canvas-grid.bmc,.canvas-grid.lean{grid-template-columns:1fr 1fr}.sphere-btn{min-width:140px}}
+    @media(max-width:768px){.canvas-grid.de,.canvas-grid.social{grid-template-columns:1fr}.canvas-grid.bmc,.canvas-grid.lean{grid-template-columns:1fr 1fr}.sphere-card-wrap{min-width:160px}}
   </style>
 </head>
 <body>
@@ -87,36 +93,11 @@
     <section class="hero">
       <p class="eyebrow">Venture Canvases</p>
       <h1>Strategy on One Page</h1>
-      <p class="lede">Pick your Venture Sphere → choose a business model → get a pre-filled canvas. Edit, save, export.</p>
+      <p class="lede">Sphere → Subcategory → Business Model → Pre-filled canvas. Edit, save, export.</p>
     </section>
 
-    <!-- Venture Spheres (I, II, III order) -->
-    <div class="sphere-nav" id="sphereNav">
-      <button class="sphere-btn" data-sphere="science">
-        <span class="s-icon">🩺</span>
-        <span class="s-body">
-          <span class="s-title">Sphere I — Science</span>
-          <span class="s-sub">Research foundations, validation, hypotheses</span>
-          <span class="s-tags"><span>Bio/Med</span><span>Green</span><span>AgTech</span><span>Human Systems</span></span>
-        </span>
-      </button>
-      <button class="sphere-btn active" data-sphere="entrepreneurship">
-        <span class="s-icon">💼</span>
-        <span class="s-body">
-          <span class="s-title">Sphere II — Entrepreneurship</span>
-          <span class="s-sub">Venture design, market intelligence, growth</span>
-          <span class="s-tags"><span>MVPs</span><span>Founder Logic</span><span>Market Validation</span><span>Ecosystem & Ops</span></span>
-        </span>
-      </button>
-      <button class="sphere-btn" data-sphere="technology">
-        <span class="s-icon">⚙️</span>
-        <span class="s-body">
-          <span class="s-title">Sphere III — Technology</span>
-          <span class="s-sub">Reusable tools, dashboards, open infrastructure</span>
-          <span class="s-tags"><span>Analytics</span><span>Engineering</span><span>Dashboards</span><span>Infrastructure</span></span>
-        </span>
-      </button>
-    </div>
+    <!-- Sphere cards with subcategory dropdowns -->
+    <div class="sphere-nav" id="sphereNav"></div>
 
     <!-- Wizard -->
     <div class="wizard-card" id="wizardCard">
@@ -130,17 +111,10 @@
       </div>
     </div>
 
-    <!-- Business Model Selector -->
+    <!-- Business Model Selector (dynamic based on subcategory) -->
     <div class="biz-selector" id="bizSelector">
       <strong>Business model:</strong>
-      <button class="biz-btn active" data-biz="subscription">🔄 Subscription/SaaS</button>
-      <button class="biz-btn" data-biz="marketplace">🏪 Marketplace</button>
-      <button class="biz-btn" data-biz="saas-freemium">🆓 SaaS Freemium</button>
-      <button class="biz-btn" data-biz="manufacturing">🏭 Manufacturing</button>
-      <button class="biz-btn" data-biz="services">💼 Services/IT</button>
-      <button class="biz-btn" data-biz="b2g">🏛️ B2G/Public</button>
-      <button class="biz-btn" data-biz="social">🌱 Social Enterprise</button>
-      <button class="biz-btn" data-biz="generic">📝 Blank</button>
+      <span id="bizBtns"></span>
     </div>
 
     <div class="model-info" id="modelInfo"></div>
@@ -251,35 +225,146 @@
       });
     });
 
-    // Sphere lens
+    // ===== 3-LEVEL HIERARCHY: Sphere → Subcategory → Business Model =====
     var currentSphere = localStorage.getItem("vs-canvas-sphere") || "entrepreneurship";
+    var currentSubcat = localStorage.getItem("vs-canvas-subcat") || "mvps";
+    var currentBiz = localStorage.getItem("vs-canvas-biz") || "subscription";
 
+    // Build sphere cards with subcategory dropdowns
+    function buildSphereCards() {
+      var nav = document.getElementById("sphereNav");
+      nav.innerHTML = "";
+      var sphereKeys = ["science","entrepreneurship","technology"];
+      sphereKeys.forEach(function(sKey) {
+        var sphere = SPHERE_TREE[sKey];
+        var wrap = document.createElement("div");
+        wrap.className = "sphere-card-wrap" + (sKey === currentSphere ? " active" : "");
+        wrap.dataset.sphere = sKey;
+
+        var html = '<div class="sc-header"><span class="sc-icon">' + sphere.label.split(" ")[0] + '</span><span class="sc-title">' + sphere.label.substring(sphere.label.indexOf(" ")+1) + '</span></div>';
+        html += '<p class="sc-sub">Select subcategory:</p>';
+
+        // Build subcategory dropdown
+        var subKeys = Object.keys(sphere.subcats);
+        html += '<div class="subcat-row"><label>📂</label><select data-sphere="'+sKey+'" id="subcat-'+sKey+'">';
+        subKeys.forEach(function(sk) {
+          var sc = sphere.subcats[sk];
+          html += '<option value="'+sk+'"'+(sk===currentSubcat && sKey===currentSphere?" selected":"")+'>'+sc.label+' — '+sc.desc+'</option>';
+        });
+        html += '</select></div>';
+
+        wrap.innerHTML = html;
+        nav.appendChild(wrap);
+
+        // Click on card = select sphere
+        wrap.addEventListener("click",function(e){
+          if (e.target.tagName === "SELECT") return; // don't trigger on dropdown
+          selectSphere(sKey);
+        });
+
+        // Dropdown change = select subcategory
+        var sel = wrap.querySelector("select");
+        sel.addEventListener("change",function(){
+          selectSphere(sKey);
+          selectSubcat(this.value);
+        });
+      });
+    }
+
+    function selectSphere(sKey) {
+      currentSphere = sKey;
+      localStorage.setItem("vs-canvas-sphere", sKey);
+      document.querySelectorAll(".sphere-card-wrap").forEach(function(w){
+        w.classList.toggle("active", w.dataset.sphere === sKey);
+      });
+      // Update subcat to first of this sphere if needed
+      var sphere = SPHERE_TREE[sKey];
+      var subKeys = Object.keys(sphere.subcats);
+      if (!sphere.subcats[currentSubcat]) {
+        currentSubcat = subKeys[0];
+        localStorage.setItem("vs-canvas-subcat", currentSubcat);
+      }
+      updateBizButtons();
+      applyLens(sKey);
+    }
+
+    function selectSubcat(sk) {
+      currentSubcat = sk;
+      localStorage.setItem("vs-canvas-subcat", sk);
+      updateBizButtons();
+    }
+
+    // Build business model buttons based on current subcategory
+    function updateBizButtons() {
+      var sphere = SPHERE_TREE[currentSphere];
+      if (!sphere) return;
+      var subcat = sphere.subcats[currentSubcat];
+      if (!subcat) { currentSubcat = Object.keys(sphere.subcats)[0]; subcat = sphere.subcats[currentSubcat]; }
+      var allowedModels = subcat.models;
+
+      var container = document.getElementById("bizBtns");
+      container.innerHTML = "";
+
+      // Always add Blank
+      var allModels = allowedModels.concat(["generic"]);
+      // Remove duplicates
+      var seen = {};
+      allModels = allModels.filter(function(m){ if (seen[m]) return false; seen[m]=true; return true; });
+
+      allModels.forEach(function(mKey) {
+        var p = CANVAS_PRESETS[mKey];
+        if (!p) return;
+        var btn = document.createElement("button");
+        btn.className = "biz-btn" + (mKey === currentBiz ? " active" : "");
+        btn.dataset.biz = mKey;
+        btn.textContent = p.label;
+        btn.addEventListener("click",function(){
+          currentBiz = mKey;
+          localStorage.setItem("vs-canvas-biz", mKey);
+          document.querySelectorAll(".biz-btn").forEach(function(b){b.classList.remove("active")});
+          this.classList.add("active");
+          updateModelInfo(mKey);
+          applyPreset(mKey);
+          applyLens(currentSphere);
+        });
+        container.appendChild(btn);
+      });
+
+      // If current model not in allowed list, auto-select first
+      if (allowedModels.indexOf(currentBiz) === -1 && currentBiz !== "generic") {
+        currentBiz = allowedModels[0];
+        localStorage.setItem("vs-canvas-biz", currentBiz);
+      }
+      updateModelInfo(currentBiz);
+    }
+
+    // Lens
     var LENS = {
       science: {
         fields: {de:["market","value","advantage","unit-econ","build"],bmc:["activities","resources","costs"],lean:["problem","metrics","advantage"],social:["problem","solution","impact"]},
         hints: {
-          de:{market:"Research: define TAM with data, not guesses",value:"Research: quantify with experiment",advantage:"Research: what evidence proves your moat?","unit-econ":"Research: validate LTV/CAC with cohort data",build:"Research: list falsifiable assumptions + test plan"},
-          bmc:{activities:"Research: what experiments must you run?",resources:"Research: what data/assets do you need?",costs:"Research: cost of validation vs cost of being wrong"},
-          lean:{problem:"Research: is this a real problem? Interview 50+",metrics:"Research: leading indicators before lagging",advantage:"Research: proprietary data or insight?"},
-          social:{problem:"Research: root cause analysis, not symptoms",solution:"Research: evidence-based intervention",impact:"Research: M&E framework, theory of change"}
+          de:{market:"Research: define TAM with data",value:"Research: quantify with experiment",advantage:"Research: evidence for moat?","unit-econ":"Research: validate LTV/CAC",build:"Research: falsifiable assumptions"},
+          bmc:{activities:"Research: what experiments?",resources:"Research: what data needed?",costs:"Research: cost of being wrong"},
+          lean:{problem:"Research: real problem? Interview 50+",metrics:"Research: leading indicators",advantage:"Research: proprietary data?"},
+          social:{problem:"Research: root cause analysis",solution:"Research: evidence-based design",impact:"Research: M&E framework"}
         }
       },
       entrepreneurship: {
         fields: {de:["raison","market","acquisition","revenue","overall-econ","scaling"],bmc:["proposition","relationships","segments","channels","revenue-streams"],lean:["uvp","segments","channels","revenue"],social:["stakeholders","funding","partners"]},
         hints: {
-          de:{raison:"Venture: why will customers pay you?",market:"Venture: who has budget + urgency?",acquisition:"Venture: how do you reach buyers affordably?",revenue:"Venture: pricing model = business model","overall-econ":"Venture: is this fundable? Rule of 40",scaling:"Venture: follow-on markets for growth"},
-          bmc:{proposition:"Venture: what makes customers switch?",relationships:"Venture: self-serve or sales-led?",segments:"Venture: beachhead first, then expand",channels:"Venture: CAC-efficient distribution","revenue-streams":"Venture: recurring > one-time"},
-          lean:{uvp:"Venture: 10-word pitch that converts",segments:"Venture: early adopters ≠ mainstream",channels:"Venture: free channels first, paid later",revenue:"Venture: price = signal of value"},
-          social:{stakeholders:"Venture: who pays vs who benefits?",funding:"Venture: earned revenue > grants",partners:"Venture: distribution through partners"}
+          de:{raison:"Venture: why will they pay?",market:"Venture: who has budget?",acquisition:"Venture: reach buyers affordably",revenue:"Venture: pricing = business model","overall-econ":"Venture: fundable? Rule of 40",scaling:"Venture: follow-on markets"},
+          bmc:{proposition:"Venture: makes them switch?",relationships:"Venture: self-serve or sales-led?",segments:"Venture: beachhead first","channels":"Venture: CAC-efficient","revenue-streams":"Venture: recurring > one-time"},
+          lean:{uvp:"Venture: 10-word pitch",segments:"Venture: early adopters ≠ mainstream","channels":"Venture: free first, paid later",revenue:"Venture: price = value signal"},
+          social:{stakeholders:"Venture: who pays vs benefits?",funding:"Venture: earned > grants",partners:"Venture: distribution via partners"}
         }
       },
       technology: {
         fields: {de:["value","advantage","build","scaling"],bmc:["partners","activities","resources","costs"],lean:["solution","advantage","metrics"],social:["structure","costs","activities","channels"]},
         hints: {
-          de:{value:"Tech: build vs buy vs partner decision",advantage:"Tech: tech moat = proprietary data/algo/infra",build:"Tech: MVBP = minimal viable beautiful product",scaling:"Tech: architecture for 10x scale"},
-          bmc:{partners:"Tech: APIs, integrations, cloud providers",activities:"Tech: CI/CD, monitoring, security",resources:"Tech: infra, codebase, dev team, IP",costs:"Tech: hosting scales with users, optimize COGS"},
-          lean:{solution:"Tech: simplest technical solution?",advantage:"Tech: network effects, data flywheel",metrics:"Tech: uptime, latency, error rate, deploy frequency"},
-          social:{structure:"Tech: open-source model for social impact?",costs:"Tech: cloud-native = lower fixed costs",activities:"Tech: automate delivery, self-service platform",channels:"Tech: API-first, embeddable widgets"}
+          de:{value:"Tech: build vs buy vs partner",advantage:"Tech: data/algo/infra moat",build:"Tech: MVBP",scaling:"Tech: 10x architecture"},
+          bmc:{partners:"Tech: APIs, cloud, integrations",activities:"Tech: CI/CD, monitoring, security",resources:"Tech: infra, codebase, team",costs:"Tech: hosting scales, optimize COGS"},
+          lean:{solution:"Tech: simplest solution?",advantage:"Tech: network effects, flywheel",metrics:"Tech: uptime, latency, deploys"},
+          social:{structure:"Tech: open-source model?",costs:"Tech: cloud-native = lower fixed",activities:"Tech: automate delivery",channels:"Tech: API-first, embeddable"}
         }
       }
     };
@@ -311,19 +396,6 @@
       });
     }
 
-    document.querySelectorAll(".sphere-btn").forEach(function(btn){
-      btn.addEventListener("click",function(){
-        document.querySelectorAll(".sphere-btn").forEach(function(b){b.classList.remove("active")});
-        this.classList.add("active");
-        currentSphere = this.dataset.sphere;
-        localStorage.setItem("vs-canvas-sphere", currentSphere);
-        applyLens(currentSphere);
-      });
-    });
-    document.querySelectorAll(".sphere-btn").forEach(function(b){
-      b.classList.toggle("active", b.dataset.sphere === currentSphere);
-    });
-
     // Wizard
     document.querySelectorAll(".wizard-opt").forEach(function(opt){
       opt.addEventListener("click",function(){
@@ -335,9 +407,7 @@
       });
     });
 
-    // Business model
-    var currentBiz = localStorage.getItem("vs-canvas-biz") || "subscription";
-
+    // Model info
     function updateModelInfo(key) {
       var p = CANVAS_PRESETS[key];
       if (!p) return;
@@ -351,12 +421,11 @@
       info.innerHTML = html;
     }
 
+    // Apply preset
     function applyPreset(key) {
       var p = CANVAS_PRESETS[key];
       if (!p) return;
-      // Clear ALL first
       document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){ ta.value = ""; });
-      // Fill from preset
       ["de","bmc","lean"].forEach(function(cv){
         if (p[cv]) {
           Object.keys(p[cv]).forEach(function(field){
@@ -365,7 +434,7 @@
           });
         }
       });
-      // Social
+      // Social canvas
       if (p.social) {
         Object.keys(p.social).forEach(function(field){
           var ta = document.querySelector('textarea[data-canvas="social"][data-field="'+field+'"]');
@@ -382,7 +451,7 @@
           activities: p.bmc.activities || "",
           channels: p.bmc.channels || "",
           partners: p.bmc.partners || "",
-          impact: "Impact: " + (p.lean && p.lean.metrics ? p.lean.metrics : "beneficiary outcomes + financial sustainability")
+          impact: "Impact: " + (p.lean && p.lean.metrics ? p.lean.metrics : "beneficiary outcomes + sustainability")
         };
         Object.keys(sm).forEach(function(field){
           var ta = document.querySelector('textarea[data-canvas="social"][data-field="'+field+'"]');
@@ -392,21 +461,6 @@
       updateFilledState();
       updateProgress();
     }
-
-    document.querySelectorAll(".biz-btn").forEach(function(btn){
-      btn.addEventListener("click",function(){
-        document.querySelectorAll(".biz-btn").forEach(function(b){b.classList.remove("active")});
-        this.classList.add("active");
-        currentBiz = this.dataset.biz;
-        localStorage.setItem("vs-canvas-biz", currentBiz);
-        updateModelInfo(currentBiz);
-        applyPreset(currentBiz);
-        applyLens(currentSphere);
-      });
-    });
-    document.querySelectorAll(".biz-btn").forEach(function(b){
-      b.classList.toggle("active", b.dataset.biz === currentBiz);
-    });
 
     // Progress
     function updateProgress() {
@@ -418,15 +472,15 @@
       tas.forEach(function(ta){ if (ta.value.trim().length > 0) filled++; });
       var pct = tas.length > 0 ? Math.round(filled/tas.length*100) : 0;
       document.getElementById("progressFill").style.width = pct+"%";
-      document.getElementById("progressLabel").textContent = pct+"% filled ("+filled+"/"+tas.length+" fields)";
+      document.getElementById("progressLabel").textContent = pct+"% filled ("+filled+"/"+tas.length+")";
     }
 
     function updateFilledState() {
       document.querySelectorAll(".canvas-box").forEach(function(box){
         var ta = box.querySelector("textarea");
         if (ta) {
-          if (ta.value.trim().length > 0) { box.classList.add("filled"); }
-          else { box.classList.remove("filled"); }
+          if (ta.value.trim().length > 0) box.classList.add("filled");
+          else box.classList.remove("filled");
         }
       });
     }
@@ -475,7 +529,7 @@
 
     // Reset
     document.getElementById("resetBtn").addEventListener("click",function(){
-      if (confirm("Reset to pre-filled values for " + CANVAS_PRESETS[currentBiz].label + "?")) {
+      if (confirm("Reset to pre-filled values?")) {
         localStorage.removeItem(SAVE_KEY);
         applyPreset(currentBiz);
         applyLens(currentSphere);
@@ -484,7 +538,7 @@
 
     // Clear
     document.getElementById("clearBtn").addEventListener("click",function(){
-      if (confirm("Clear ALL fields across ALL canvases?")) {
+      if (confirm("Clear ALL fields?")) {
         document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){ ta.value = ""; });
         localStorage.removeItem(SAVE_KEY);
         updateFilledState(); updateProgress();
@@ -493,7 +547,7 @@
 
     // Download JSON
     document.getElementById("dlJson").addEventListener("click",function(){
-      var data = {biz:currentBiz,sphere:currentSphere,saved:new Date().toISOString()};
+      var data = {biz:currentBiz,sphere:currentSphere,subcat:currentSubcat,saved:new Date().toISOString()};
       document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){
         var k = ta.dataset.canvas + "." + ta.dataset.field;
         if (ta.value.trim()) data[k] = ta.value;
@@ -522,8 +576,9 @@
           var data = JSON.parse(ev.target.result);
           if (data.biz) { currentBiz = data.biz; localStorage.setItem("vs-canvas-biz",currentBiz); }
           if (data.sphere) { currentSphere = data.sphere; localStorage.setItem("vs-canvas-sphere",currentSphere); }
-          document.querySelectorAll(".biz-btn").forEach(function(b){b.classList.toggle("active",b.dataset.biz===currentBiz)});
-          document.querySelectorAll(".sphere-btn").forEach(function(b){b.classList.toggle("active",b.dataset.sphere===currentSphere)});
+          if (data.subcat) { currentSubcat = data.subcat; localStorage.setItem("vs-canvas-subcat",currentSubcat); }
+          buildSphereCards();
+          updateBizButtons();
           document.querySelectorAll("textarea[data-canvas]").forEach(function(ta){
             var k = ta.dataset.canvas + "." + ta.dataset.field;
             if (data[k] !== undefined) ta.value = data[k];
@@ -558,6 +613,8 @@
     });
 
     // Init
+    buildSphereCards();
+    updateBizButtons();
     var hasSavedData = localStorage.getItem(SAVE_KEY);
     if (hasSavedData) { loadAll(); updateModelInfo(currentBiz); }
     else { updateModelInfo(currentBiz); applyPreset(currentBiz); }

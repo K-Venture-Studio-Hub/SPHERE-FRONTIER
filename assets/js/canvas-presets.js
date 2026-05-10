@@ -1,285 +1,387 @@
-// Pre-filled canvas data per business model
-// Source: KSE Zubchenok "Business Model: Startup's Focus" + Disciplined Entrepreneurship
-const CANVAS_PRESETS = {
+// Canvas Presets — 3-level hierarchy: Sphere → Subcategory → Business Model
+// Data from KSE Zubchenok business model PDF + DE methodology
+
+var CANVAS_PRESETS = {
+  // ===== SUBSCRIPTION (default, shared across spheres) =====
   subscription: {
-    label: "🔄 Subscription / SaaS",
-    desc: "Recurring revenue via MRR/ARR. Key metrics: LTV, churn, CAC. Pipeline model: you create → customer consumes.",
-    examples: ["Netflix","Spotify","Adobe CC","Coursera Plus","Microsoft 365","Megogo","AllRight","Prom.ua Pro","BetterMe","LIGA360"],
+    label: "🔄 Subscription/SaaS",
+    desc: "Recurring revenue from monthly/annual subscriptions. MRR/ARR metrics, high gross margin (70-85%).",
+    examples: ["Netflix","Zoom","Notion","Grammarly","Salesforce"],
     de: {
-      raison: "Recurring pain demanding continuous access. Founder passion for solving a workflow/content gap that compounds. Assets: domain expertise, content library, proprietary algorithm.",
-      market: "Beachhead: demographic with recurring need (language learners, fitness users, data professionals). TAM = users × monthly price × 12. Persona: 25-40yo, values convenience, hates manual processes.",
-      value: "Ongoing access to content/software saving time or delivering results monthly. Quantified: saves X hours/week, delivers Y results/month. Spec: web/app with subscription paywall, onboarding, retention loops.",
-      advantage: "Network effects from user data (recommendations improve). Switching costs: history, preferences, integrations. Brand trust from consistent delivery. Content/software moat grows monthly.",
-      acquisition: "Champion = end user. Buyer = same (B2C) or team lead (B2B). Trigger: free trial/freemium. Process: ad/content → free trial → onboarding emails → conversion → retention (streaks, badges, recommendations).",
-      "unit-econ": "LTV = ARPU × (1/churn). E.g. $15/mo × 24mo = $360. CAC = ad spend + sales / new subs. Target LTV/CAC ≥ 3:1. Payback < 12mo. Churn: <5% monthly B2C, <2% B2B.",
-      revenue: "Model: recurring subscription (monthly/annual). Tiers: Free trial → Basic ($X/mo) → Pro ($Y/mo) → Enterprise ($Z/mo). Upsell: annual discount, add-ons, family plans. Channel: self-service signup.",
-      "overall-econ": "P&L: Revenue = subs × ARPU. COGS: hosting, support, content. OpEx: marketing 40-60% early, R&D, G&A. Burn rate: track monthly. Runway = cash/burn. Rule of 40: growth% + margin% ≥ 40.",
-      build: "Assumption 1: people pay monthly → test: trial conversion rate. Assumption 2: churn < X% → test: cohort retention 30/60/90 days. MVBP: core feature + paywall + email onboarding. Metrics: MRR, churn, trial conversion.",
-      scaling: "Follow-on 1: adjacent vertical (fitness → nutrition). 2: B2B version of B2C. 3: international. Growth: referrals, integrations, content flywheel."
+      raison: "Democratize access to [domain] through a recurring, self-service platform that delivers continuous value.",
+      market: "Beachhead: SMBs in [vertical] with 10-200 employees. TAM: $2-5B. End user: team leads who need [outcome] daily.",
+      value: "10x faster [workflow] vs manual. Automated [process]. ROI in <3 months. Quantified: save 15+ hours/week per team.",
+      advantage: "Network effects from user data. Switching costs from workflow integration. Proprietary [algo/dataset].",
+      acquisition: "DMU: team lead (champion) + IT admin (buyer). Content marketing → free trial → product-led growth. Trigger: pain with current manual process.",
+      "unit-econ": "LTV: $1,800 (ARPU $15/mo × 70% margin ÷ 5% churn). CAC: $50. LTV/CAC: 36x. Payback: 5 months.",
+      revenue: "Tiered pricing: Free → Pro $15/user/mo → Enterprise $30/user/mo. Annual discount 20%. Expansion via seats + features.",
+      "overall-econ": "Gross margin 70-85%. Break-even at ~500 paying customers. Burn $3K/mo pre-revenue. Rule of 40 target.",
+      build: "MVBP: core [workflow] automation + 1 integration. Key assumption: users will pay after trial. Track: trial-to-paid rate, DAU/MAU.",
+      scaling: "Follow-on: enterprise tier, adjacent verticals, marketplace of integrations. Product-led + sales-assist motion."
     },
     bmc: {
-      partners: "Payment processors (Stripe, LiqPay), content/providers, integration partners (SSO, CRMs), CDN/hosting",
-      activities: "Content/software development, subscription management, retention optimization, A/B testing, customer support",
-      proposition: "Continuous access to evolving content/software. Always-on, always-updated. Predictable cost. Compounding value over time.",
-      relationships: "Self-service onboarding, automated email nurturing, in-app support, community (Discord/Telegram), account management for B2B",
-      segments: "B2C: individual subscribers with recurring needs. B2B: teams needing shared access. Early adopters: power users of free tier.",
-      resources: "Software platform, content library, user behavior data, brand, engineering team, payment infrastructure",
-      channels: "Free trial → product-led growth, SEO/content marketing, app stores, social ads, email campaigns, referral programs",
-      costs: "Fixed: engineering salaries, hosting/CDN, content production. Variable: CAC (ads), payment fees, support. Top 3: 1) R&D 2) Marketing 3) Hosting.",
-      "revenue-streams": "Monthly/annual subscriptions (MRR/ARR). Upsell: premium tiers, family/team plans, add-ons. B2B enterprise contracts. Target: >$50 ARPU B2B, >$10 B2C."
+      partners: "Cloud providers (AWS/GCP), integration partners (Slack, Zapier), payment processors (Stripe)",
+      activities: "Product development, customer success, content marketing, infrastructure reliability",
+      proposition: "Automated [workflow] that saves 15+ hours/week. Self-service, instant onboarding, continuous updates.",
+      relationships: "Self-service (freemium/trial), automated onboarding, community support, CSM for enterprise",
+      segments: "SMBs (10-200 employees) in [vertical], team leads, IT decision-makers",
+      resources: "Codebase, cloud infra, user data, brand, developer team",
+      channels: "Website, app stores, content/SEO, integrations marketplace, partner referrals",
+      costs: "R&D (40%), cloud hosting (15%), marketing (25%), customer support (10%), G&A (10%)",
+      "revenue-streams": "Monthly subscriptions (MRR), annual prepay, enterprise contracts, add-on features"
     },
     lean: {
-      problem: "1. Manual/fragmented workflow wastes time weekly\n2. Existing solutions too expensive or complex\n3. No single tool covers full need end-to-end",
-      solution: "1. Automated workflow replacing 3+ manual steps\n2. Simple pricing with free entry\n3. All-in-one platform covering full journey",
-      uvp: "Stop wasting X hours/week on [task]. Done in one place, predictable monthly price. Cancel anytime.",
-      advantage: "Proprietary algorithm/content, network effects from user data, high switching costs, first-mover in niche",
-      segments: "Primary: [demographic] with recurring [task]. Early adopters: power users complaining on forums about existing tools.",
-      metrics: "AARRR: Acquisition (signups), Activation (first value <5min), Retention (D7/D30), Revenue (trial→paid%), Referral (invites)",
-      channels: "Free trial (product-led), SEO blog, YouTube tutorials, social ads, influencer partnerships, app store optimization",
-      costs: "Fixed: R&D team, hosting. Variable: ad spend (CAC), payment fees. Top 3: 1) Engineering 2) Marketing/CAC 3) Infrastructure",
-      revenue: "Subscription: $X/mo Basic, $Y/mo Pro. Annual = 10mo price. LTV = ARPU × (1/churn). Target LTV/CAC ≥ 3:1."
+      problem: "1. Manual [workflow] wastes 15+ hours/week. 2. Existing tools are bloated/expensive. 3. No simple solution for [vertical].",
+      solution: "1. Automated [workflow] in one click. 2. Lightweight, purpose-built. 3. Free tier to start, upgrade when ready.",
+      uvp: "The simplest way to [achieve outcome] — set up in 5 minutes, save 15 hours/week, or it's free.",
+      advantage: "Proprietary [algo/data], network effects from user behavior, deep [vertical] integration",
+      segments: "Early adopters: team leads at 10-50 person companies in [vertical] who are frustrated with manual processes",
+      metrics: "Acquisition: trial signups. Activation: first [action] within 24h. Retention: DAU/MAU >40%. Revenue: MRR. Referral: NPS >50.",
+      channels: "Product-led (free trial), content/SEO, integrations, word-of-mouth",
+      costs: "R&D, cloud hosting, marketing, support",
+      revenue: "Subscription: $15-30/user/mo. LTV $1,800. Payback 5 months."
     }
   },
+
+  // ===== MARKETPLACE =====
   marketplace: {
-    label: "🏪 Marketplace / E-commerce",
-    desc: "Connect supply with demand. Two-sided: you own the platform, not inventory. Key: liquidity. Revenue from transaction fees.",
-    examples: ["Airbnb","Etsy","Amazon Marketplace","Fiverr","eBay","Rozetka","OLX.ua","Liki24","Kabanchik.ua","Shafa.ua"],
+    label: "🏪 Marketplace",
+    desc: "Connect buyers and sellers. Revenue from commissions/fees. Network effects are the moat.",
+    examples: ["Rozetka","Airbnb","Uber","Jooble","Preply"],
     de: {
-      raison: "Fragmented market where buyers can't find sellers. Passion for connecting people and creating trust. Assets: industry connections, first supply-side relationships.",
-      market: "Beachhead: one vertical with most pain (freelance services, second-hand fashion, local services). TAM = total transaction volume × take rate. Two-sided: supply + demand.",
-      value: "Trust, liquidity, ease of transaction. Buyers find fast, sellers get demand without marketing. Quantified: saves X hours searching, increases seller revenue Y%.",
-      advantage: "Network effects: more sellers → more buyers → more sellers. Liquidity moat: depth of inventory. Trust: reviews, verification, disputes. Switching cost: reputation on platform.",
-      acquisition: "Supply-first: recruit sellers manually. Demand: SEO for listings, referral loops. DMU: buyer decides, seller is champion. Trigger: specific need search.",
-      "unit-econ": "Take rate: 10-30% per transaction. LTV = avg transaction × frequency × take rate × retention months. CAC: supply (manual) vs demand (ads). Track both sides separately.",
-      revenue: "Model: transaction fee (commission). Additional: listing fees, premium placement, seller subscriptions, ads on platform. Pricing: 10-20% of transaction typically.",
-      "overall-econ": "Revenue = GMV × take rate. COGS: payment processing, disputes. OpEx: engineering, supply acquisition, marketing. Need 18-24mo to reach liquidity.",
-      build: "Assumption 1: sellers will list → test: manually recruit 20. Assumption 2: buyers will transact → test: drive traffic, measure conversion. MVBP: listing + search + messaging + payment.",
-      scaling: "New verticals on same platform. Geographic expansion. Adjacent: logistics, financing, insurance. Growth: viral loops, SEO flywheel (more listings = more traffic)."
+      raison: "Create an efficient market where [buyers] and [sellers] connect directly, reducing friction and cost.",
+      market: "Beachhead: [specific buyer segment] in [region]. TAM: $5-20B. Two-sided: supply density = demand value.",
+      value: "For buyers: wider selection, lower prices, verified quality. For sellers: access to demand, lower CAC.",
+      advantage: "Network effects: more sellers → more buyers → more sellers. Liquidity moat. Review/trust system.",
+      acquisition: "Supply first: seed 1,000+ sellers via outreach. Demand: SEO + paid. DMU: individual buyer + procurement.",
+      "unit-econ": "Take rate 15-30%. AOV $50. LTV: $200 (4 repeat purchases). CAC: $80. Payback: 1-2 orders.",
+      revenue: "Commission per transaction (15-30%), listing fees for premium placement, advertising from sellers.",
+      "overall-econ": "Gross margin 25-40% (COGS = seller payouts). Break-even at 10K monthly transactions. Burn $5K/mo.",
+      build: "MVBP: listing + search + checkout + reviews. Key assumption: sellers will list without upfront payment. Track: listings, GMV, repeat rate.",
+      scaling: "Adjacent categories, B2B marketplace, SaaS tools for sellers, logistics/fulfillment services."
     },
     bmc: {
-      partners: "Payment processors, logistics/shipping, verification, insurance, local business associations",
-      activities: "Platform development, seller onboarding & vetting, buyer acquisition, dispute resolution, trust & safety",
-      proposition: "Find what you need fast (buyer). Access demand without marketing (seller). Trust & liquidity in one place.",
-      relationships: "Reputation systems, reviews, dispute resolution, seller support, buyer protection guarantees",
-      segments: "Two-sided: buyers (demand) + sellers/providers (supply). Seed supply first, then attract demand.",
-      resources: "Platform code, seller/buyer databases, trust/review system, payment infrastructure, brand",
-      channels: "Supply: manual outreach, industry events, cold email. Demand: SEO, social, referral loops, paid ads",
-      costs: "Fixed: platform development, support team. Variable: payment processing, seller acquisition, marketing. Top 3: 1) R&D 2) Supply acquisition 3) Marketing",
-      "revenue-streams": "Transaction commission (10-20%), listing fees, premium placement, seller subscriptions, advertising"
+      partners: "Payment processors, logistics providers, verification services, marketing affiliates",
+      activities: "Platform development, seller onboarding, quality control, demand generation, dispute resolution",
+      proposition: "Verified [category] marketplace with widest selection, best prices, and buyer protection",
+      relationships: "Self-service for both sides, trust & safety team, seller support, buyer reviews",
+      segments: "Buyers: price-sensitive [segment]. Sellers: small businesses seeking online demand channel",
+      resources: "Platform codebase, seller/buyer database, review data, brand trust, payment infrastructure",
+      channels: "SEO (product listings), paid acquisition, seller referrals, social media",
+      costs: "Platform development (30%), marketing (35%), operations/support (20%), payment processing (15%)",
+      "revenue-streams": "Transaction commission (15-30%), premium listings, seller advertising, subscription for pro sellers"
     },
     lean: {
-      problem: "1. Buyers can't find reliable providers easily\n2. Sellers spend too much on marketing/acquisition\n3. No trust mechanism in fragmented market",
-      solution: "1. Curated marketplace with verified providers\n2. Demand comes to sellers automatically\n3. Reviews + escrow + dispute resolution",
-      uvp: "Find trusted [service/product] in minutes, or get discovered by ready-to-buy customers. Zero marketing needed.",
-      advantage: "Network effects (liquidity), trust system with reviews, first-mover in niche, seller lock-in (reputation)",
-      segments: "Supply: providers/sellers in [niche]. Demand: buyers seeking [service/product]. Early: sellers frustrated by existing platforms.",
-      metrics: "GMV, take rate, liquidity (listings per category), buyer conversion, seller retention, NPS both sides",
-      channels: "Supply: cold outreach, industry groups. Demand: SEO for specific services, social proof, referral programs",
-      costs: "Fixed: platform, support. Variable: payment processing, seller incentives. Top 3: 1) Engineering 2) Supply acquisition 3) Marketing",
-      revenue: "Commission per transaction (10-20%). Listing upgrades, featured placement. Target: positive unit economics per transaction."
+      problem: "1. Fragmented market — hard to find [product/service]. 2. No trust/verification. 3. High intermediary costs.",
+      solution: "1. One platform with all [category] listings. 2. Reviews + verification. 3. Direct connection, lower fees.",
+      uvp: "Find any [product/service] in one place — verified sellers, buyer protection, best price guaranteed.",
+      advantage: "Network effects (liquidity), trust system (reviews), seller lock-in (repeat demand)",
+      segments: "Early adopters: [specific buyer segment] frustrated with current search process",
+      metrics: "GMV, take rate, seller retention, buyer repeat rate, NPS, listing growth",
+      channels: "SEO (product pages), seller outreach, referral programs, paid acquisition",
+      costs: "Platform dev, marketing, operations, payment processing",
+      revenue: "Commission 15-30%, premium listings, seller ads"
     }
   },
+
+  // ===== SAAS FREEMIUM =====
   "saas-freemium": {
-    label: "🆓 SaaS Freemium (B2B/B2C)",
-    desc: "Free tier hooks users, paid tier monetizes power users. Key: conversion rate from free→paid. MRR/ARR, CAC, retention.",
-    examples: ["GitLab","Zoom","Notion","Canva","Salesforce","Grammarly","Preply","Fitmap.online","PeopleForce","YouControl"],
+    label: "🆓 SaaS Freemium",
+    desc: "Free tier drives adoption, paid tier monetizes power users. Conversion rate 2-5% is typical.",
+    examples: ["Grammarly","Canva","Preply Business","Monobank","Reface"],
     de: {
-      raison: "Workflow pain that affects many but only some will pay to solve fully. Founder passion for democratizing access. Assets: technical expertise, open-source community, or unique dataset.",
-      market: "Beachhead: users of specific tools/processes (HR-tech, EdTech, B2B data). TAM = total potential users × conversion rate × ARPU. Persona: individual user first, team lead for B2B upgrade.",
-      value: "Automate/simplify/accelerate a workflow. Free tier delivers immediate value. Paid tier unlocks scale, collaboration, advanced features. Quantified: saves X hours, increases productivity Y%.",
-      advantage: "Data moat from free users. Switching costs: workflows built on platform. Network effects: team adoption drives org-wide rollout. Open-source community (if applicable) = distribution.",
-      acquisition: "Product-led growth: free signup → in-app prompts → usage limits → upgrade CTA. DMU: user is champion, manager is buyer. Trigger: hitting free tier limit. Process: signup → aha moment → habit → paywall → upgrade.",
-      "unit-econ": "Free→paid conversion: 2-5% typical, 5-10% excellent. LTV = paid ARPU × retention months. CAC near zero for free users, higher for converting them. Payback: immediate for annual plans.",
-      revenue: "Model: freemium subscription. Free: limited features/users. Pro: $X/user/mo. Enterprise: custom pricing. Upsell: team → org, monthly → annual. API/white-label for B2B.",
-      "overall-econ": "Revenue = paid users × ARPU. Free users = marketing cost (hosting + support). OpEx: R&D 40%, marketing 30%, support 15%, G&A 15%. Burn: scale with paid conversion rate.",
-      build: "Assumption 1: free users convert at >3%. Test: measure conversion at different limits. Assumption 2: retention >90% monthly for paid. Test: cohort analysis. MVBP: free tier + upgrade prompt + payment.",
-      scaling: "Upgrading models: Grammarly (Freemium→B2B), Preply (SaaS B2B), Ajax (white-label). Platform play: API + marketplace. International: localize free tier, monetize globally."
+      raison: "Give [capability] to everyone for free, monetize the power users who need more.",
+      market: "Beachhead: individual [role] users. TAM: $3-10B. Free users = top of funnel. Paid: 2-5% conversion.",
+      value: "Free: core [feature] with limits. Paid: unlimited + advanced features + collaboration. Value gap is clear.",
+      advantage: "Viral loop from free users. Data moat from usage patterns. Brand awareness at scale.",
+      acquisition: "Product-led: free signup → in-product prompts to upgrade. Viral: sharing/collaboration features. DMU: individual user.",
+      "unit-econ": "ARPU $20/mo (paid). Free→paid conversion 3%. Blended CAC $30. LTV: $1,200. Payback: 1.5 months for paid users.",
+      revenue: "Free tier → Pro ($12/mo) → Business ($24/mo). Revenue from 3% of users. Expansion: seats, API, enterprise.",
+      "overall-econ": "Gross margin 75-85%. Free tier cost: hosting + support. Break-even at 50K free users (1,500 paid). Burn $4K/mo.",
+      build: "MVBP: free tier with 1 killer feature + upgrade wall. Key assumption: 3%+ will convert. Track: free→paid rate, feature usage.",
+      scaling: "Enterprise tier, API/platform, international markets, vertical-specific features."
     },
     bmc: {
-      partners: "Cloud providers, integration partners (Slack, Jira, CRMs), developer community, reseller/affiliates",
-      activities: "Product development, free user acquisition at scale, conversion optimization, customer success, API/platform development",
-      proposition: "Start free, upgrade when ready. Powerful workflow tool with zero upfront commitment. Team features for collaboration.",
-      relationships: "Self-service onboarding, in-app guidance, community forum, customer success for enterprise, developer docs for API",
-      segments: "Free users (mass adoption), Pro users (power individuals), Teams (B2B), Enterprise (custom). Seed: individual contributors.",
-      resources: "Codebase, user data, integration ecosystem, brand, engineering team, free user base as distribution",
-      channels: "Product-led growth (free signup), SEO, developer communities, App Store/Marketplace listings, viral invites, content marketing",
-      costs: "Fixed: R&D, infrastructure for free users. Variable: cloud costs scale with users, support. Top 3: 1) R&D 2) Infrastructure 3) Marketing",
-      "revenue-streams": "Freemium: free → Pro ($X/mo) → Team ($Y/user/mo) → Enterprise (custom). API access, white-label, annual plans with discount."
+      partners: "Cloud providers, integration platforms, content creators for free tier",
+      activities: "Product development, free user support, conversion optimization, viral feature development",
+      proposition: "Free [capability] for everyone — upgrade when you need more power, collaboration, or advanced features",
+      relationships: "Self-service free tier, in-product upgrade prompts, community, CSM for enterprise",
+      segments: "Free: individual users worldwide. Paid: power users, teams, enterprises",
+      resources: "Codebase, free user base (top of funnel), usage data, brand, cloud infra",
+      channels: "Product-led (free signup), viral features, SEO, app stores, referral programs",
+      costs: "R&D (45%), free tier hosting (20%), marketing (20%), support (10%), G&A (5%)",
+      "revenue-streams": "Pro subscriptions, Business/Enterprise plans, API access, marketplace"
     },
     lean: {
-      problem: "1. Existing tools too expensive to try\n2. Switching cost prevents adoption\n3. Team collaboration features locked behind high paywalls",
-      solution: "1. Free tier with real value (not just trial)\n2. Import from existing tools, easy onboarding\n3. Team features at per-user pricing",
-      uvp: "Start free today. Upgrade only when you're hooked. No credit card needed.",
-      advantage: "Free user base = distribution channel, data moat from usage patterns, integration ecosystem, community-driven growth",
-      segments: "Individual users (free → Pro), Team leads (Pro → Team), CTOs/HR (Team → Enterprise). Early: frustrated users of expensive tools.",
-      metrics: "Free signups, activation rate, free→paid conversion %, paid retention, ARPU, NPS, feature adoption rates",
-      channels: "Product-led (free signup), SEO, developer communities, viral (invite teammates), integration marketplaces",
-      costs: "Fixed: R&D, infrastructure. Variable: cloud per user, support. Top 3: 1) Engineering 2) Cloud/infra 3) Support",
-      revenue: "Freemium: free → $X/mo Pro → $Y/user/mo Team. Conversion target: 3-5%. LTV focus on paid cohorts."
+      problem: "1. [Capability] is too expensive for individuals. 2. Existing tools have no free entry. 3. Switching cost is high.",
+      solution: "1. Free tier with real value. 2. Upgrade only when needed. 3. Import from existing tools.",
+      uvp: "Get [capability] for free today — upgrade only when you're ready for more.",
+      advantage: "Viral loop, massive free user base, data from usage patterns, brand at scale",
+      segments: "Early adopters: individual [role] users who can't afford enterprise tools",
+      metrics: "Free signups, activation rate, free→paid conversion, paid retention, viral coefficient",
+      channels: "Free product, viral sharing, SEO, app stores, referral rewards",
+      costs: "Free tier hosting, R&D, conversion optimization",
+      revenue: "3% conversion to paid ($12-24/mo). LTV $1,200."
     }
   },
+
+  // ===== MANUFACTURING =====
   manufacturing: {
-    label: "🏭 Manufacturing / Product Sales",
-    desc: "Physical product + sales. FMCG, fashion, green tech, hardware. Revenue from unit sales. Key: unit economics, COGS, distribution.",
-    examples: ["Apple","Tesla","Samsung","LEGO","Xiaomi","Biosphere Corporation","Kormotech","Technocom","Enzym Group","Roshen"],
+    label: "🏭 Manufacturing",
+    desc: "Physical product creation. COGS-heavy, supply-chain dependent. Margin 30-50%.",
+    examples: ["Kormotech","Ajax Systems","MacPaw (hardware)"],
     de: {
-      raison: "Solve a physical-world problem with tangible product. Passion for design/engineering/quality. Assets: manufacturing know-how, supply chain, patents, or unique materials access.",
-      market: "Beachhead: users constrained by existing physical solutions. TAM = addressable units × price per unit. Persona: values performance, reliability, design, or cost advantage over alternatives.",
-      value: "Performance, reliability, design, or cost advantage over existing physical solutions. Quantified: lasts X longer, costs Y less, performs Z better. Tangible, demonstrable product.",
-      advantage: "Patents, proprietary manufacturing process, supply chain optimization, brand/design reputation, economies of scale. Distribution partnerships as moat.",
-      acquisition: "Retail/distributor relationships. DMU: end user chooses, retailer approves, distributor delivers. Trigger: physical need, recommendation, in-store experience. Process: awareness → evaluation → purchase → repeat.",
-      "unit-econ": "Unit economics: selling price - COGS = gross margin. Target: >50% gross margin. LTV = repeat purchases × margin. CAC = marketing + distribution costs / units sold. Payback: first purchase if margin positive.",
-      revenue: "Model: unit sales (one-time) + accessories + service contracts. Pricing: cost-plus or value-based. Channel: retail, distributors, direct online. Recurring: replacement parts, warranty extensions.",
-      "overall-econ": "P&L: Revenue = units × price. COGS: materials, manufacturing, logistics. OpEx: R&D, marketing, sales team. Inventory management critical. Cash flow: seasonality, production cycles.",
-      build: "Assumption 1: target users want this product. Test: pre-orders, crowdfunding. Assumption 2: can manufacture at target COGS. Test: prototype + supplier quotes. MVBP: minimum viable product + sales channel + payment.",
-      scaling: "New product lines, geographic markets, B2B/OEM channels. Platform model: accessories ecosystem. Licensing IP. International distribution partnerships."
+      raison: "Build [product category] that is better/cheaper/more accessible than imports, for [market].",
+      market: "Beachhead: [region] consumers/businesses needing [product]. TAM: $10-50B. Import substitution opportunity.",
+      value: "30% cheaper than imports, same or better quality. Local support + warranty. Faster delivery.",
+      advantage: "Local production = lower logistics cost + tariff advantage. Supply chain relationships. Brand trust.",
+      acquisition: "B2B: distributor partnerships, trade shows. B2C: retail + e-commerce. DMU: procurement manager or end consumer.",
+      "unit-econ": "COGS 55% of price. AOV $50. LTV: $300 (6 repeat purchases). CAC: $100. Payback: 2-3 orders.",
+      revenue: "Direct sales + distributor wholesale. Pricing: cost+ margin model. Volume discounts for B2B.",
+      "overall-econ": "Gross margin 45%. Break-even at 5,000 units/month. CapEx for equipment. Burn $8K/mo operating.",
+      build: "MVBP: 1 product SKU, local materials, manual process. Key assumption: demand exists at price point. Track: units sold, return rate.",
+      scaling: "Expand SKU line, automate production, export to new markets, B2B private label."
     },
     bmc: {
-      partners: "Raw material suppliers, contract manufacturers, distributors/retailers, logistics companies, certification bodies",
-      activities: "Product design & engineering, manufacturing/quality control, supply chain management, distribution, brand marketing",
-      proposition: "Superior physical product: better performance, design, durability, or price. Tangible, demonstrable advantage.",
-      relationships: "Retail partnerships, warranty & support, brand community, influencer endorsements, customer service",
-      segments: "End consumers (B2C), OEMs (B2B), retailers/distributors. Early adopters: enthusiasts in product category.",
-      resources: "Manufacturing facility or partner, supply chain, patents/IP, brand, design team, quality assurance",
-      channels: "Retail stores, distributors, direct online (DTC), Amazon/marketplaces, trade shows, B2B sales team",
-      costs: "Fixed: manufacturing, R&D, team. Variable: materials, logistics, marketing per unit. Top 3: 1) COGS/materials 2) Distribution 3) Marketing",
-      "revenue-streams": "Unit sales, accessories, service contracts, warranty extensions, licensing. Target: >50% gross margin per unit."
+      partners: "Raw material suppliers, distributors, logistics companies, certification bodies",
+      activities: "Production, quality control, supply chain management, sales, R&D for new products",
+      proposition: "High-quality [product] made locally — 30% cheaper than imports, with local warranty and fast delivery",
+      relationships: "Distributor partnerships, direct B2C sales, B2B contracts, after-sales support",
+      segments: "B2B: distributors, retailers. B2C: price-conscious consumers in [region]",
+      resources: "Production facility, equipment, supply chain, workforce, certifications, brand",
+      channels: "Distributors, retail stores, e-commerce, trade shows, B2B direct sales",
+      costs: "Raw materials (40%), labor (20%), logistics (15%), marketing (10%), overhead (15%)",
+      "revenue-streams": "Product sales (wholesale + retail), B2B contracts, private label manufacturing"
     },
     lean: {
-      problem: "1. Existing products don't meet performance/quality expectations\n2. Price too high for what you get\n3. No product combines [feature A] + [feature B] in one",
-      solution: "1. Engineered product with superior specs\n2. Optimized supply chain for better price/performance\n3. Integrated design combining key features",
-      uvp: "Finally, a [product] that delivers [key benefit] at [compelling price]. Built to last.",
-      advantage: "Proprietary manufacturing process, patents, exclusive supplier relationships, brand reputation, economies of scale",
-      segments: "Consumers needing [product category], B2B OEMs, retailers. Early: enthusiasts who research before buying.",
-      metrics: "Units sold, gross margin %, repeat purchase rate, return rate, customer satisfaction (NPS), inventory turnover",
-      channels: "Retail partnerships, DTC website, Amazon, trade shows, influencer reviews, B2B direct sales",
-      costs: "Fixed: manufacturing, R&D. Variable: materials, logistics per unit. Top 3: 1) COGS 2) Distribution 3) Marketing",
-      revenue: "Unit sales at target gross margin. Accessories as add-on. Service contracts for recurring revenue."
+      problem: "1. Imported [product] is expensive. 2. No local alternative. 3. Long delivery times from abroad.",
+      solution: "1. Local production at 30% lower cost. 2. Same/better quality with local certification. 3. 2-day delivery.",
+      uvp: "Local [product] — same quality as imports, 30% cheaper, delivered in 2 days.",
+      advantage: "Local supply chain, tariff advantage, brand trust, lower logistics cost",
+      segments: "Early adopters: [region] buyers frustrated with import prices and delivery times",
+      metrics: "Units produced, units sold, return rate, gross margin, distributor count",
+      channels: "Distributors, e-commerce, retail, trade shows",
+      costs: "Materials, labor, logistics, overhead",
+      revenue: "Product sales, wholesale, B2B contracts"
     }
   },
+
+  // ===== SERVICES =====
   services: {
-    label: "💼 Services / IT Outsourcing",
-    desc: "Sell expertise and time. Revenue = hours × rate. Key: utilization rate, billable hours, client retention. Pipeline model.",
-    examples: ["McKinsey","Deloitte","IDEO","Accenture","Bain","Fedoriv Agency","KSE Executive Education","N-iX","Sigma Software","Arzinger"],
+    label: "💼 Services/IT",
+    desc: "Sell expertise and time. Revenue = rate × hours. High margin (40-60%) but hard to scale.",
+    examples: ["N-iX","SoftServe","People.ai","PeopleForce"],
     de: {
-      raison: "Deep expertise that clients lack in-house. Passion for solving complex problems for organizations. Assets: team expertise, methodology, client relationships, industry reputation.",
-      market: "Beachhead: specific industry vertical or service type (IT outsourcing, consulting, design, legal). TAM = addressable client spend in niche. Persona: C-level or department head with budget authority.",
-      value: "Expert execution that would take client 3-5x longer in-house. Quantified: deliver project in X weeks vs Y months internally, at Z% of hiring cost. Methodology-driven, predictable outcomes.",
-      advantage: "Team expertise depth, proprietary methodology/frameworks, client relationships & trust, industry specialization. Switching costs: knowledge transfer, relationship depth.",
-      acquisition: "DMU: champion = internal sponsor, buyer = C-level/VP, veto = procurement/legal. Process: thought leadership → inbound inquiry → proposal → negotiation → contract. Trigger: project need, strategic gap.",
-      "unit-econ": "Revenue = billable hours × hourly rate. Utilization target: >75%. Gross margin: rate - cost per consultant. LTV = avg project value × repeat projects. CAC: business development costs / new clients.",
-      revenue: "Model: time & materials (T&M) or fixed-price projects. Pricing: $X/hour by seniority. Retainer: monthly commitment. Value-based: % of impact delivered. Channel: direct sales, referrals, RFPs.",
-      "overall-econ": "P&L: Revenue = hours × rate. COGS: consultant salaries (50-60% of revenue). OpEx: BD, office, G&A. Margin target: >20% net. Cash flow: project-based, lumpy. Runway: maintain bench utilization.",
-      build: "Assumption 1: clients will pay premium for expertise. Test: win 3 paid pilot projects. Assumption 2: repeat business >30%. Test: measure client retention. MVBP: core service offering + 1 reference client + proposal template.",
-      scaling: "Hire more consultants, open new verticals, create productized services (fixed-scope packages), build IP/tools, geographic expansion, acquire niche firms."
+      raison: "Provide [domain] expertise that clients lack in-house, delivered faster and better than they can build themselves.",
+      market: "Beachhead: mid-market companies needing [service]. TAM: $20-100B. Client: CTO/VP who needs [outcome] fast.",
+      value: "2x faster delivery vs in-house. Access to specialized talent. Predictable cost via fixed-price or T&M.",
+      advantage: "Deep expertise in [domain]. Talent pool. Reusable components/frameworks. Client relationships = retention.",
+      acquisition: "Outbound: LinkedIn + conferences. Inbound: case studies + thought leadership. DMU: CTO (champion) + CFO (buyer).",
+      "unit-econ": "Blended rate $80/hr. Utilization target 75%. Gross margin 40%. LTV: $50K per client. CAC: $200.",
+      revenue: "T&M billing, fixed-price projects, retainer contracts. Expansion: add services, extend engagements.",
+      "overall-econ": "Gross margin 40%. Break-even at 5 consultants billed. Burn $6K/mo bench cost. Rule: minimize bench time.",
+      build: "MVBP: 1 service offering with 2-3 consultants. Key assumption: clients will pay $80/hr. Track: utilization rate, pipeline.",
+      scaling: "Productize services into SaaS, hire more talent, open new offices, build delivery methodology."
     },
     bmc: {
-      partners: "Technology vendors, subcontractors (overflow), academic institutions, industry associations, complementary service firms",
-      activities: "Client delivery (projects), business development, talent recruitment & training, methodology development, thought leadership",
-      proposition: "Expert execution faster than in-house. Proven methodology. Access to talent client can't hire. Predictable outcomes.",
-      relationships: "Long-term partnerships, account management, advisory boards, trusted advisor status, project-based with repeat engagement",
-      segments: "Enterprise clients (IT, strategy, design), mid-market companies, startups needing specific expertise. Government/NGOs.",
-      resources: "Expert team, proprietary methodology, client relationships, brand/reputation, knowledge base, training programs",
-      channels: "Direct sales, thought leadership (publications, conferences), referrals, RFP responses, partnerships, LinkedIn",
-      costs: "Fixed: team salaries, office, training. Variable: subcontractors, travel, BD. Top 3: 1) People/salaries 2) BD 3) Overhead",
-      "revenue-streams": "T&M projects, fixed-price engagements, monthly retainers, advisory fees, training workshops. Target: >75% utilization, >20% net margin."
+      partners: "Technology vendors (AWS, Azure), staffing agencies, training providers, client PMOs",
+      activities: "Service delivery, talent recruitment, client management, pre-sales, methodology development",
+      proposition: "Expert [domain] teams that deliver 2x faster — predictable cost, guaranteed quality",
+      relationships: "Long-term client partnerships, dedicated teams, advisory boards, community events",
+      segments: "Mid-market and enterprise companies needing [domain] expertise, CTOs/VPs with budget",
+      resources: "Talent pool, delivery methodology, client relationships, frameworks/codebase, brand",
+      channels: "Outbound sales, conferences, case studies, referrals, LinkedIn",
+      costs: "Talent salaries (60%), sales & marketing (15%), office/remote (10%), G&A (15%)",
+      "revenue-streams": "T&M billing, fixed-price projects, retainers, managed services"
     },
     lean: {
-      problem: "1. Client lacks in-house expertise for critical project\n2. Hiring full-time is too slow/expensive\n3. Existing vendors don't understand [industry] specifics",
-      solution: "1. Expert team deployed in days, not months\n2. Flexible engagement: project, retainer, or advisory\n3. Industry-specialized consultants with domain depth",
-      uvp: "Get [expertise] delivered by specialists who understand [your industry]. No hiring, no ramp-up, results from week 1.",
-      advantage: "Deep domain expertise, proprietary methodology, team chemistry, client trust built over years, talent brand attracts top consultants",
-      segments: "C-level/VPs at [industry] companies. Early: companies with urgent project need and budget approved.",
-      metrics: "Utilization rate, gross margin per project, client retention %, NPS, proposal win rate, revenue per consultant",
-      channels: "Thought leadership, referrals from past clients, conference speaking, LinkedIn, strategic partnerships",
-      costs: "Fixed: team salaries. Variable: subcontractors, travel. Top 3: 1) People 2) BD 3) Overhead",
-      revenue: "Hourly/daily rate by seniority. Project-based or retainer. Target: >75% utilization, >20% net margin."
+      problem: "1. Can't find/hire [domain] talent fast enough. 2. In-house team lacks expertise. 3. Project deadlines slipping.",
+      solution: "1. Ready-made expert team in days. 2. Deep [domain] specialization. 3. Fixed-price or T&M with guarantees.",
+      uvp: "Expert [domain] team on demand — start in 2 weeks, deliver 2x faster, or we fix it free.",
+      advantage: "Talent pool, reusable frameworks, deep [domain] expertise, client relationships",
+      segments: "Early adopters: CTOs at mid-market companies with urgent [domain] needs",
+      metrics: "Utilization rate, pipeline value, client retention, NPS, bench time %",
+      channels: "Outbound, conferences, referrals, case studies",
+      costs: "Talent, sales, operations",
+      revenue: "Hourly/project billing, retainers, managed services"
     }
   },
+
+  // ===== B2G/PUBLIC =====
   b2g: {
-    label: "🏛️ B2G / Public Sector",
-    desc: "Sell to government: agencies, municipalities, public institutions. Revenue via procurement, RFPs, grants. Long sales cycles, large contracts.",
-    examples: ["Palantir","SAP Public","Deloitte Gov","IBM Gov","Fedoriv (public cases)","KSE programs","e-Vidomosti","ProZorro","Diia ecosystem partners"],
+    label: "🏛️ B2G/Public Sector",
+    desc: "Government contracts, long sales cycles, compliance-heavy. ProZorro-style procurement.",
+    examples: ["ProZorro","eHealth Ukraine","Diia","GovTech"],
     de: {
-      raison: "Improve public services, compliance, transparency, or citizen outcomes. Passion for public impact. Assets: government relationships, compliance expertise, security clearances, policy knowledge.",
-      market: "Beachhead: one government agency or municipality with specific pain. TAM = public sector IT/consulting spend in region. Persona: department head with procurement authority, influenced by policy mandates.",
-      value: "Efficiency, transparency, compliance, citizen impact. Quantified: saves X hours of manual processing, reduces fraud by Y%, serves Z more citizens. Must demonstrate ROI to taxpayer.",
-      advantage: "Security clearances, compliance certifications, existing government relationships, understanding of procurement process, policy expertise. Incumbent advantage: hard to displace once in.",
-      acquisition: "DMU: champion = program manager, buyer = procurement office, veto = legal/compliance. Process: relationship → RFP → proposal → evaluation → contract. Trigger: policy mandate, budget allocation, audit finding.",
-      "unit-econ": "Large contract values ($50K-$5M+). Long sales cycles (6-18mo). LTV = multi-year contracts with renewals. CAC = BD + proposal costs / wins. Margin: 15-25% typical. Cash flow: milestone-based payments.",
-      revenue: "Model: government contracts (fixed-price or T&M). Grants for R&D. Public tenders (ProZorro). Pricing: must comply with procurement rules. Channel: direct sales + procurement portals.",
-      "overall-econ": "Revenue = contract values. COGS: delivery team. OpEx: BD/proposal team, compliance, security. Cash: milestone payments, 30-60 day payment terms. Risk: contract concentration (1-2 big clients).",
-      build: "Assumption 1: agency will adopt new solution. Test: pilot project or sandbox. Assumption 2: can win procurement. Test: respond to 3 RFPs. MVBP: compliance-ready MVP + security audit + reference from 1 agency.",
-      scaling: "Expand to more agencies. Build platform (reusable across departments). Adjacent: regional governments, international development. Partnership with larger integrators as subcontractor → prime."
+      raison: "Digitize [public service] to make it transparent, efficient, and accessible to every citizen.",
+      market: "Beachhead: [specific government agency/ministry]. TAM: $500M-5B (public IT budget). Procurement via ProZorro.",
+      value: "10x faster service delivery. Transparency via open data. Cost reduction 30-50% vs manual processes.",
+      advantage: "Compliance expertise. Political connections. First-mover in [domain]. Open-source credibility.",
+      acquisition: "ProZorro tenders. Lobbying. Pilot projects. DMU: minister (sponsor) + IT director (evaluator) + procurement (buyer).",
+      "unit-econ": "Contract value $100K-5M. Sales cycle 6-18 months. Gross margin 30-40%. CAC: $20K (tender preparation).",
+      revenue: "Government contracts, pilot projects, maintenance/SLA fees, international development grants (USAID, EU).",
+      "overall-econ": "Gross margin 30-40%. Revenue lumpy (contract-based). Break-even at 2-3 mid-size contracts/year. Burn $10K/mo between contracts.",
+      build: "MVBP: working demo for 1 agency process. Key assumption: agency will adopt after pilot. Track: tender wins, pilot success rate.",
+      scaling: "Expand to more agencies, other countries, open-source community, SaaS for smaller municipalities."
     },
     bmc: {
-      partners: "System integrators, compliance/security auditors, policy advisors, technology vendors, other contractors (consortium)",
-      activities: "Proposal writing, compliance management, security operations, stakeholder management, solution delivery, reporting/auditing",
-      proposition: "Compliant, secure solution that improves [public outcome]. Proven in government context. Meets all regulatory requirements.",
-      relationships: "Long-term contracts, formal reporting, stakeholder committees, advisory boards, public accountability",
-      segments: "Government agencies, municipalities, public institutions, state-owned enterprises, international development organizations",
-      resources: "Security clearances, compliance certifications, government relationships, policy expertise, secure infrastructure, reference projects",
-      channels: "Procurement portals (ProZorro), direct relationships, conferences, policy networks, consortium partnerships",
-      costs: "Fixed: compliance, security, team. Variable: proposal writing, legal. Top 3: 1) Delivery team 2) Compliance/security 3) BD/proposals",
-      "revenue-streams": "Government contracts, grants, public tenders, multi-year framework agreements. Typical: $50K-$5M per contract, 1-3 year terms."
+      partners: "Government agencies, international donors (USAID, EU), system integrators, open-source communities",
+      activities: "Compliance development, tender participation, stakeholder management, deployment & training",
+      proposition: "Transparent, efficient [public service] — open-source, compliant, proven in pilot",
+      relationships: "Long-term government contracts, advisory boards, public-private partnerships, community engagement",
+      segments: "Central government agencies, municipalities, state-owned enterprises",
+      resources: "Compliance certifications, government relationships, open-source codebase, domain expertise",
+      channels: "ProZorro tenders, direct lobbying, pilot projects, conferences, donor programs",
+      costs: "Compliance (20%), development (35%), sales/tender prep (20%), deployment (15%), G&A (10%)",
+      "revenue-streams": "Government contracts, maintenance/SLA, donor grants, consulting"
     },
     lean: {
-      problem: "1. Government process is slow, manual, and opaque\n2. Legacy systems don't meet modern citizen expectations\n3. Compliance requirements prevent adoption of commercial tools",
-      solution: "1. Digital workflow purpose-built for government\n2. Citizen-facing interface with government backend\n3. Compliance-first architecture with security built in",
-      uvp: "Modern [solution] that meets every government requirement out of the box. Deploy in weeks, not years.",
-      advantage: "Compliance certifications, security clearances, government relationships, policy expertise, incumbent lock-in after deployment",
-      segments: "Agency program managers, CIOs in government, procurement officers. Early: agencies under mandate to modernize.",
-      metrics: "Proposal win rate, contract value, delivery milestones on time, citizen adoption rate, compliance audit results",
-      channels: "Procurement portals, direct BD, policy networks, conferences, consortium with integrators",
-      costs: "Fixed: compliance, security, team. Variable: proposals, legal. Top 3: 1) People 2) Compliance 3) BD",
-      revenue: "Government contracts via procurement. Multi-year framework agreements. Grants for innovation."
+      problem: "1. [Public service] is slow, opaque, corrupt. 2. Citizens can't access services online. 3. No data for decision-making.",
+      solution: "1. Digital platform with open data. 2. Online service portal. 3. Real-time analytics dashboard.",
+      uvp: "Open-source [public service] platform — transparent by design, 10x faster, 30% cheaper to operate.",
+      advantage: "Open-source trust, compliance expertise, first-mover in [domain], political capital",
+      segments: "Early adopters: reform-minded agencies with donor support and digital mandate",
+      metrics: "Tender win rate, citizen adoption, service delivery time, cost savings, transparency score",
+      channels: "ProZorro, pilot projects, donor programs, lobbying",
+      costs: "Compliance, development, tender prep, deployment",
+      revenue: "Government contracts, SLA fees, donor grants"
     }
   },
+
+  // ===== SOCIAL ENTERPRISE =====
   social: {
     label: "🌱 Social Enterprise",
-    desc: "Mission-driven venture. Impact + financial sustainability. Hybrid models: earned revenue + grants. Theory of Change required.",
-    examples: ["Grameen Bank","Kiva","TOMS","Warby Parker","Ashoka fellows","Enactus","Teach For All","United Way","Plast","NGO hybrids"],
+    desc: "Mission-driven venture balancing impact and financial sustainability. Hybrid models common.",
+    examples: ["Teach For Ukraine","Husk","United24","Social Venture Fund"],
     de: {
-      raison: "Social/environmental problem that demands market-based solution. Passion for impact + sustainability. Assets: community trust, volunteer network, policy knowledge, donor relationships.",
-      market: "Beachhead: specific beneficiary group + specific problem (e.g. youth employment, clean water, education access). TAM = total affected population × intervention cost. Stakeholders: beneficiaries, donors, government, community.",
-      value: "Measurable social/environmental impact delivered through sustainable business model. Quantified: improves X lives, reduces Y emissions, increases Z access. Theory of Change: activity → output → outcome → impact.",
-      advantage: "Community trust, first-mover in social niche, donor network, policy influence, volunteer engagement. Brand authenticity. Hybrid model flexibility (nonprofit + earned revenue).",
-      acquisition: "Beneficiaries: community outreach, partner referrals. Donors: impact reports, events. Government: policy alignment. DMU: multiple stakeholders with different motivations. Trigger: visible social need + proven intervention.",
-      "unit-econ": "Earned revenue: fee-for-service or product sales. Grants: restricted/unrestricted. LTV = lifetime beneficiary impact + donor retention. CAC = outreach cost per beneficiary. Subsidy model: cross-subsidize with premium tier.",
-      revenue: "Model: hybrid (earned + grants). Earned: sliding-scale fees, B2B services, premium products subsidizing free tier. Grants: foundations, government, CSR. Channel: partnerships + direct service + online.",
-      "overall-econ": "Revenue = earned + grants. COGS: program delivery. OpEx: outreach, monitoring/evaluation, fundraising. Margin: target surplus >5% for reserves. Cash: grant cycles + earned revenue. Track: cost per beneficiary served.",
-      build: "Assumption 1: intervention creates measurable impact. Test: pilot with 50 beneficiaries, measure outcomes. Assumption 2: model is financially sustainable. Test: 6-month revenue mix. MVBP: core program + measurement + 1 funding source.",
-      scaling: "Replicate to new geographies. License methodology to partners. Build movement (volunteer network). Policy advocacy. Franchise model for local chapters."
+      raison: "Solve [social problem] through a sustainable enterprise model — impact first, revenue to sustain.",
+      market: "Beachhead: [affected population] in [region]. TAM: depends on donor/market size. Beneficiary ≠ customer often.",
+      value: "Measurable impact on [problem]. For beneficiaries: improved [outcome]. For payers: ROI on social investment.",
+      advantage: "Deep community trust. Mission alignment attracts talent. Impact data = moat. First-mover in [problem area].",
+      acquisition: "For beneficiaries: community outreach, NGO partnerships. For funders: impact reports, grant applications. DMU: program director.",
+      "unit-econ": "Impact unit cost: $[X] per beneficiary served. Revenue per beneficiary: $[Y]. Gap filled by grants/donations.",
+      revenue: "Earned revenue (50-70%): service fees, product sales. Grants (20-30%): foundations, government. Impact investment (10-20%).",
+      "overall-econ": "Gross margin 30-50%. Break-even when earned revenue covers 70%+ of costs. Burn offset by grants. Path to self-sustainability in 3-5 years.",
+      build: "MVBP: serve 100 beneficiaries with measurable [outcome]. Key assumption: impact can be measured and funded. Track: beneficiary count, outcome metrics, cost per beneficiary.",
+      scaling: "Replicate to new regions, franchise model, policy advocacy, train-the-trainer, SaaS for other NGOs."
     },
     bmc: {
-      partners: "NGOs, government agencies, foundations/donors, community organizations, academic institutions, corporate CSR partners",
-      activities: "Program delivery, impact measurement (M&E), fundraising, community organizing, advocacy, volunteer management",
-      proposition: "Measurable [social/environmental] impact through sustainable intervention. Beneficiary empowerment, not charity.",
-      relationships: "Community engagement, beneficiary feedback loops, donor stewardship, volunteer community, government partnership",
-      segments: "Beneficiaries (direct recipients), donors/funders (individuals, foundations, CSR), government partners, volunteers",
-      resources: "Community trust, methodology/program design, donor network, volunteer base, impact data, brand/mission authenticity",
-      channels: "Community outreach, partner referrals, online campaigns, events, government programs, media/advocacy",
-      costs: "Fixed: program team, M&E. Variable: outreach, fundraising events. Top 3: 1) Program delivery 2) Fundraising 3) M&E/impact measurement",
-      "revenue-streams": "Earned: fees, products, B2B services. Grants: foundations, government, CSR. Donations: individual, corporate. Target: >40% earned revenue for sustainability."
+      partners: "NGOs, government agencies, foundations, impact investors, community organizations, universities",
+      activities: "Program delivery, impact measurement, fundraising, community engagement, advocacy",
+      proposition: "Measurable [social outcome] per dollar invested — sustainable model that scales beyond grant dependency",
+      relationships: "Community trust, donor stewardship, volunteer engagement, government collaboration",
+      segments: "Beneficiaries: [affected population]. Customers/payers: government, foundations, CSR programs, impact investors",
+      resources: "Community trust, impact data, methodology, team passion, volunteer network, brand/mission",
+      channels: "Community outreach, grant applications, impact platforms, government partnerships, media",
+      costs: "Program delivery (50%), fundraising (15%), admin (15%), impact measurement (10%), advocacy (10%)",
+      "revenue-streams": "Service fees, product sales, government contracts, grants, impact investment, donations"
     },
     lean: {
-      problem: "1. [Social group] lacks access to [resource/opportunity]\n2. Existing solutions are charity-dependent and unsustainable\n3. Systemic barriers prevent [group] from improving their situation",
-      solution: "1. Market-based intervention creating access\n2. Earned revenue model reducing dependency on donations\n3. Empowerment approach: skills + tools, not handouts",
-      uvp: "Sustainable impact for [beneficiary group]. Every dollar earned reinforces the mission. Measurable outcomes, not just outputs.",
-      advantage: "Community trust, proven methodology, donor network, policy influence, authentic mission-driven brand, volunteer army",
-      segments: "Beneficiaries: [specific group]. Funders: foundations, CSR, individual donors. Partners: NGOs, government. Early: pilot community.",
-      metrics: "Beneficiaries served, cost per beneficiary, outcome rate (% achieving target), earned revenue %, donor retention, volunteer hours",
-      channels: "Community partnerships, online campaigns, donor events, government programs, media stories, referral from other NGOs",
-      costs: "Fixed: program team, M&E. Variable: outreach, fundraising. Top 3: 1) Program 2) Fundraising 3) Impact measurement",
-      revenue: "Hybrid: earned revenue (fees/products) + grants + donations. Target: >40% earned for long-term sustainability."
+      problem: "1. [Social problem] affects [X] people. 2. Current solutions are insufficient/unsustainable. 3. No market incentive to solve it.",
+      solution: "1. Enterprise model that serves [population] sustainably. 2. Measurable impact per dollar. 3. Revenue model that reduces grant dependency.",
+      uvp: "Solve [social problem] sustainably — every dollar creates measurable [outcome], and the model funds itself over time.",
+      advantage: "Community trust, impact data, mission-driven talent, first-mover in [problem area]",
+      segments: "Early adopters: [specific beneficiary group] + foundation/government program officers who fund [problem area]",
+      metrics: "Beneficiaries served, outcome per dollar, earned revenue ratio, cost per beneficiary, repeat engagement",
+      channels: "Community outreach, grants, government, impact investors, media",
+      costs: "Program delivery, fundraising, measurement, operations",
+      revenue: "Earned revenue + grants + impact investment"
     }
   },
+
+  // ===== BLANK =====
   generic: {
     label: "📝 Blank Canvas",
     desc: "Start from scratch. Fill each block yourself. Use the hint text as guidance for what belongs in each section.",
     examples: [],
-    de: {raison:"",market:"",value:"",advantage:"",acquisition:"","unit-econ":"",revenue:"","overall-econ":"",build:"",scaling:""},
-    bmc: {partners:"",activities:"",proposition:"",relationships:"",segments:"",resources:"",channels:"",costs:"","revenue-streams":""},
-    lean: {problem:"",solution:"",uvp:"",advantage:"",segments:"",metrics:"",channels:"",costs:"",revenue:""}
+    de: {
+      raison: "", market: "", value: "", advantage: "", acquisition: "", "unit-econ": "", revenue: "", "overall-econ": "", build: "", scaling: ""
+    },
+    bmc: {
+      partners: "", activities: "", proposition: "", relationships: "", segments: "", resources: "", channels: "", costs: "", "revenue-streams": ""
+    },
+    lean: {
+      problem: "", solution: "", uvp: "", advantage: "", segments: "", metrics: "", channels: "", costs: "", revenue: ""
+    }
+  }
+};
+
+// ===== SPHERE-SUBCATEGORY-MODEL HIERARCHY =====
+// Each sphere has subcategories, each subcategory has relevant business models
+var SPHERE_TREE = {
+  science: {
+    label: "🩺 Sphere I — Science",
+    subcats: {
+      "bio-med": {
+        label: "🧬 Bio/Med",
+        desc: "Biotech, medtech, health SaaS, pharma, diagnostics",
+        models: ["subscription","saas-freemium","services","b2g"]
+      },
+      green: {
+        label: "🌿 Green/Sustainability",
+        desc: "Cleantech, carbon credits, ESG platforms, green SaaS",
+        models: ["subscription","saas-freemium","marketplace","b2g","social"]
+      },
+      agtech: {
+        label: "🌾 AgTech",
+        desc: "Precision agriculture, farm management, supply chain",
+        models: ["subscription","saas-freemium","manufacturing","marketplace"]
+      },
+      "human-systems": {
+        label: "🧠 Human Systems",
+        desc: "EdTech, HR tech, wellness, behavioral science",
+        models: ["subscription","saas-freemium","services","social"]
+      }
+    }
+  },
+  entrepreneurship: {
+    label: "💼 Sphere II — Entrepreneurship",
+    subcats: {
+      mvps: {
+        label: "🚀 MVPs",
+        desc: "Product validation, lean startup, build-measure-learn",
+        models: ["subscription","saas-freemium","marketplace","services"]
+      },
+      "founder-logic": {
+        label: "🧭 Founder Logic",
+        desc: "Decision-making, team building, fundraising, vision",
+        models: ["subscription","saas-freemium","services"]
+      },
+      "market-validation": {
+        label: "📊 Market Validation",
+        desc: "Customer discovery, unit economics, beachhead market",
+        models: ["subscription","marketplace","saas-freemium","manufacturing","services"]
+      },
+      "ecosystem-ops": {
+        label: "🔗 Ecosystem & Ops",
+        desc: "Partnerships, operations, scaling, legal/compliance",
+        models: ["marketplace","services","b2g","manufacturing"]
+      }
+    }
+  },
+  technology: {
+    label: "⚙️ Sphere III — Technology",
+    subcats: {
+      analytics: {
+        label: "📈 Analytics",
+        desc: "Data platforms, BI, ML/AI tools, observability",
+        models: ["subscription","saas-freemium","services"]
+      },
+      engineering: {
+        label: "🔧 Engineering",
+        desc: "Dev tools, CI/CD, infrastructure, security",
+        models: ["subscription","saas-freemium","services"]
+      },
+      dashboards: {
+        label: "📊 Dashboards",
+        desc: "Visualization, reporting, KPI tracking, decision support",
+        models: ["subscription","saas-freemium","b2g"]
+      },
+      infrastructure: {
+        label: "🏗️ Infrastructure",
+        desc: "Cloud, APIs, platforms, open-source foundations",
+        models: ["subscription","saas-freemium","services","b2g"]
+      }
+    }
   }
 };
