@@ -201,7 +201,7 @@
             <div class="quiz-opt" onclick="pickQuiz(this,3)" data-v="engineer">Solving complex problems</div>
           </div>
         </div>
-        <button class="step-btn" onclick="calcPersonality()" style="margin-top:8px">Calculate My Type</button>
+        <button class="btn-primary" onclick="calcPersonality()" style="margin-top:8px;border:1px solid var(--science);border-radius:999px;padding:8px 22px;font-size:14px;cursor:pointer;background:var(--science);color:#fff;font-weight:600">Calculate My Type</button>
       </div>
       <div id="personalityResult"></div>
     </div>
@@ -367,10 +367,11 @@ function saveState(){
 }
 
 /* ── Step nav ── */
-document.querySelectorAll(".step-btn").forEach(function(btn){
+document.querySelectorAll(".step-btn[data-step]").forEach(function(btn){
   btn.addEventListener("click", function(){
     var step = this.getAttribute("data-step");
-    document.querySelectorAll(".step-btn").forEach(function(b){ b.classList.remove("active"); });
+    if(!step) return;
+    document.querySelectorAll(".step-btn[data-step]").forEach(function(b){ b.classList.remove("active"); });
     this.classList.add("active");
     document.querySelectorAll(".step-panel").forEach(function(p){ p.classList.remove("active"); });
     document.getElementById("panel-" + step).classList.add("active");
