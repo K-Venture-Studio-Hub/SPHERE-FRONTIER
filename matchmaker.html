@@ -425,11 +425,17 @@ function buildPersonalityGrid(){
 }
 
 function pickPersonality(el){
+  var wasSelected = el.classList.contains("selected");
   document.querySelectorAll(".p-card").forEach(function(c){ c.classList.remove("selected"); });
-  el.classList.add("selected");
-  state.personality = el.getAttribute("data-type");
+  if(wasSelected){
+    state.personality = "";
+    document.getElementById("personalityResult").innerHTML = "";
+  } else {
+    el.classList.add("selected");
+    state.personality = el.getAttribute("data-type");
+    showPersonalityResult();
+  }
   saveState();
-  showPersonalityResult();
 }
 
 function highlightPersonality(){
@@ -480,6 +486,7 @@ function calcPersonality(){
   saveState();
   highlightPersonality();
   showPersonalityResult();
+  document.getElementById("personalityResult").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 
 /* ── Step 3: Readiness ── */
