@@ -195,12 +195,19 @@ body{
 
 /* Sphere grid (Venture Studio specific) */
 .sphere-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-.sphere-card{background:var(--card-bg);border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px}
+.sphere-card{background:var(--card-bg);border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px;position:relative}
 .sphere-card h3{margin:0 0 4px;font-size:18px}
 .sphere-card p{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.6}
 .sphere-s{border-left:4px solid var(--science)}
 .sphere-e{border-left:4px solid var(--entrepreneurship)}
 .sphere-t{border-left:4px solid var(--technology)}
+
+/* Animated gradient border */
+@keyframes borderSpin{to{--angle:360deg}}
+@property --angle{syntax:"<angle>";initial-value:0deg;inherits:false}
+.glow-wrap{position:relative;border-radius:24px;padding:2px;background:conic-gradient(from var(--angle),var(--science),var(--entrepreneurship),var(--technology),var(--science));animation:borderSpin 4s linear infinite}
+.glow-wrap .sphere-card{border:none;border-radius:22px;background:var(--card-bg)}
+[data-theme="dark"] .glow-wrap{background:conic-gradient(from var(--angle),var(--science),var(--entrepreneurship),var(--technology),var(--science))}
 .card-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
 .venture-list{list-style:none;padding:0!important;margin:0 0 10px!important;font-size:13px;color:var(--muted)}
 .venture-list li{padding:3px 0}
