@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="./assets/css/venture-studio.css">
   <style>
     .step-nav{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0}
-    .step-btn{border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:14px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
+    .step-btn{border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:14px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:background .1s,border-color .1s;font-weight:600}
     .step-btn:hover{background:var(--ink);color:#fff}
     .step-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
     [data-theme="dark"] .step-btn:hover{background:#1a1a1a;color:#fff;border-color:rgba(255,255,255,.2)}
@@ -16,8 +16,8 @@
     .step-panel.active{display:block}
     /* Entry cards */
     .entry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-    .entry-card{background:var(--card-bg);border:2px solid var(--line);border-radius:22px;padding:24px;cursor:pointer;transition:all .15s;text-align:center}
-    .entry-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .entry-card{background:var(--card-bg);border:2px solid var(--line);border-radius:22px;padding:24px;cursor:pointer;transition:border-color .1s;text-align:center}
+    .entry-card:hover{border-color:var(--accent)}
     .entry-card.chosen{border-color:var(--accent);background:rgba(255,255,255,.03)}
     [data-theme="dark"] .entry-card.chosen{background:rgba(255,255,255,.03)}
     .entry-card .ec-icon{font-size:40px;margin-bottom:10px}
@@ -25,7 +25,7 @@
     .entry-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
     /* Personality cards */
     .personality-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-    .p-card{background:var(--card-bg);border:2px solid var(--line);border-radius:22px;padding:20px;cursor:pointer;transition:all .15s}
+    .p-card{background:var(--card-bg);border:2px solid var(--line);border-radius:22px;padding:20px;cursor:pointer;transition:border-color .1s}
     .p-card:hover{border-color:var(--accent)}
     .p-card.selected{border-color:var(--science);background:rgba(62,207,148,.06)}
     .p-card .p-icon{font-size:28px;margin-bottom:8px}
@@ -38,7 +38,7 @@
     .quiz-section{margin-bottom:24px}
     .quiz-section h3{margin:0 0 10px;font-size:16px;color:var(--accent)}
     .quiz-options{display:flex;gap:8px;flex-wrap:wrap}
-    .quiz-opt{border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:all .15s;font-weight:600}
+    .quiz-opt{border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:border-color .1s,background .1s;font-weight:600}
     .quiz-opt:hover{border-color:var(--accent)}
     .quiz-opt.picked{border-color:var(--science);background:rgba(62,207,148,.08);color:var(--science)}
     /* Result card */
@@ -52,14 +52,14 @@
     .cofounder-chip.best{border-color:var(--science);color:var(--science);background:rgba(62,207,148,.08)}
     /* Idea readiness */
     .readiness-checklist{display:flex;flex-direction:column;gap:8px}
-    .check-item{display:flex;gap:10px;align-items:flex-start;font-size:14px;cursor:pointer;padding:8px 12px;border-radius:12px;transition:background .15s}
+    .check-item{display:flex;gap:10px;align-items:flex-start;font-size:14px;cursor:pointer;padding:8px 12px;border-radius:12px;transition:background .1s}
     .check-item:hover{background:rgba(255,255,255,.03)}
     .check-item input[type="checkbox"]{margin-top:3px;accent-color:var(--science);width:18px;height:18px}
     .check-copy{flex:1;line-height:1.5}
     .check-copy strong{display:block;margin-bottom:2px}
     .check-copy span{color:var(--muted);font-size:13px}
     .readiness-bar-wrap{background:var(--line);border-radius:999px;height:12px;margin:18px 0 6px;overflow:hidden}
-    .readiness-bar-fill{height:100%;border-radius:999px;transition:width .3s}
+    .readiness-bar-fill{height:100%;border-radius:999px;transition:width .2s}
     .readiness-label{font-size:13px;color:var(--muted)}
     /* Match cards */
     .match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
@@ -76,8 +76,8 @@
     .compat-low{background:rgba(110,168,240,.12);color:var(--technology)}
     /* Resources */
     .resource-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:14px}
-    .resource-card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:16px;text-decoration:none;color:var(--ink);transition:all .15s;display:block}
-    .resource-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+    .resource-card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:16px;text-decoration:none;color:var(--ink);transition:border-color .1s;display:block}
+    .resource-card:hover{border-color:var(--accent)}
     .resource-card h4{margin:0 0 4px;font-size:14px}
     .resource-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.4}
     .resource-card .rc-source{font-size:11px;color:var(--accent);margin-top:6px}
