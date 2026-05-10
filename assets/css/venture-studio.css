@@ -21,7 +21,7 @@
   --ink:#e8e8e8;
   --muted:#999;
   --line:rgba(255,255,255,.1);
-  --accent:#e0a050;
+  --accent:#c8c8c8;
   --accent-2:#3ecf94;
   --science:#3ecf94;
   --entrepreneurship:#e0a050;
@@ -43,8 +43,8 @@ body{
 }
 [data-theme="dark"] body{
   background:
-    radial-gradient(circle at top left,rgba(62,207,148,.04),transparent 26%),
-    radial-gradient(circle at top right,rgba(224,160,80,.05),transparent 24%),
+    radial-gradient(circle at top left,rgba(62,207,148,.03),transparent 26%),
+    radial-gradient(circle at top right,rgba(110,168,240,.03),transparent 24%),
     linear-gradient(180deg,#050505 0%,var(--bg) 100%);
 }
 .page{width:min(1180px,calc(100vw - 32px));margin:0 auto;padding:32px 0 56px}
@@ -187,7 +187,7 @@ body{
   background:#111;color:#e8e8e8;border:1px solid var(--line);
 }
 [data-theme="dark"] select option{background:#111;color:#e8e8e8}
-[data-theme="dark"] .hero-links a:hover,[data-theme="dark"] .link-pill:hover,[data-theme="dark"] .card-actions button:hover,[data-theme="dark"] .card-actions a:hover,[data-theme="dark"] .mission-actions button:hover,[data-theme="dark"] .pill-button.active,[data-theme="dark"] .theme-toggle:hover{background:#1a1a1a;color:#fff;border-color:rgba(224,160,80,.5)}
+[data-theme="dark"] .hero-links a:hover,[data-theme="dark"] .link-pill:hover,[data-theme="dark"] .card-actions button:hover,[data-theme="dark"] .card-actions a:hover,[data-theme="dark"] .mission-actions button:hover,[data-theme="dark"] .pill-button.active,[data-theme="dark"] .theme-toggle:hover{background:#1a1a1a;color:#fff;border-color:rgba(255,255,255,.2)}
 
 /* Theme toggle */
 .theme-toggle{position:fixed;top:16px;right:16px;z-index:100;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px)}

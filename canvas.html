@@ -14,8 +14,8 @@
     .tabbar button{border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:14px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
     .tabbar button:hover{background:var(--ink);color:#fff}
     .tabbar button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-    [data-theme="dark"] .tabbar button:hover{background:#1a1a1a;color:#fff;border-color:rgba(224,160,80,.5)}
-    [data-theme="dark"] .tabbar button.active{background:#1a1a1a;color:#fff;border-color:rgba(224,160,80,.5)}
+    [data-theme="dark"] .tabbar button:hover{background:#1a1a1a;color:#fff;border-color:rgba(255,255,255,.2)}
+    [data-theme="dark"] .tabbar button.active{background:#1a1a1a;color:#fff;border-color:rgba(255,255,255,.2)}
     .tab-panel{display:none;margin-top:18px}
     .tab-panel.active{display:block}
     .canvas-grid{display:grid;gap:14px}
@@ -30,11 +30,11 @@
     .canvas-box textarea:focus{outline:none;border-color:var(--accent)}
     [data-theme="dark"] .canvas-box textarea{background:#111;color:#e8e8e8}
     .canvas-box.filled textarea{border-color:var(--science);border-style:dashed}
-    .canvas-box.lens-hl{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(181,107,45,.12)}
+    .canvas-box.lens-hl{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(255,255,255,.06)}
     .canvas-box .lens-tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:999px;margin-top:2px;display:inline-block}
-    .lens-tag.science{background:rgba(30,122,94,.1);color:var(--science)}
-    .lens-tag.entrepreneurship{background:rgba(181,107,45,.1);color:var(--entrepreneurship)}
-    .lens-tag.technology{background:rgba(59,130,246,.1);color:#3b82f6}
+    .lens-tag.science{background:rgba(62,207,148,.12);color:var(--science)}
+    .lens-tag.entrepreneurship{background:rgba(224,160,80,.12);color:var(--entrepreneurship)}
+    .lens-tag.technology{background:rgba(110,168,240,.12);color:var(--technology)}
     [data-theme="dark"] .lens-tag.science{color:#3ecf94}
     [data-theme="dark"] .lens-tag.entrepreneurship{color:#e0a050}
     [data-theme="dark"] .lens-tag.technology{color:#60a5fa}
@@ -42,7 +42,7 @@
     .sphere-nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
     .sphere-card-wrap{border:2px solid var(--line);border-radius:16px;padding:14px;flex:1;min-width:240px;cursor:pointer;transition:all .15s;background:var(--card-bg);overflow:hidden}
     .sphere-card-wrap:hover{border-color:var(--accent)}
-    .sphere-card-wrap.active{border-color:var(--accent);background:rgba(181,107,45,.06)}
+    .sphere-card-wrap.active{border-color:var(--accent);background:rgba(255,255,255,.03)}
     .sphere-card-wrap .sc-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
     .sphere-card-wrap .sc-icon{font-size:22px}
     .sphere-card-wrap .sc-title{font-weight:700;font-size:14px}
@@ -57,23 +57,23 @@
     .biz-selector strong{font-size:13px;color:var(--muted);margin-right:4px}
     .biz-btn{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
     .biz-btn:hover{background:var(--ink);color:#fff}
-    .biz-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .biz-btn.active{background:var(--accent);color:#111;border-color:var(--accent)}
     .biz-btn.disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
-    [data-theme="dark"] .biz-btn.active{background:#b56b2d;color:#fff;border-color:#b56b2d}
+    [data-theme="dark"] .biz-btn.active{background:#c8c8c8;color:#111;border-color:#c8c8c8}
     .model-info{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;font-size:13px;line-height:1.6}
     .model-info h4{margin:0 0 6px;font-size:14px;color:var(--accent)}
     .model-info p{margin:0;color:var(--muted)}
     .model-info .examples{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
     .model-info .chip{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--card-bg);border:1px solid var(--line);color:var(--ink)}
-    .prefill-badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;background:rgba(30,122,94,.12);color:var(--science);margin-left:6px;vertical-align:middle}
+    .prefill-badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;background:rgba(62,207,148,.12);color:var(--science);margin-left:6px;vertical-align:middle}
     [data-theme="dark"] .prefill-badge{color:#3ecf94}
     .wizard-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
     .wizard-card h3{margin:0 0 10px;font-size:16px;color:var(--accent)}
     .wizard-card p{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.6}
     .wizard-options{display:flex;gap:8px;flex-wrap:wrap}
     .wizard-opt{border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:all .15s;font-weight:600}
-    .wizard-opt:hover{border-color:var(--accent);background:rgba(181,107,45,.06)}
-    .wizard-opt.chosen{border-color:var(--accent);background:rgba(181,107,45,.1);color:var(--accent)}
+    .wizard-opt:hover{border-color:var(--accent);background:rgba(255,255,255,.03)}
+    .wizard-opt.chosen{border-color:var(--accent);background:rgba(255,255,255,.05);color:var(--accent)}
     .progress-bar-wrap{background:var(--line);border-radius:999px;height:8px;margin:10px 0 0;overflow:hidden}
     .progress-bar-fill{height:100%;border-radius:999px;background:var(--science);transition:width .3s}
     .progress-label{font-size:11px;color:var(--muted);margin-top:4px}
