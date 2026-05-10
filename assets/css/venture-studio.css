@@ -14,21 +14,21 @@
   --card-bg:#fffdfa;
   --input-bg:#fff;
 }
-/* Dark theme */
+/* Dark theme — black */
 [data-theme="dark"]{
-  --bg:#14100a;
-  --panel:rgba(28,22,12,.88);
-  --ink:#f0e4d0;
-  --muted:#b8a888;
-  --line:rgba(232,220,200,.15);
+  --bg:#0a0a0a;
+  --panel:rgba(18,18,18,.92);
+  --ink:#e8e8e8;
+  --muted:#999;
+  --line:rgba(255,255,255,.1);
   --accent:#e0a050;
   --accent-2:#3ecf94;
   --science:#3ecf94;
   --entrepreneurship:#e0a050;
   --technology:#6ea8f0;
-  --shadow:0 20px 50px rgba(0,0,0,.4);
-  --card-bg:#221c14;
-  --input-bg:#1c1608;
+  --shadow:0 20px 50px rgba(0,0,0,.5);
+  --card-bg:#141414;
+  --input-bg:#111;
 }
 *{box-sizing:border-box}
 body{
@@ -43,9 +43,9 @@ body{
 }
 [data-theme="dark"] body{
   background:
-    radial-gradient(circle at top left,rgba(62,207,148,.06),transparent 26%),
-    radial-gradient(circle at top right,rgba(224,160,80,.08),transparent 24%),
-    linear-gradient(180deg,#0a0804 0%,var(--bg) 100%);
+    radial-gradient(circle at top left,rgba(62,207,148,.04),transparent 26%),
+    radial-gradient(circle at top right,rgba(224,160,80,.05),transparent 24%),
+    linear-gradient(180deg,#050505 0%,var(--bg) 100%);
 }
 .page{width:min(1180px,calc(100vw - 32px));margin:0 auto;padding:32px 0 56px}
 .hero,.panel-section{background:var(--panel);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow)}
@@ -184,10 +184,10 @@ body{
 
 /* Dark mode form elements */
 [data-theme="dark"] select,[data-theme="dark"] input,[data-theme="dark"] textarea{
-  background:#221c14;color:#f0e4d0;border:1px solid var(--line);
+  background:#111;color:#e8e8e8;border:1px solid var(--line);
 }
-[data-theme="dark"] select option{background:#221c14;color:#f0e4d0}
-[data-theme="dark"] .hero-links a:hover,[data-theme="dark"] .link-pill:hover,[data-theme="dark"] .card-actions button:hover,[data-theme="dark"] .card-actions a:hover,[data-theme="dark"] .mission-actions button:hover,[data-theme="dark"] .pill-button.active,[data-theme="dark"] .theme-toggle:hover{background:#2a1000;color:#fff;border-color:rgba(224,160,80,.5)}
+[data-theme="dark"] select option{background:#111;color:#e8e8e8}
+[data-theme="dark"] .hero-links a:hover,[data-theme="dark"] .link-pill:hover,[data-theme="dark"] .card-actions button:hover,[data-theme="dark"] .card-actions a:hover,[data-theme="dark"] .mission-actions button:hover,[data-theme="dark"] .pill-button.active,[data-theme="dark"] .theme-toggle:hover{background:#1a1a1a;color:#fff;border-color:rgba(224,160,80,.5)}
 
 /* Theme toggle */
 .theme-toggle{position:fixed;top:16px;right:16px;z-index:100;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px)}
