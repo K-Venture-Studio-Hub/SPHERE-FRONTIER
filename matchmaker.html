@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matchmaker — K Venture Studio Hub</title>
+  <link rel="stylesheet" href="./assets/css/venture-studio.css">
+  <style>
+    .step-nav{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0}
+    .step-btn{border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:14px;cursor:pointer;background:var(--input-bg);color:var(--ink);transition:all .15s;font-weight:600}
+    .step-btn:hover{background:var(--ink);color:#fff}
+    .step-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+    [data-theme="dark"] .step-btn:hover{background:#1a1a1a;color:#fff;border-color:rgba(255,255,255,.2)}
+    [data-theme="dark"] .step-btn.active{background:#1a1a1a;color:#fff;border-color:rgba(255,255,255,.2)}
+    .step-panel{display:none;margin-top:18px}
+    .step-panel.active{display:block}
+    /* Entry cards */
+    .entry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+    .entry-card{background:var(--card-bg);border:2px solid var(--line);border-radius:22px;padding:24px;cursor:pointer;transition:all .15s;text-align:center}
+    .entry-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .entry-card.chosen{border-color:var(--accent);background:rgba(255,255,255,.03)}
+    [data-theme="dark"] .entry-card.chosen{background:rgba(255,255,255,.03)}
+    .entry-card .ec-icon{font-size:40px;margin-bottom:10px}
+    .entry-card h3{margin:0 0 6px;font-size:18px}
+    .entry-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+    /* Personality cards */
+    .personality-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+    .p-card{background:var(--card-bg);border:2px solid var(--line);border-radius:22px;padding:20px;cursor:pointer;transition:all .15s}
+    .p-card:hover{border-color:var(--accent)}
+    .p-card.selected{border-color:var(--science);background:rgba(62,207,148,.06)}
+    .p-card .p-icon{font-size:28px;margin-bottom:8px}
+    .p-card h3{margin:0 0 6px;font-size:16px}
+    .p-card .p-tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-right:4px;margin-bottom:6px}
+    .p-card p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+    .p-card .match-row{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+    .p-card .match-row strong{color:var(--ink)}
+    /* Quiz questions */
+    .quiz-section{margin-bottom:24px}
+    .quiz-section h3{margin:0 0 10px;font-size:16px;color:var(--accent)}
+    .quiz-options{display:flex;gap:8px;flex-wrap:wrap}
+    .quiz-opt{border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-size:13px;cursor:pointer;background:var(--card-bg);color:var(--ink);transition:all .15s;font-weight:600}
+    .quiz-opt:hover{border-color:var(--accent)}
+    .quiz-opt.picked{border-color:var(--science);background:rgba(62,207,148,.08);color:var(--science)}
+    /* Result card */
+    .result-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:28px;margin-top:18px}
+    .result-card h2{margin:0 0 12px;font-size:22px}
+    .result-card .result-type{font-size:36px;margin-bottom:8px}
+    .result-card .result-desc{color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 16px}
+    .result-card .cofounder-section{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+    .result-card .cofounder-section h3{margin:0 0 8px;font-size:16px}
+    .cofounder-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;margin:4px 4px 4px 0;background:var(--card-bg);color:var(--ink)}
+    .cofounder-chip.best{border-color:var(--science);color:var(--science);background:rgba(62,207,148,.08)}
+    /* Idea readiness */
+    .readiness-checklist{display:flex;flex-direction:column;gap:8px}
+    .check-item{display:flex;gap:10px;align-items:flex-start;font-size:14px;cursor:pointer;padding:8px 12px;border-radius:12px;transition:background .15s}
+    .check-item:hover{background:rgba(255,255,255,.03)}
+    .check-item input[type="checkbox"]{margin-top:3px;accent-color:var(--science);width:18px;height:18px}
+    .check-copy{flex:1;line-height:1.5}
+    .check-copy strong{display:block;margin-bottom:2px}
+    .check-copy span{color:var(--muted);font-size:13px}
+    .readiness-bar-wrap{background:var(--line);border-radius:999px;height:12px;margin:18px 0 6px;overflow:hidden}
+    .readiness-bar-fill{height:100%;border-radius:999px;transition:width .3s}
+    .readiness-label{font-size:13px;color:var(--muted)}
+    /* Match cards */
+    .match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+    .match-card{background:var(--card-bg);border:1px solid var(--line);border-radius:22px;padding:20px}
+    .match-card .mc-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .match-card .mc-avatar{width:44px;height:44px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:22px}
+    .match-card .mc-name{font-weight:700;font-size:15px}
+    .match-card .mc-type{font-size:12px;color:var(--muted)}
+    .match-card .mc-tags{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
+    .match-card .mc-desc{color:var(--muted);font-size:13px;line-height:1.5;margin:0}
+    .compat-score{font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px}
+    .compat-high{background:rgba(62,207,148,.12);color:var(--science)}
+    .compat-mid{background:rgba(224,160,80,.12);color:var(--entrepreneurship)}
+    .compat-low{background:rgba(110,168,240,.12);color:var(--technology)}
+    /* Resources */
+    .resource-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:14px}
+    .resource-card{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:16px;text-decoration:none;color:var(--ink);transition:all .15s;display:block}
+    .resource-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+    .resource-card h4{margin:0 0 4px;font-size:14px}
+    .resource-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.4}
+    .resource-card .rc-source{font-size:11px;color:var(--accent);margin-top:6px}
+    @media(max-width:768px){.entry-grid,.personality-grid,.match-grid,.resource-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  <script>var t=localStorage.getItem("theme")||"dark";document.documentElement.setAttribute("data-theme",t);document.getElementById("themeToggle").textContent=t==="dark"?"☀️":"🌙";</script>
+  <main class="page">
+    <div class="breadcrumb"><a href="./">← K Venture Studio Hub</a></div>
+    <section class="hero">
+      <p class="eyebrow">Matchmaker</p>
+      <h1>🤝 Find Your Co-Founder</h1>
+      <p class="lede">Discover your founder personality, find your ideal co-founder match, and assess your idea readiness. Based on validated research from Oxford Internet Institute.</p>
+    </section>
+
+    <!-- Step navigation -->
+    <div class="step-nav" id="stepNav">
+      <button class="step-btn active" data-step="entry">1. Who are you?</button>
+      <button class="step-btn" data-step="personality">2. Founder Type</button>
+      <button class="step-btn" data-step="readiness">3. Idea Readiness</button>
+      <button class="step-btn" data-step="matches">4. Your Matches</button>
+      <button class="step-btn" data-step="resources">5. Resources</button>
+    </div>
+
+    <!-- Step 1: Entry -->
+    <div class="step-panel active" id="panel-entry">
+      <h2 style="margin:0 0 14px;font-size:20px">Where are you on your founder journey?</h2>
+      <div class="entry-grid">
+        <div class="entry-card" data-entry="seeking-idea" onclick="pickEntry(this)">
+          <div class="ec-icon">🔍</div>
+          <h3>Seeking an Idea</h3>
+          <p>I have skills and drive, but haven't found the right problem yet. I want to develop my "idea muscle."</p>
+        </div>
+        <div class="entry-card" data-entry="with-idea" onclick="pickEntry(this)">
+          <div class="ec-icon">💡</div>
+          <h3>With an Idea</h3>
+          <p>I have a concept or hypothesis. I need a co-founder or team to build it with me.</p>
+        </div>
+        <div class="entry-card" data-entry="level-up" onclick="pickEntry(this)">
+          <div class="ec-icon">🎯</div>
+          <h3>Level Up</h3>
+          <p>I want to sharpen my founder instincts — decision-making, opportunity recognition, team building.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Personality -->
+    <div class="step-panel" id="panel-personality">
+      <h2 style="margin:0 0 6px;font-size:20px">Which founder personality fits you best?</h2>
+      <p style="margin:0 0 14px;color:var(--muted);font-size:14px">Based on <a href="https://founderpersonalityquiz.com/personalities" target="_blank" rel="noreferrer" style="color:var(--technology)">Oxford research</a> analyzing 32,732 founders. Pick the one that resonates most.</p>
+      <div class="personality-grid" id="personalityGrid"></div>
+      <div style="margin-top:18px">
+        <h3 style="margin:0 0 8px;font-size:16px">Quick self-assessment</h3>
+        <p style="margin:0 0 10px;color:var(--muted);font-size:13px">Answer 4 questions to narrow down your type:</p>
+        <div class="quiz-section">
+          <h3>When facing uncertainty, you tend to:</h3>
+          <div class="quiz-options" data-q="0">
+            <div class="quiz-opt" onclick="pickQuiz(this,0)" data-v="fighter">Push through aggressively</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,0)" data-v="operator">Organize and systematize</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,0)" data-v="leader">Take charge and set direction</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,0)" data-v="engineer">Analyze and design a solution</div>
+          </div>
+        </div>
+        <div class="quiz-section">
+          <h3>Your strongest trait is:</h3>
+          <div class="quiz-options" data-q="1">
+            <div class="quiz-opt" onclick="pickQuiz(this,1)" data-v="fighter">Resilience under pressure</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,1)" data-v="operator">Reliability and order</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,1)" data-v="accomplisher">Confidence and execution</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,1)" data-v="developer">Adaptability and breadth</div>
+          </div>
+        </div>
+        <div class="quiz-section">
+          <h3>In a team, you naturally become the:</h3>
+          <div class="quiz-options" data-q="2">
+            <div class="quiz-opt" onclick="pickQuiz(this,2)" data-v="leader">Vision setter</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,2)" data-v="operator">Operations anchor</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,2)" data-v="engineer">Technical architect</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,2)" data-v="accomplisher">Execution driver</div>
+          </div>
+        </div>
+        <div class="quiz-section">
+          <h3>You're most energized by:</h3>
+          <div class="quiz-options" data-q="3">
+            <div class="quiz-opt" onclick="pickQuiz(this,3)" data-v="fighter">Competitive challenges</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,3)" data-v="leader">Exploring the unknown</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,3)" data-v="developer">Building useful things</div>
+            <div class="quiz-opt" onclick="pickQuiz(this,3)" data-v="engineer">Solving complex problems</div>
+          </div>
+        </div>
+        <button class="step-btn" onclick="calcPersonality()" style="margin-top:8px">Calculate My Type</button>
+      </div>
+      <div id="personalityResult"></div>
+    </div>
+
+    <!-- Step 3: Idea Readiness -->
+    <div class="step-panel" id="panel-readiness">
+      <h2 style="margin:0 0 6px;font-size:20px">Idea Readiness Checklist</h2>
+      <p style="margin:0 0 14px;color:var(--muted);font-size:14px">Check off what you've figured out so far. Don't worry if some items are unchecked — that's what co-founders are for.</p>
+      <div class="readiness-checklist" id="readinessChecklist"></div>
+      <div class="readiness-bar-wrap"><div class="readiness-bar-fill" id="readinessFill" style="width:0%;background:var(--science)"></div></div>
+      <div class="readiness-label" id="readinessLabel">0 of 12 checked — just getting started</div>
+      <div id="readinessAdvice" style="margin-top:14px"></div>
+    </div>
+
+    <!-- Step 4: Matches -->
+    <div class="step-panel" id="panel-matches">
+      <h2 style="margin:0 0 6px;font-size:20px">Your Co-Founder Matches</h2>
+      <p style="margin:0 0 14px;color:var(--muted);font-size:14px">Based on your founder type and entry point. These are ideal co-founder profiles that complement your strengths.</p>
+      <div id="matchResults"></div>
+    </div>
+
+    <!-- Step 5: Resources -->
+    <div class="step-panel" id="panel-resources">
+      <h2 style="margin:0 0 6px;font-size:20px">Founder Resources</h2>
+      <p style="margin:0 0 14px;color:var(--muted);font-size:14px">Curated tools and assessments from the best startup research programs.</p>
+      <div class="resource-grid">
+        <a class="resource-card" href="https://founderpersonalityquiz.com/quiz" target="_blank" rel="noreferrer">
+          <h4>🧪 Founder Personality Quiz</h4>
+          <p>Scientific quiz based on analysis of 32,732 founders. Identifies your founder type from 6 validated patterns.</p>
+          <div class="rc-source">Oxford Internet Institute · Nature Scientific Reports</div>
+        </a>
+        <a class="resource-card" href="https://dna.fi.co/c/fi/assessments/start" target="_blank" rel="noreferrer">
+          <h4>🧬 Founder DNA Assessment</h4>
+          <p>Y Combinator's Founder DNA assessment. Measures traits correlated with startup success.</p>
+          <div class="rc-source">Y Combinator · Fi.com</div>
+        </a>
+        <a class="resource-card" href="https://www.ycombinator.com/library" target="_blank" rel="noreferrer">
+          <h4>📚 YC Startup Library</h4>
+          <p>Videos, essays, and guides from YC partners on every stage of building a startup.</p>
+          <div class="rc-source">Y Combinator</div>
+        </a>
+        <a class="resource-card" href="https://www.nature.com/articles/s41598-023-41980-y" target="_blank" rel="noreferrer">
+          <h4>📄 Original Research Paper</h4>
+          <p>"Founder personality and startup success" — the peer-reviewed study behind the personality types.</p>
+          <div class="rc-source">Nature Scientific Reports · 2023</div>
+        </a>
+        <a class="resource-card" href="./canvas.html">
+          <h4>📋 Business Model Canvases</h4>
+          <p>Pre-filled canvases for your sphere and business model. DE, BMC, Lean, Social Enterprise.</p>
+          <div class="rc-source">K Venture Studio Hub</div>
+        </a>
+        <a class="resource-card" href="./quiz.html">
+          <h4>🧩 Startup Readiness Quiz</h4>
+          <p>Assess your readiness to launch across product, market, team, and finance dimensions.</p>
+          <div class="rc-source">K Venture Studio Hub</div>
+        </a>
+      </div>
+    </div>
+  </main>
+
+<script>
+/* ── Data ── */
+var TYPES = {
+  fighter: {
+    icon: "🥊", name: "Fighter",
+    tagline: "Spontaneous, tough, and uncompromising under pressure",
+    desc: "Fighters move quickly and push hard when something needs to happen. They question assumptions and keep things moving because they tend to be spontaneous, impulsive, tough, sceptical, and uncompromising. Especially useful during intense phases like a launch or market entry.",
+    tags: ["Resilient", "Decisive", "Challenger"],
+    bestMatch: ["developer"],
+    goodMatch: ["leader", "operator"]
+  },
+  operator: {
+    icon: "⚙️", name: "Operator",
+    tagline: "Orderly operators who keep systems working",
+    desc: "Operators keep things running. They bring order to chaos and make sure systems, logistics, and delivery hold together. Especially high in conscientiousness through orderliness and high in agreeableness through humility. Fit service, maintenance, and operations roles.",
+    tags: ["Reliable", "Systematic", "Coordinated"],
+    bestMatch: ["developer", "developer"],
+    goodMatch: ["fighter", "accomplisher"]
+  },
+  accomplisher: {
+    icon: "🏆", name: "Accomplisher",
+    tagline: "Organised and confident builders who drive execution",
+    desc: "Accomplishers are structured builders who help turn plans into progress. They bring steady execution because they are organised, outgoing, confident, down-to-earth, and self-assured. Often appear in CEO, CFO, and COO positions.",
+    tags: ["Executor", "Confident", "Structured"],
+    bestMatch: ["accomplisher", "accomplisher"],
+    goodMatch: ["leader", "developer"]
+  },
+  leader: {
+    icon: "🧭", name: "Leader",
+    tagline: "Adventurous leaders who create direction and momentum",
+    desc: "Leaders bring direction and momentum to a founding team. They do well in uncertainty and bring people together around an idea. Adventurous, persistent, assertive, self-controlled, calm under pressure. Especially valuable in the early stages of building a company.",
+    tags: ["Visionary", "Persistent", "Assertive"],
+    bestMatch: ["leader", "developer"],
+    goodMatch: ["engineer", "accomplisher"]
+  },
+  engineer: {
+    icon: "🔧", name: "Engineer",
+    tagline: "Imaginative problem-solvers with strong technical depth",
+    desc: "Engineers are analytical builders who shape ideas through logic and design. Strong at building systems, solving complex problems, and scaling technology. Highest in openness through imagination and intellect. Their precision and curiosity support product quality.",
+    tags: ["Analytical", "Creative", "Precise"],
+    bestMatch: ["developer", "leader"],
+    goodMatch: ["operator", "fighter"]
+  },
+  developer: {
+    icon: "💻", name: "Developer",
+    tagline: "Dutiful builders with broader technology fit",
+    desc: "Developers sit between creativity and execution. They share some characteristics with Fighters, but with higher extraversion and a broader fit across technology roles. Closest occupation fit includes application developers, business systems analysts, and product managers.",
+    tags: ["Versatile", "Builder", "Pragmatic"],
+    bestMatch: ["leader", "leader"],
+    goodMatch: ["fighter", "engineer", "operator"]
+  }
+};
+
+var READINESS_ITEMS = [
+  {id:"problem", label:"Problem identified", desc:"You can clearly state the problem you're solving"},
+  {id:"audience", label:"Target audience defined", desc:"You know who experiences this problem most"},
+  {id:"solution", label:"Solution concept", desc:"You have a hypothesis for how to solve it"},
+  {id:"differentiation", label:"Differentiation clear", desc:"You know why your approach is different from existing solutions"},
+  {id:"validation", label:"Some validation done", desc:"You've talked to potential users or tested the concept"},
+  {id:"model", label:"Business model sketched", desc:"You have an idea of how revenue would work"},
+  {id:"mvp-scope", label:"MVP scope defined", desc:"You know what the first version would include"},
+  {id:"tech-stack", label:"Tech approach decided", desc:"You know what tools/platforms you'd use"},
+  {id:"market-size", label:"Market size estimated", desc:"You've checked if the market is big enough"},
+  {id:"competition", label:"Competition analyzed", desc:"You know who else is solving this and how"},
+  {id:"team-gap", label:"Team gaps identified", desc:"You know what skills you're missing"},
+  {id:"commitment", label:"Personal commitment clear", desc:"You're ready to invest time and resources into this"}
+];
+
+var MATCH_PROFILES = [
+  {name:"Alex", type:"leader", sphere:"entrepreneurship", stage:"Idea", desc:"Experienced in market validation and go-to-market strategy. Looking for a technical co-founder to build the product.", avatar:"🧭"},
+  {name:"Sam", type:"engineer", sphere:"technology", stage:"MVP", desc:"Full-stack developer with ML expertise. Has a working prototype, needs help with business strategy and fundraising.", avatar:"🔧"},
+  {name:"Jordan", type:"operator", sphere:"entrepreneurship", stage:"Growth", desc:"Operations and finance specialist. Can structure processes, manage budgets, and keep the team on track.", avatar:"⚙️"},
+  {name:"Riley", type:"developer", sphere:"technology", stage:"Pre-idea", desc:"Product-minded engineer. Great at translating user needs into features. Looking for a problem worth solving.", avatar:"💻"},
+  {name:"Morgan", type:"fighter", sphere:"science", stage:"Idea", desc:"Biomedical researcher with a novel diagnostic approach. Needs a builder to create the first version.", avatar:"🥊"},
+  {name:"Casey", type:"accomplisher", sphere:"entrepreneurship", stage:"MVP", desc:"Serial executor. Has launched 3 projects before. Brings structure, discipline, and momentum.", avatar:"🏆"}
+];
+
+/* ── State ── */
+var state = {
+  entry: "",
+  personality: "",
+  quizAnswers: [null, null, null, null],
+  readiness: {}
+};
+
+/* ── Init ── */
+(function(){
+  loadState();
+  buildPersonalityGrid();
+  buildReadinessChecklist();
+  if(state.entry){ highlightEntry(); }
+  if(state.personality){ highlightPersonality(); }
+})();
+
+function loadState(){
+  try{
+    var s = localStorage.getItem("matchmaker_state");
+    if(s){ var p = JSON.parse(s); state.entry = p.entry||""; state.personality = p.personality||""; state.readiness = p.readiness||{}; state.quizAnswers = p.quizAnswers||[null,null,null,null]; }
+  }catch(e){}
+}
+function saveState(){
+  try{ localStorage.setItem("matchmaker_state", JSON.stringify(state)); }catch(e){}
+}
+
+/* ── Step nav ── */
+document.querySelectorAll(".step-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var step = this.getAttribute("data-step");
+    document.querySelectorAll(".step-btn").forEach(function(b){ b.classList.remove("active"); });
+    this.classList.add("active");
+    document.querySelectorAll(".step-panel").forEach(function(p){ p.classList.remove("active"); });
+    document.getElementById("panel-" + step).classList.add("active");
+    if(step === "matches"){ renderMatches(); }
+  });
+});
+
+function goToStep(step){
+  document.querySelectorAll(".step-btn").forEach(function(b){
+    b.classList.toggle("active", b.getAttribute("data-step") === step);
+  });
+  document.querySelectorAll(".step-panel").forEach(function(p){ p.classList.remove("active"); });
+  document.getElementById("panel-" + step).classList.add("active");
+  if(step === "matches"){ renderMatches(); }
+}
+
+/* ── Step 1: Entry ── */
+function pickEntry(el){
+  document.querySelectorAll(".entry-card").forEach(function(c){ c.classList.remove("chosen"); });
+  el.classList.add("chosen");
+  state.entry = el.getAttribute("data-entry");
+  saveState();
+}
+
+function highlightEntry(){
+  document.querySelectorAll(".entry-card").forEach(function(c){
+    c.classList.toggle("chosen", c.getAttribute("data-entry") === state.entry);
+  });
+}
+
+/* ── Step 2: Personality ── */
+function buildPersonalityGrid(){
+  var grid = document.getElementById("personalityGrid");
+  var html = "";
+  var keys = Object.keys(TYPES);
+  for(var i=0;i<keys.length;i++){
+    var t = TYPES[keys[i]];
+    var matchNames = t.bestMatch.map(function(k){ return TYPES[k].icon + " " + TYPES[k].name; }).join(" + ");
+    html += '<div class="p-card" data-type="'+keys[i]+'" onclick="pickPersonality(this)">'
+      + '<div class="p-icon">'+t.icon+'</div>'
+      + '<h3>'+t.name+'</h3>'
+      + '<div>';
+    for(var j=0;j<t.tags.length;j++){
+      html += '<span class="p-tag" style="background:rgba(62,207,148,.1);color:var(--science)">'+t.tags[j]+'</span>';
+    }
+    html += '</div>'
+      + '<p>'+t.tagline+'</p>'
+      + '<div class="match-row">Best match: <strong>'+matchNames+'</strong></div>'
+      + '</div>';
+  }
+  grid.innerHTML = html;
+}
+
+function pickPersonality(el){
+  document.querySelectorAll(".p-card").forEach(function(c){ c.classList.remove("selected"); });
+  el.classList.add("selected");
+  state.personality = el.getAttribute("data-type");
+  saveState();
+  showPersonalityResult();
+}
+
+function highlightPersonality(){
+  document.querySelectorAll(".p-card").forEach(function(c){
+    c.classList.toggle("selected", c.getAttribute("data-type") === state.personality);
+  });
+  if(state.personality){ showPersonalityResult(); }
+}
+
+function showPersonalityResult(){
+  var t = TYPES[state.personality];
+  if(!t) return;
+  var bestHtml = t.bestMatch.map(function(k){ return '<span class="cofounder-chip best">'+TYPES[k].icon+' '+TYPES[k].name+'</span>'; }).join("");
+  var goodHtml = t.goodMatch.map(function(k){ return '<span class="cofounder-chip">'+TYPES[k].icon+' '+TYPES[k].name+'</span>'; }).join("");
+  document.getElementById("personalityResult").innerHTML = '<div class="result-card">'
+    + '<div class="result-type">'+t.icon+'</div>'
+    + '<h2>You are a '+t.name+'</h2>'
+    + '<p class="result-desc">'+t.desc+'</p>'
+    + '<div class="cofounder-section">'
+    + '<h3>🤝 Your ideal co-founders</h3>'
+    + '<p style="font-size:13px;color:var(--muted);margin:0 0 8px">Best combinations (from Oxford research):</p>'
+    + bestHtml + goodHtml
+    + '</div></div>';
+}
+
+/* ── Quiz ── */
+function pickQuiz(el, q){
+  var row = el.parentElement;
+  row.querySelectorAll(".quiz-opt").forEach(function(o){ o.classList.remove("picked"); });
+  el.classList.add("picked");
+  state.quizAnswers[q] = el.getAttribute("data-v");
+  saveState();
+}
+
+function calcPersonality(){
+  var counts = {};
+  for(var i=0;i<state.quizAnswers.length;i++){
+    var a = state.quizAnswers[i];
+    if(a){ counts[a] = (counts[a]||0) + 1; }
+  }
+  var max = 0, best = "";
+  var keys = Object.keys(counts);
+  for(var j=0;j<keys.length;j++){
+    if(counts[keys[j]] > max){ max = counts[keys[j]]; best = keys[j]; }
+  }
+  if(!best){ best = "developer"; }
+  state.personality = best;
+  saveState();
+  highlightPersonality();
+  showPersonalityResult();
+}
+
+/* ── Step 3: Readiness ── */
+function buildReadinessChecklist(){
+  var cl = document.getElementById("readinessChecklist");
+  var html = "";
+  for(var i=0;i<READINESS_ITEMS.length;i++){
+    var item = READINESS_ITEMS[i];
+    var checked = state.readiness[item.id] ? "checked" : "";
+    html += '<label class="check-item">'
+      + '<input type="checkbox" data-id="'+item.id+'" '+checked+' onchange="toggleReadiness(this)">'
+      + '<div class="check-copy"><strong>'+item.label+'</strong><span>'+item.desc+'</span></div>'
+      + '</label>';
+  }
+  cl.innerHTML = html;
+  updateReadiness();
+}
+
+function toggleReadiness(el){
+  var id = el.getAttribute("data-id");
+  state.readiness[id] = el.checked;
+  saveState();
+  updateReadiness();
+}
+
+function updateReadiness(){
+  var total = READINESS_ITEMS.length;
+  var checked = 0;
+  for(var i=0;i<READINESS_ITEMS.length;i++){
+    if(state.readiness[READINESS_ITEMS[i].id]){ checked++; }
+  }
+  var pct = Math.round((checked/total)*100);
+  var fill = document.getElementById("readinessFill");
+  fill.style.width = pct + "%";
+  if(pct < 33){ fill.style.background = "var(--entrepreneurship)"; }
+  else if(pct < 66){ fill.style.background = "var(--technology)"; }
+  else { fill.style.background = "var(--science)"; }
+
+  var label = document.getElementById("readinessLabel");
+  label.textContent = checked + " of " + total + " checked — " + readinessText(pct);
+
+  var advice = document.getElementById("readinessAdvice");
+  if(pct < 33){
+    advice.innerHTML = '<div class="result-card"><h3>🔍 Early Explorer</h3><p style="color:var(--muted);font-size:14px;line-height:1.6;margin:0">You\'re at the beginning of your journey — that\'s perfectly fine. Focus on the first 4 items: problem, audience, solution, and differentiation. A co-founder with <strong>Operator</strong> or <strong>Leader</strong> traits can help you structure your thinking.</p></div>';
+  } else if(pct < 66){
+    advice.innerHTML = '<div class="result-card"><h3>💡 Taking Shape</h3><p style="color:var(--muted);font-size:14px;line-height:1.6;margin:0">Your idea is forming. Now focus on validation, business model, and MVP scope. A <strong>Developer</strong> or <strong>Engineer</strong> co-founder would complement your vision with execution power.</p></div>';
+  } else {
+    advice.innerHTML = '<div class="result-card"><h3>🚀 Ready to Build</h3><p style="color:var(--muted);font-size:14px;line-height:1.6;margin:0">You\'re well-prepared. Fill the remaining gaps and start looking for a co-founder who complements your personality type. Check the Matches tab for your ideal profiles.</p></div>';
+  }
+}
+
+function readinessText(pct){
+  if(pct === 0) return "just getting started";
+  if(pct < 33) return "early exploration";
+  if(pct < 66) return "taking shape";
+  if(pct < 100) return "almost there";
+  return "fully ready";
+}
+
+/* ── Step 4: Matches ── */
+function renderMatches(){
+  var container = document.getElementById("matchResults");
+  var myType = state.personality || "developer";
+  var t = TYPES[myType];
+
+  var html = '<div style="margin-bottom:14px">';
+  html += '<p style="color:var(--muted);font-size:14px;margin:0">Your type: <strong style="color:var(--ink)">'+t.icon+' '+t.name+'</strong> — looking for complementary co-founders</p>';
+  html += '</div>';
+  html += '<div class="match-grid">';
+
+  for(var i=0;i<MATCH_PROFILES.length;i++){
+    var p = MATCH_PROFILES[i];
+    var compat = getCompatibility(myType, p.type);
+    var compatClass = compat > 80 ? "compat-high" : (compat > 50 ? "compat-mid" : "compat-low");
+    var compatLabel = compat > 80 ? "Great match" : (compat > 50 ? "Good match" : "Potential fit");
+
+    html += '<div class="match-card">'
+      + '<div class="mc-header">'
+      + '<div class="mc-avatar">'+p.avatar+'</div>'
+      + '<div><div class="mc-name">'+p.name+'</div><div class="mc-type">'+TYPES[p.type].icon+' '+TYPES[p.type].name+' · '+p.sphere+' · '+p.stage+'</div></div>'
+      + '<span class="compat-score '+compatClass+'" style="margin-left:auto">'+compatLabel+'</span>'
+      + '</div>'
+      + '<div class="mc-tags">';
+    for(var j=0;j<TYPES[p.type].tags.length;j++){
+      html += '<span class="p-tag" style="background:rgba(62,207,148,.1);color:var(--science)">'+TYPES[p.type].tags[j]+'</span>';
+    }
+    html += '</div>'
+      + '<p class="mc-desc">'+p.desc+'</p>'
+      + '</div>';
+  }
+  html += '</div>';
+
+  html += '<div style="margin-top:18px;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:16px">';
+  html += '<h3 style="margin:0 0 6px;font-size:15px">💡 How to use these matches</h3>';
+  html += '<p style="color:var(--muted);font-size:13px;line-height:1.6;margin:0">These are example profiles based on the Oxford research on successful founder combinations. In a real scenario, you\'d look for people with complementary personality types in your network, at hackathons, startup events, or through YC Co-Founder Matching. The key insight: <strong style="color:var(--ink)">diverse founder teams outperform solo founders</strong>.</p>';
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+function getCompatibility(myType, theirType){
+  var t = TYPES[myType];
+  if(t.bestMatch.indexOf(theirType) !== -1) return 90;
+  if(t.goodMatch.indexOf(theirType) !== -1) return 65;
+  if(theirType === myType) return 40;
+  return 30;
+}
+</script>
+</body>
+</html>
