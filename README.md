@@ -41,4 +41,4 @@ K-Mentorship-Hub (learn) → K-RnD-Lab (research) → K-Venture-Studio-Hub (buil
 
 ## Live Site
 
-🌐 [sphere-venture-studio.vercel.app](https://sphere-venture-studio.vercel.app)
+🌐 [k-venture-studio.vercel.app](https://k-venture-studio.vercel.app)
